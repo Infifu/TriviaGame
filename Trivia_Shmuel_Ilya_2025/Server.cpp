@@ -2,11 +2,11 @@
 
 void Server::run()
 {
-	std::thread handleThread(Communicator::startHandleRequests);
-	handleThread.detach();
+    std::thread handleThread(&Communicator::startHandleRequests, &m_communicator);
+    handleThread.detach();
 
-	while (true)
-	{
-
-	}
+    while (true)
+    {
+        // Server main loop
+    }
 }

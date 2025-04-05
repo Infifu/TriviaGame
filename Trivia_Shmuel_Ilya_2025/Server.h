@@ -7,5 +7,4 @@ public:
 
 private:
 	Communicator m_communicator;
-
 };

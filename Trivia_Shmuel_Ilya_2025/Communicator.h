@@ -9,7 +9,8 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-class Communicator {
+class Communicator
+{
 public:
 	Communicator();
 	void startHandleRequests();
