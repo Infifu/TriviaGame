@@ -3,7 +3,7 @@
 
 void Server::run()
 {
-	std::thread handleThread(&Communicator::startHandleRequests);
+    std::thread handleThread(&Communicator::startHandleRequests, &m_communicator);
 	handleThread.detach();
 
     std::string command;
@@ -16,5 +16,4 @@ void Server::run()
             std::cout << "The progrem is Closeing..." << std::endl;
         }
     }
-    // TODO: Release resources before exit
 }

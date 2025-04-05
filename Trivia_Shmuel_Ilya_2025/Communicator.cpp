@@ -4,6 +4,18 @@
 
 Communicator::Communicator()
 {
+	WSADATA wsaData;
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		throw std::exception("WSAStartup failed");
+	}
+
+	m_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (m_serverSocket == INVALID_SOCKET)
+	{
+		WSACleanup();
+		throw std::exception(__FUNCTION__ " - Socket");
+	}
 }
 
 void Communicator::startHandleRequests()
@@ -13,12 +25,6 @@ void Communicator::startHandleRequests()
 
 void Communicator::bindAndListen()
 {
-	m_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-	if (m_serverSocket == INVALID_SOCKET)
-	{
-		throw std::exception(__FUNCTION__ " - Socket");
-	}
 
 	SOCKET client_socket;
 	struct sockaddr_in sa = { 0 };
