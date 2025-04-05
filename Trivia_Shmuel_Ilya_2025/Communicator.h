@@ -1,9 +1,13 @@
 #pragma once
 #include "IRequestHandler.h"
+#include "LoginRequestHandler.h"
 #include <winsock2.h>
 #include <iostream>
 #include <thread>
 #include <map>
+#include <utility>
+
+#pragma comment(lib, "ws2_32.lib")
 
 class Communicator {
 public:

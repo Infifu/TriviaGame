@@ -1,5 +1,7 @@
 #include "Communicator.h"
 
+#define BUFFERSIZE 1024
+
 void Communicator::startHandleRequests()
 {
 	bindAndListen();
@@ -45,5 +47,12 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
+	LoginRequestHandler* requestHandler; //supposed to be something but not implemented in this version
+	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, requestHandler));
+	char buffer[BUFFERSIZE] = { 0 };
+	send(clientSocket, "Hello", strlen("Hello"), 0);
 
+	recv(clientSocket, buffer, BUFFERSIZE,0);
+
+	std::cout << buffer << std::endl;
 }
