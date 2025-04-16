@@ -1,5 +1,9 @@
 #include "JsonResponsePacketSerializer.h"
 
+//ERROR 1
+//LOGIN 0
+//SIGNUP 2
+
 /**
  * @brief serialize error response (converting to binary)
  * @param errorResponse - struct that holds the message
@@ -7,12 +11,27 @@
  */
 Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse errorResponse)
 {
-    std::string message = errorResponse.message;
+    Buffer jsonDump;
     Buffer buffer;
-    json jstatus = { {"message" , message} };
-    buffer = json::to_cbor(jstatus);
+
+    std::string message = errorResponse.message; //store the message
+    json messageSerialized = { {"message", message} }; //create the json
+    unsigned char errorCode = 1; //store the error code (1 byte)
+
+    jsonDump = json::to_cbor(messageSerialized); //serialize the json
+    int jsonLength = jsonDump.size(); //length of the json
+
+    //push the error code (1 byte)
+    buffer.push_back(errorCode);
+    //resize the buffer to fit the int
+    buffer.resize(buffer.size() + sizeof(jsonLength));
+    //write the into into the buffer by starting after the erro code
+    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
 }
+
 
 /**
  * @brief serialize login response (converting to binary)
@@ -21,11 +40,25 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse errorRespon
  */
 Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginResponse)
 {
-    unsigned int status = loginResponse.status;
+    Buffer jsonDump;
     Buffer buffer;
-    json jstatus = { {"status" , status} };
-    buffer = json::to_cbor(jstatus);
-    return buffer; 
+
+    int status = loginResponse.status; //store the message
+    json statusSerialized = { {"status", status} }; //create the json
+    unsigned char loginCode = 0; //store the login code (1 byte)
+
+    jsonDump = json::to_cbor(statusSerialized); //serialize the json
+    int jsonLength = jsonDump.size(); //length of the json
+
+    //push the login code (1 byte)
+    buffer.push_back(loginCode);
+    //resize the buffer to fit the int
+    buffer.resize(buffer.size() + sizeof(jsonLength));
+    //write the into into the buffer by starting after the login code
+    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
 }
 
 /**
@@ -35,9 +68,23 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginRespon
  */
 Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signupResponse)
 {
-    unsigned int status = signupResponse.status;
+    Buffer jsonDump;
     Buffer buffer;
-    json jstatus = { {"status" , status} };
-    buffer = json::to_cbor(jstatus);
+
+    int status = signupResponse.status; //store the message
+    json statusSerialized = { {"status", status} }; //create the json
+    unsigned char signUpCode = 2; //store the signup code (1 byte)
+
+    jsonDump = json::to_cbor(statusSerialized); //serialize the json
+    int jsonLength = jsonDump.size(); //length of the json
+
+    //push the signup code (1 byte)
+    buffer.push_back(signUpCode);
+    //resize the buffer to fit the int
+    buffer.resize(buffer.size() + sizeof(jsonLength));
+    //write the into into the buffer by starting after the signup code
+    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
 }
