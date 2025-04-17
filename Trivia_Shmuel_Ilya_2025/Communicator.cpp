@@ -57,12 +57,59 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
+	std::vector<char> charBuffer(BUFFERSIZE);
 	LoginRequestHandler* requestHandler; //supposed to be something but not implemented in this version
 	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, requestHandler));
-	char buffer[BUFFERSIZE] = { 0 };
-	send(clientSocket, "Hello", strlen("Hello"), 0);
 
-	recv(clientSocket, buffer, BUFFERSIZE,0);
+	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);
 
-	std::cout << buffer << std::endl;
+	Buffer buffer(charBuffer.begin(), charBuffer.end());
+
+	unsigned char code = buffer.at(0);
+
+	try
+	{
+		switch (code)
+		{
+		case 0: //login case
+		{
+			//
+			LoginRequest loginRequestStruct = JsonRequestPacketDeserializer::deserializeLoginRequest(buffer);
+
+			//create login response?
+			LoginResponse response;
+			response.status = 0;
+
+			Buffer msg = JsonResponsePacketSerializer::serializeResponse(response);
+
+			send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
+
+			break;
+		}
+		case 2: //signup case
+		{
+			SignupRequest signUpRequestStruct = JsonRequestPacketDeserializer::deserializeSignupRequest(buffer);
+
+			//create login response?
+			SignupResponse response;
+			response.status = 2;
+
+			Buffer msg = JsonResponsePacketSerializer::serializeResponse(response);
+
+			send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	catch (const std::exception&)
+	{
+		ErrorResponse error;
+		error.message = "An error has occured";
+		Buffer msg = JsonResponsePacketSerializer::serializeResponse(error);
+		send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
+		std::cout << "Error has occured" << std::endl;
+	}
 }
+
