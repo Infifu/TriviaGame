@@ -29,7 +29,8 @@ public:
 	static Buffer serializeResponse(SignupResponse signupResponse);
 
 private:
-	
+	static void intToBytesRef(Buffer& buffer,int number);
+	static Buffer intToBytesVal(Buffer buffer,int number);
 
 
 

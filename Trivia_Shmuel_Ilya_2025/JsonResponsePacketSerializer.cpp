@@ -23,8 +23,6 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse errorRespon
 
     //push the error code (1 byte)
     buffer.push_back(errorCode);
-    //resize the buffer to fit the int
-    buffer.resize(buffer.size() + sizeof(jsonLength));
     //write the into into the buffer by starting after the erro code
     std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
     //now just push the json
@@ -52,10 +50,8 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginRespon
 
     //push the login code (1 byte)
     buffer.push_back(loginCode);
-    //resize the buffer to fit the int
-    buffer.resize(buffer.size() + sizeof(jsonLength));
     //write the into into the buffer by starting after the login code
-    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    JsonResponsePacketSerializer::intToBytesRef(buffer, jsonLength);
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
@@ -80,11 +76,29 @@ Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signupResp
 
     //push the signup code (1 byte)
     buffer.push_back(signUpCode);
-    //resize the buffer to fit the int
-    buffer.resize(buffer.size() + sizeof(jsonLength));
     //write the into into the buffer by starting after the signup code
-    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    JsonResponsePacketSerializer::intToBytesRef(buffer, jsonLength);
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
+}
+
+void JsonResponsePacketSerializer::intToBytesRef(Buffer& buffer, int number)
+{
+    //little endian more like little inidan hahahahha
+    buffer.push_back((number) & 0xFF);
+    buffer.push_back((number >> 8) & 0xFF);
+    buffer.push_back((number >> 16) & 0xFF);
+    buffer.push_back((number >> 24) & 0xFF);
+}
+
+Buffer JsonResponsePacketSerializer::intToBytesVal(Buffer buffer, int number)
+{
+    //little endian encoding cuz god want me to suffer or whatever
+    Buffer intBytes;
+    intBytes.push_back((number) & 0xFF);         
+    intBytes.push_back((number >> 8) & 0xFF);
+    intBytes.push_back((number >> 16) & 0xFF);
+    intBytes.push_back((number >> 24) & 0xFF); 
+    return intBytes;
 }

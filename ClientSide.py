@@ -1,5 +1,6 @@
 import socket
 import json
+import cbor2
 
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 6969
@@ -8,12 +9,7 @@ SERVER_PORT = 6969
 def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (SERVER_IP, SERVER_PORT)
-
     sock.connect(server_address)
-
-    server_msg = sock.recv(1024)
-    server_msg = server_msg.decode()
-    print(server_msg)
 
     userInput = int(input("""Choose the options: \n1.Login \n2.SignUp \n"""))
 
@@ -26,10 +22,10 @@ def main():
             "password": password
         }
 
-        loginMsgSerialized = json.dumps(loginMsg).encode('utf-8')
-        loginMsgSize = len(loginMsgSerialized).to_bytes(4, 'big')  #i hate little endian
+        loginMsgSerialized = cbor2.dumps(loginMsg)
+        loginMsgSize = len(loginMsgSerialized).to_bytes(4, 'little')  #i hate little endian
 
-        opcode = 1
+        opcode = 0
         opcodeByte = bytes([opcode])
 
         message = opcodeByte + loginMsgSize + loginMsgSerialized
@@ -43,22 +39,32 @@ def main():
         signUpMsg = {
             "username": username,
             "password": password,
-            "mail": mail
+            "email": mail
         }
 
-        signUpMsgSerialized = json.dumps(signUpMsg).encode('utf-8')  #
-        signUpMsgSize = len(signUpMsgSerialized).to_bytes(4, 'big')  #i hate little endian
+        signUpMsgSerialized = cbor2.dumps(signUpMsg)
+        signUpMsgSize = len(signUpMsgSerialized).to_bytes(4, 'little')  # i hate little endian
 
-        opcode = 1
+        opcode = 2
         opcodeByte = bytes([opcode])
 
         message = opcodeByte + signUpMsgSize + signUpMsgSerialized
+        print(message)
 
         sock.sendall(message)
 
     server_msg = sock.recv(1024)
-    server_msg = server_msg.decode()
-    print(server_msg)
+    code = server_msg[0]
+    length = server_msg[1:5]
+    length = int.from_bytes(length, "little")  # little endian byte order as always basically :C
+    print("Code: ", code, "Length: ", length)
+    if code == 0:
+        print("successful login siir")
+    elif code == 2:
+        print("Successful sign up sirrrr")
+    else:
+        print("Login failed :C")
+
     sock.close()
 
 
