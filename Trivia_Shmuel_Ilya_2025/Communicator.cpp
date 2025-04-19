@@ -1,4 +1,5 @@
 #include "Communicator.h"
+#include "RequestHandlerFactory.h"
 
 #define BUFFERSIZE 1024
 
@@ -55,53 +56,30 @@ void Communicator::bindAndListen()
 	}
 }
 
+
+//i think i forgot to mutex somewhere but idrc rn so whatever
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	std::vector<char> charBuffer(BUFFERSIZE);
-	LoginRequestHandler* requestHandler; //supposed to be something but not implemented in this version
+	LoginRequestHandler* requestHandler = RequestHandlerFactory::createLoginRequestHandler();
 	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, requestHandler));
 
 	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);
 
 	Buffer buffer(charBuffer.begin(), charBuffer.end());
 
-	unsigned char code = buffer.at(0);
-
 	try
 	{
-		switch (code)
-		{
-		case 0: //login case
-		{
-			//
-			LoginRequest loginRequestStruct = JsonRequestPacketDeserializer::deserializeLoginRequest(buffer);
+		unsigned char code = buffer.at(0);
+		RequestResult requestResult;
+		RequestInfo requestinfo;
+		requestinfo.id = code;
+		requestinfo.buffer = buffer;
+		requestinfo.receivalTime = std::time(nullptr);
 
-			//create login response?
-			LoginResponse response;
-			response.status = 0;
 
-			Buffer msg = JsonResponsePacketSerializer::serializeResponse(response);
-
-			send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
-
-			break;
-		}
-		case 2: //signup case
-		{
-			SignupRequest signUpRequestStruct = JsonRequestPacketDeserializer::deserializeSignupRequest(buffer);
-
-			//create login response?
-			SignupResponse response;
-			response.status = 2;
-
-			Buffer msg = JsonResponsePacketSerializer::serializeResponse(response);
-
-			send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
-			break;
-		}
-		default:
-			break;
-		}
+		requestResult = requestHandler->handleRequest(requestinfo);
+		send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
 	}
 	catch (const std::exception&)
 	{
