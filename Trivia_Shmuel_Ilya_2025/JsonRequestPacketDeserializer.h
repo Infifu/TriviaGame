@@ -5,7 +5,7 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
-typedef std::vector<unsigned char> Buffer;
+typedef std::vector<unsigned char> Buffer; //same name to match the xml
 
 struct LoginRequest
 {
