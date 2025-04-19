@@ -25,7 +25,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
         else if (requestInfo.id == 2) 
         {
             auto signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
-            SignupResponse signupResp{ 2 };
+            SignupResponse signupResp{ 0 };
             result.response = JsonResponsePacketSerializer::serializeResponse(signupResp);
             result.newHandler = nullptr; // Someday
         }
