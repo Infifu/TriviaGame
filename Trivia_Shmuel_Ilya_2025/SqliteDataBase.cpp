@@ -1,5 +1,28 @@
 #include "SqliteDataBase.h"
 
+bool SqliteDataBase::open()
+{
+	//remind me to do something here idkl
+	int res = sqlite3_open("Gallery.VC.db", &_database);
+
+	if (res != SQLITE_OK)
+	{
+		std::cerr << "Failed to open database: " << sqlite3_errmsg(_database) << std::endl;
+		sqlite3_close(_database);
+		return false;
+	}
+	return true;
+}
+
+bool SqliteDataBase::close()
+{
+	if (sqlite3_close(_database) == SQLITE_OK)
+	{
+		return true;
+	}
+	return false;
+}
+
 bool SqliteDataBase::doesUserExist(std::string username)
 {
 	dbVector selected = SqliteDataBase::selectQuery("username", username);
