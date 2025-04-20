@@ -2,7 +2,7 @@
 
 #include <vector>
 
-// circle not good, bad circle
+//TO DO: verify ts
 class IRequestHandler;
 
 struct RequestResult 

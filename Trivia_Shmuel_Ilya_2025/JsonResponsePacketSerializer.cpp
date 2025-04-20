@@ -43,7 +43,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginRespon
 
     int status = loginResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
-    unsigned char loginCode = 0; //store the login code (1 byte)
+    unsigned char loginCode = loginResponse.status;
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
     int jsonLength = jsonDump.size(); //length of the json
@@ -69,7 +69,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signupResp
 
     int status = signupResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
-    unsigned char signUpCode = 2; //store the signup code (1 byte)
+    unsigned char signUpCode = signupResponse.status;
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
     int jsonLength = jsonDump.size(); //length of the json

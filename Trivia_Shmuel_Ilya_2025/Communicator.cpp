@@ -79,6 +79,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 
 		requestResult = requestHandler->handleRequest(requestinfo);
+
 		send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
 	}
 	catch (const std::exception&)
