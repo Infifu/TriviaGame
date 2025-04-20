@@ -59,6 +59,8 @@ void SqliteDataBase::addNewUser(std::string username , std::string password, std
 
 std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(std::string column, std::string argument)
 {
+	//TO DO
+	//i need to check where does the database is stored in the process
 	sqlite3* db;
 	sqlite3_open("TriviaDB.db", &db);
 
@@ -110,7 +112,7 @@ bool SqliteDataBase::insertQuery(std::map<std::string, std::string> values)
 	char* errMessage = nullptr;
 
 	sqlStatement = "INSERT INTO users (username, password, email) VALUES (";
-	sqlStatement += "'" + values.at("username") + "', '" + values.at("password") + "', '" + values.at("email") + ");";
+	sqlStatement += "'" + values.at("username") + "', '" + values.at("password") + "', '" + values.at("email") + "');";
 
 	int res = sqlite3_exec(db, sqlStatement.c_str(), nullptr, nullptr, &errMessage);
 
