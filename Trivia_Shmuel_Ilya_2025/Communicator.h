@@ -17,6 +17,7 @@ class Communicator
 {
 public:
 	Communicator();
+	Communicator(IDatabase* database);
 	void startHandleRequests();
 
 private:
@@ -25,4 +26,5 @@ private:
 
 	SOCKET m_serverSocket;
 	std::map<SOCKET, IRequestHandler*> m_clients;
+	IDatabase* m_database;
 };

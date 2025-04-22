@@ -6,16 +6,17 @@
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
 
-
-struct LoginStatus 
+enum LoginStatus
 {
-    unsigned int status = 0;
+    LoginSuccess = 0,
+    LoginUserNotExist = 1,
+    LoginWrongPassword = 2
 };
 
-
-struct SignUpStatus 
+enum SignUpStatus
 {
-    unsigned int status = 0;
+    SignSuccess = 0,
+    SignUsernameIsTaken = 1
 };
 
 
