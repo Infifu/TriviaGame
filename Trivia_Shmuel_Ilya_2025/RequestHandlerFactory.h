@@ -2,6 +2,7 @@
 #include "LoginManager.h"
 #include "IDatabase.h"
 #include "MenuRequestHandler.h"
+#include "LoginRequestHandler.h" 
 
 class LoginRequestHandler;
 

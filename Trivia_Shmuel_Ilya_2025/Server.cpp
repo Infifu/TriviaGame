@@ -3,8 +3,8 @@
 
 Server::Server()
     : m_database(new SqliteDataBase()),
-    m_handlerFactory(reinterpret_cast<SqliteDataBase*>(m_database)),
-    m_communicator(m_database)
+    m_handlerFactory(dynamic_cast<SqliteDataBase*>(m_database)),
+    m_communicator(m_database, &m_handlerFactory)
 {
     m_database->open();
 }

@@ -4,11 +4,7 @@
 
 #define BUFFERSIZE 1024
 
-Communicator::Communicator()
-{
-}
-
-Communicator::Communicator(IDatabase* database)
+Communicator::Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory)
 {
 	WSADATA wsaData;
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -68,7 +64,7 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	std::vector<char> charBuffer(BUFFERSIZE);
-	LoginRequestHandler* loginRequestHandler = .createLoginRequestHandler();
+	LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
 	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
 
 	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);

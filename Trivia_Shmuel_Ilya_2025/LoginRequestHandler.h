@@ -8,6 +8,7 @@
 
 
 typedef std::vector<unsigned char> Buffer; //same name to match the xml
+class RequestHandlerFactory;
 
 
 class LoginRequestHandler : public IRequestHandler 

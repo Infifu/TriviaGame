@@ -16,14 +16,14 @@ typedef std::vector<unsigned char> Buffer;
 class Communicator
 {
 public:
-	Communicator();
-	Communicator(IDatabase* database);
+	Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory);
 	void startHandleRequests();
 
 private:
 	void bindAndListen();
 	void handleNewClient(SOCKET clientSocket);
 
+	RequestHandlerFactory& m_handlerFactory;
 	SOCKET m_serverSocket;
 	std::map<SOCKET, IRequestHandler*> m_clients;
 	IDatabase* m_database;
