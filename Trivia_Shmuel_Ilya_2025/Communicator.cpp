@@ -1,8 +1,10 @@
 #include "Communicator.h"
+#include "RequestHandlerFactory.h"
+#include "IDatabase.h"
 
 #define BUFFERSIZE 1024
 
-Communicator::Communicator()
+Communicator::Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory)
 {
 	WSADATA wsaData;
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -16,6 +18,8 @@ Communicator::Communicator()
 		WSACleanup();
 		throw std::exception(__FUNCTION__ " - Socket");
 	}
+
+	m_database = database;
 }
 
 void Communicator::startHandleRequests()
@@ -55,14 +59,39 @@ void Communicator::bindAndListen()
 	}
 }
 
+
+//i think i forgot to mutex somewhere but idrc rn so whatever
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	LoginRequestHandler* requestHandler; //supposed to be something but not implemented in this version
-	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, requestHandler));
-	char buffer[BUFFERSIZE] = { 0 };
-	send(clientSocket, "Hello", strlen("Hello"), 0);
+	std::vector<char> charBuffer(BUFFERSIZE);
+	LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
+	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
 
-	recv(clientSocket, buffer, BUFFERSIZE,0);
+	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);
 
-	std::cout << buffer << std::endl;
+	Buffer buffer(charBuffer.begin(), charBuffer.end());
+
+	try
+	{
+		unsigned char code = buffer.at(0);
+		RequestResult requestResult;
+		RequestInfo requestinfo;
+		requestinfo.id = code;
+		requestinfo.buffer = buffer;
+		requestinfo.receivalTime = std::time(nullptr);
+
+
+		requestResult = loginRequestHandler->handleRequest(requestinfo);
+
+		send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
+	}
+	catch (const std::exception&)
+	{
+		ErrorResponse error;
+		error.message = "An error has occured";
+		Buffer msg = JsonResponsePacketSerializer::serializeResponse(error);
+		send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
+		std::cout << "Error has occured" << std::endl;
+	}
 }
+
