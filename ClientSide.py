@@ -58,12 +58,22 @@ def main():
     length = server_msg[1:5]
     length = int.from_bytes(length, "little")  # little endian byte order as always basically :C
     print("Code: ", code, "Length: ", length)
-    if code == 0:
-        print("successful login siir")
-    elif code == 2:
-        print("Successful sign up sirrrr")
-    else:
-        print("Login failed :C")
+
+    if userInput == 1:
+        if code == 0:
+            print("Login successful")
+        elif code == 1:
+            print("User doesnt exist")
+        elif code == 2:
+            print("Incorrect password")
+
+    elif userInput == 2:
+        if code == 0:
+            print("Sign up successful")
+        elif code == 1:
+            print("Username already exists")
+
+
 
     sock.close()
 

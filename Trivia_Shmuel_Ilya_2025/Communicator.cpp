@@ -1,9 +1,10 @@
 #include "Communicator.h"
 #include "RequestHandlerFactory.h"
+#include "IDatabase.h"
 
 #define BUFFERSIZE 1024
 
-Communicator::Communicator()
+Communicator::Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory)
 {
 	WSADATA wsaData;
 	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -17,6 +18,8 @@ Communicator::Communicator()
 		WSACleanup();
 		throw std::exception(__FUNCTION__ " - Socket");
 	}
+
+	m_database = database;
 }
 
 void Communicator::startHandleRequests()
@@ -61,8 +64,8 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	std::vector<char> charBuffer(BUFFERSIZE);
-	LoginRequestHandler* requestHandler = RequestHandlerFactory::createLoginRequestHandler();
-	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, requestHandler));
+	LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
+	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
 
 	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);
 
@@ -78,7 +81,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 		requestinfo.receivalTime = std::time(nullptr);
 
 
-		requestResult = requestHandler->handleRequest(requestinfo);
+		requestResult = loginRequestHandler->handleRequest(requestinfo);
 
 		send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
 	}
