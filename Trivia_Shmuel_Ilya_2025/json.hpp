@@ -6516,7 +6516,8 @@ class file_input_adapter
         return std::fgetc(m_file);
     }
 
-    // returns the number of characters successfully read
+    // returns the number of characters 
+    // fully read
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {

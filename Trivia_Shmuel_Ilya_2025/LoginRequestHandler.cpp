@@ -3,6 +3,10 @@
 #include "JsonResponsePacketSerializer.h"
 #include "RequestInfo.h"
 #include "RequestResult.h"
+#include "LoginManager.h"
+
+LoginRequestHandler::LoginRequestHandler(LoginManager& loginManager, RequestHandlerFactory& handlerFactory)
+    : _loginManager(loginManager), _handlerFactory(handlerFactory) {}
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
@@ -11,6 +15,7 @@ bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo) 
 {
+    LoginManager* loginManager = &_loginManager; 
     RequestResult reqRes;
 
     try 
@@ -40,65 +45,38 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
 RequestResult LoginRequestHandler::login(RequestInfo requestInfo)
 {
-    LoginRequest loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
-    LoginResponse loginRes;
+    LoginManager* loginManager = &_loginManager;
     RequestResult reqRes;
+    LoginRequest logReq = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
+    LoginResponse logRes;
+    std::string username = logReq.username;
+    std::string password = logReq.password;
 
-    //TO DO: check if this could be done in a diffrent way
-    SqliteDataBase database;
-    if (database.doesUserExist(loginReq.username))
-    {
-        if (database.doesPasswordMatch(loginReq.username, loginReq.password))
-        {
-            _loggedUsers.push_back(LoggedUser(loginReq.username));
-            loginRes.status = 0;
-        }
-        else
-        {
-            loginRes.status = 2; //password doesnt match
-        }
-    }
-    else
-    {
-        loginRes.status = 1; //doesnt exist
-    }
+    LoginStatus loginStatus = loginManager->login(username, password);
 
-    reqRes.response = JsonResponsePacketSerializer::serializeResponse(loginRes);
-    reqRes.newHandler = nullptr; //TO DO: complete
-
+    logRes.status = loginStatus;
+    reqRes.response = JsonResponsePacketSerializer::serializeResponse(logRes);
+    reqRes.newHandler = nullptr;
     return reqRes;
 }
 
 RequestResult LoginRequestHandler::signup(RequestInfo requestInfo)
 {
-    SignupRequest signUpReq = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
-    SignupResponse signUpRes;
+    LoginManager* loginManager = &_loginManager;
     RequestResult reqRes;
 
-    //TO DO: check if this could be done in a diffrent way
-    //Check if username 
-    SqliteDataBase database;
+    SignupRequest signReq = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
+    SignUpStatus signUpStatus;
+    SignupResponse signRes;
+    std::string username = signReq.username;
+    std::string password = signReq.password;
+    std::string email = signReq.email;
 
-    if (!database.doesUserExist(signUpReq.username)) //do the same with mail
-    {
-        database.addNewUser(signUpReq.username, signUpReq.password, signUpReq.email);
-        signUpRes.status = 0;
-    }
-    else
-    {
-        signUpRes.status = 1; // username taken
-    }
-    
-    reqRes.response = JsonResponsePacketSerializer::serializeResponse(signUpRes);
-    reqRes.newHandler = nullptr; //TO DO: complete
+
+    signUpStatus = loginManager->signup(username, password, email);
+    signRes.status = signUpStatus;
+    reqRes.response = JsonResponsePacketSerializer::serializeResponse(signRes);
+    reqRes.newHandler = nullptr;
 
     return reqRes;
 }
-
-//TO DO: verify this
-void LoginRequestHandler::logOut(LoggedUser user)
-{
-    //the so called erase - remove idiom
-    _loggedUsers.erase(std::remove(_loggedUsers.begin(), _loggedUsers.end(), user),_loggedUsers.end());
-}
-
