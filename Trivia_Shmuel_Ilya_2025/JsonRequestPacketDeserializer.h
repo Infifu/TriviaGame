@@ -3,6 +3,7 @@
 #include <iostream>
 #include "json.hpp"
 #include "UsingBuffer.h"
+#include <cstdint> //for the uint32_t
 
 using json = nlohmann::json;
 

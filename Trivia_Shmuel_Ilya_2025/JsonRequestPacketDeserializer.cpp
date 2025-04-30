@@ -10,8 +10,10 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const Buffer
     LoginRequest request;
 
     // See if the buffer has at least 5 bytes
-    if (buffer.size() < 5)
-        throw std::runtime_error("Not Valid buffer length for LoginRequest");
+    if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    {
+        throw std::runtime_error("Not Valid buffer length For LoginRequest");
+    }
 
     // Extract the 4 sbyte length of the json skiping the data 1 byte
     int length = 0;
@@ -38,8 +40,10 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
     SignupRequest request;
 
     // See that the buffer has at least 5 bytes
-    if (buffer.size() < 5)
+    if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    {
         throw std::runtime_error("Not Valid buffer length For SignupRequest");
+    }
 
     // Extract the 4 sbyte length of the json skiping the data 1 byte
     int length = 0;
