@@ -14,7 +14,7 @@ LoginRequestHandler::~LoginRequestHandler()
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
-    return requestInfo.id == 0 || requestInfo.id == 2;
+    return requestInfo.id == LoginRec || requestInfo.id == SignupRec;
 }
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo) 
@@ -24,11 +24,11 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
     try 
     {
-        if (requestInfo.id == 0) 
+        if (requestInfo.id == LoginRec)
         {
             reqRes = login(requestInfo);
         }
-        else if (requestInfo.id == 2) 
+        else if (requestInfo.id == SignupRec)
         {
             reqRes = signup(requestInfo);
         }
