@@ -8,6 +8,10 @@
 LoginRequestHandler::LoginRequestHandler(LoginManager& loginManager, RequestHandlerFactory& handlerFactory)
     : _loginManager(loginManager), _handlerFactory(handlerFactory) {}
 
+LoginRequestHandler::~LoginRequestHandler()
+{
+}
+
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
     return requestInfo.id == 0 || requestInfo.id == 2;

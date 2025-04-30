@@ -1,13 +1,10 @@
 #pragma once
-
-#include <vector>
 #include <ctime>
-
-using byte = unsigned char; //same name to match the xml
+#include "UsingBuffer.h"
 
 struct RequestInfo 
 {
-    byte id;
+    unsigned char id;
     time_t receivalTime;
-    std::vector<byte> buffer;
+    Buffer buffer;
 };

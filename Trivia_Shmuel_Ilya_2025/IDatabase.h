@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <list>
-#include <vector>
+#include "UsingBuffer.h"
 #include <iostream>
 #include <map>
 #include "sqlite3.h"
@@ -9,6 +9,8 @@
 class IDatabase
 {
 public:
+	virtual ~IDatabase() {};
+
 	virtual bool open() = 0;
 	virtual bool close() = 0;
 

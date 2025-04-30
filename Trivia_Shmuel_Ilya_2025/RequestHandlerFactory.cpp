@@ -1,10 +1,7 @@
 #include "RequestHandlerFactory.h"
 
 
-RequestHandlerFactory::RequestHandlerFactory(SqliteDataBase* database) : _loginManager(database)
-{
-	_database = database;
-}
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* database) : _loginManager(database), _database(database) {}
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {

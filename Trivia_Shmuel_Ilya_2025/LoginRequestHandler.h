@@ -5,9 +5,8 @@
 #include "LoginManager.h"
 #include "RequestHandlerFactory.h"
 #include "RequestResult.h"
+#include "UsingBuffer.h"
 
-
-typedef std::vector<unsigned char> Buffer; //same name to match the xml
 class RequestHandlerFactory;
 
 
@@ -15,6 +14,7 @@ class LoginRequestHandler : public IRequestHandler
 {
 public:
     LoginRequestHandler(LoginManager& loginManager, RequestHandlerFactory& handlerFactory);
+    ~LoginRequestHandler();
     bool isRequestRelevant(const RequestInfo& requestInfo) override;
     RequestResult handleRequest(const RequestInfo& requestInfo) override;
 private:

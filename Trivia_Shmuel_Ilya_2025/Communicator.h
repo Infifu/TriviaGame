@@ -8,9 +8,8 @@
 #include <thread>
 #include <map>
 #include <utility>
-#include <vector>
+#include "UsingBuffer.h"
 
-typedef std::vector<unsigned char> Buffer;
 #pragma comment(lib, "ws2_32.lib")
 
 class Communicator

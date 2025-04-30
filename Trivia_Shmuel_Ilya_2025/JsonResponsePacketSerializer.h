@@ -1,10 +1,10 @@
 #pragma once
-#include <vector>
+#include "UsingBuffer.h"
 #include <string>
 #include "json.hpp"
 
 using json = nlohmann::json; //so the class could be accessed just by json::foo keyword
-typedef std::vector<unsigned char> Buffer; //same name to match the xml
+
 
 struct LoginResponse
 {

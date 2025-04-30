@@ -1,13 +1,11 @@
 #pragma once
+#include "UsingBuffer.h"
 
-#include <vector>
-
-//TO DO: verify ts
 class IRequestHandler;
 
 struct RequestResult 
 {
-    std::vector<unsigned char> response;
+    Buffer response;
     IRequestHandler* newHandler;
 };
 

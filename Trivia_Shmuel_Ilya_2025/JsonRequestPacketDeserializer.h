@@ -1,11 +1,10 @@
 #pragma once
-#include <vector>
 #include <string>
 #include <iostream>
 #include "json.hpp"
+#include "UsingBuffer.h"
 
 using json = nlohmann::json;
-typedef std::vector<unsigned char> Buffer; //same name to match the xml
 
 struct LoginRequest
 {
