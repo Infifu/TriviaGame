@@ -14,13 +14,13 @@ public:
 	bool open() override;
 	bool close() override;
 
-	bool doesUserExist(std::string username) override ;
-	bool doesPasswordMatch(std::string username, std::string password) override;
-	void addNewUser(std::string username, std::string password, std::string email) override;
+	bool doesUserExist(const std::string username) override ;
+	bool doesPasswordMatch(const std::string username,const std::string password) override;
+	void addNewUser(const std::string username,const std::string password,const std::string email) override;
 
 private:
-	DBvector selectQuery(std::string sqlStatement,std::string argument);
-	bool insertQuery(std::string table, std::map<std::string, std::string> values);
+	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
+	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);
 
 private:
 	sqlite3* m_database;

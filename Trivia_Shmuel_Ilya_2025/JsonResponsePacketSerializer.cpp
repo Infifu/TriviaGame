@@ -9,7 +9,7 @@
  * @param errorResponse - struct that holds the message
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse errorResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse errorResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
@@ -36,7 +36,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(ErrorResponse errorRespon
  * @param loginResponse - struct that holds the status
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse loginResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
@@ -62,7 +62,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(LoginResponse loginRespon
  * @param loginResponse - struct that holds the status
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(SignupResponse signupResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse signupResponse)
 {
     Buffer jsonDump;
     Buffer buffer;

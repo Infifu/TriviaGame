@@ -14,9 +14,9 @@ public:
 	virtual bool open() = 0;
 	virtual bool close() = 0;
 
-	virtual bool doesUserExist(std::string username) = 0;
-	virtual bool doesPasswordMatch(std::string username, std::string password) = 0;
-	virtual void addNewUser(std::string username, std::string password, std::string email) = 0;
+	virtual bool doesUserExist(const std::string username) = 0;
+	virtual bool doesPasswordMatch(const std::string username, const std::string password) = 0;
+	virtual void addNewUser(const std::string username, std::string password, const std::string email) = 0;
 
 	//to do:
 	//List<Question> getQuestions(int)

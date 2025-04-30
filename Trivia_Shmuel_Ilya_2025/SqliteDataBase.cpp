@@ -34,7 +34,7 @@ bool SqliteDataBase::close()
 	return false;
 }
 
-bool SqliteDataBase::doesUserExist(std::string username)
+bool SqliteDataBase::doesUserExist(const std::string username)
 {
 	std::string statement = "SELECT * FROM users WHERE username = ?;";
 	DBvector selected = SqliteDataBase::selectQuery(statement,username);
@@ -42,7 +42,7 @@ bool SqliteDataBase::doesUserExist(std::string username)
 	return !selected.empty();
 }
 
-bool SqliteDataBase::doesPasswordMatch(std::string username, std::string password)
+bool SqliteDataBase::doesPasswordMatch(const std::string username,const std::string password)
 {
 	std::string statement = "SELECT * FROM users WHERE username = ?;";
 	DBvector selected = SqliteDataBase::selectQuery(statement,username); //right now username supposed to be individual for everyone
@@ -58,7 +58,7 @@ bool SqliteDataBase::doesPasswordMatch(std::string username, std::string passwor
 
 
 //check this function
-void SqliteDataBase::addNewUser(std::string username , std::string password, std::string email)
+void SqliteDataBase::addNewUser(const std::string username ,const std::string password,const std::string email)
 {
 	std::map<std::string, std::string> values;
 	values["username"] = username;
@@ -68,7 +68,7 @@ void SqliteDataBase::addNewUser(std::string username , std::string password, std
 	bool res = SqliteDataBase::insertQuery("users", values);
 }
 
-std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(std::string sqlStatement,std::string argument)
+std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
 {
 	std::vector<std::map<std::string, std::string>> selected;
 	sqlite3_stmt* stmt;
@@ -108,7 +108,7 @@ std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(std:
 	return selected;
 }
 
-bool SqliteDataBase::insertQuery(std::string table,std::map<std::string, std::string> values)
+bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
 {
 	std::string sqlStatement;
 	sqlite3_stmt* stmt;

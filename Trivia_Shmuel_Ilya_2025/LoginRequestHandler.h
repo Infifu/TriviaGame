@@ -18,8 +18,8 @@ public:
     bool isRequestRelevant(const RequestInfo& requestInfo) override;
     RequestResult handleRequest(const RequestInfo& requestInfo) override;
 private:
-    RequestResult login(RequestInfo);
-    RequestResult signup(RequestInfo);
+    RequestResult login(const RequestInfo requestInfo);
+    RequestResult signup(const RequestInfo requestInfo);
 
     LoginManager& _loginManager;
     RequestHandlerFactory& _handlerFactory;

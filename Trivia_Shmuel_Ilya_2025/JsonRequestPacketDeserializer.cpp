@@ -5,7 +5,7 @@
  * @param buffer - the raw binary data received from the client
  * @return LoginRequest struct containing username and password extracted from json
  */
-LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(Buffer buffer)
+LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const Buffer buffer)
 {
     LoginRequest request;
 

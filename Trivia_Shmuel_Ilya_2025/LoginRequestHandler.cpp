@@ -47,7 +47,7 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
     return reqRes;
 }
 
-RequestResult LoginRequestHandler::login(RequestInfo requestInfo)
+RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
 {
     LoginManager* loginManager = &_loginManager;
     RequestResult reqRes;
@@ -64,7 +64,7 @@ RequestResult LoginRequestHandler::login(RequestInfo requestInfo)
     return reqRes;
 }
 
-RequestResult LoginRequestHandler::signup(RequestInfo requestInfo)
+RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
 {
     LoginManager* loginManager = &_loginManager;
     RequestResult reqRes;
