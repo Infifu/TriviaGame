@@ -3,7 +3,7 @@
 #include "UsingBuffer.h"
 
 using DBvector = std::vector<std::map<std::string, std::string>>;
-
+using ArgMap = std::map<std::string, std::string>;
 
 class SqliteDataBase : public IDatabase
 {
@@ -20,7 +20,7 @@ public:
 
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
-	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);
+	bool insertQuery(const std::string table,const ArgMap values);
 
 private:
 	sqlite3* m_database;

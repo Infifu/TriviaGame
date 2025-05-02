@@ -16,11 +16,13 @@ class Communicator
 {
 public:
 	Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory);
+	~Communicator();
 	void startHandleRequests();
 
 private:
 	void bindAndListen();
 	void handleNewClient(SOCKET clientSocket);
+	static SOCKET socketInit();
 
 	RequestHandlerFactory& m_handlerFactory;
 	SOCKET m_serverSocket;

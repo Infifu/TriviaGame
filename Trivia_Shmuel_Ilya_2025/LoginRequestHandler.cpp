@@ -4,6 +4,7 @@
 #include "RequestInfo.h"
 #include "RequestResult.h"
 #include "LoginManager.h"
+#include "TriviaException.h"
 
 LoginRequestHandler::LoginRequestHandler(LoginManager& loginManager, RequestHandlerFactory& handlerFactory)
     : _loginManager(loginManager), _handlerFactory(handlerFactory) {}
@@ -34,14 +35,13 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
         }
         else 
         {
-            throw std::runtime_error("Invalid request type");
+            throw TriviaException("Invalid request type");
         }
     }
     catch (const std::exception& e) 
     {
         ErrorResponse errorResp{ e.what() };
         reqRes.response = JsonResponsePacketSerializer::serializeResponse(errorResp);
-        reqRes.newHandler = nullptr;
     }
 
     return reqRes;
@@ -50,37 +50,32 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
 {
     LoginManager* loginManager = &_loginManager;
-    RequestResult reqRes;
     LoginRequest logReq = JsonRequestPacketDeserializer::deserializeLoginRequest(requestInfo.buffer);
-    LoginResponse logRes;
     std::string username = logReq.username;
     std::string password = logReq.password;
 
     LoginStatus loginStatus = loginManager->login(username, password);
 
-    logRes.status = loginStatus;
-    reqRes.response = JsonResponsePacketSerializer::serializeResponse(logRes);
-    reqRes.newHandler = nullptr;
+    LoginResponse logRes{ loginStatus };
+    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)
+        , _handlerFactory.createMenuRequestHandler()};
     return reqRes;
 }
 
 RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
 {
     LoginManager* loginManager = &_loginManager;
-    RequestResult reqRes;
 
     SignupRequest signReq = JsonRequestPacketDeserializer::deserializeSignupRequest(requestInfo.buffer);
     SignUpStatus signUpStatus;
-    SignupResponse signRes;
     std::string username = signReq.username;
     std::string password = signReq.password;
     std::string email = signReq.email;
 
 
-    signUpStatus = loginManager->signup(username, password, email);
-    signRes.status = signUpStatus;
-    reqRes.response = JsonResponsePacketSerializer::serializeResponse(signRes);
-    reqRes.newHandler = nullptr;
+    SignupResponse signRes{ signUpStatus = loginManager->signup(username, password, email) };
+    RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) ,
+        _handlerFactory.createMenuRequestHandler() };
 
     return reqRes;
 }

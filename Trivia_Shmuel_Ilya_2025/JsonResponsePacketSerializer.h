@@ -29,8 +29,7 @@ public:
 	static Buffer serializeResponse(const SignupResponse signupResponse);
 
 private:
-	static void intToBytesRef(Buffer& buffer,int number);
-	static Buffer intToBytesVal(Buffer buffer,int number);
+	static Buffer intToBytesVal(int number);
 
 
 

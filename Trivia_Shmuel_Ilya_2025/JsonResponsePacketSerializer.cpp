@@ -1,5 +1,13 @@
 #include "JsonResponsePacketSerializer.h"
 
+
+enum requestsCodes
+{
+    REQUEST_LOGIN = 0,
+    REQUEST_ERROR = 1,
+    REQUEST_SIGNUP = 2
+};
+
 //ERROR 1
 //LOGIN 0
 //SIGNUP 2
@@ -13,18 +21,21 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse error
 {
     Buffer jsonDump;
     Buffer buffer;
-
+    Buffer numberInBinary;
+    
     std::string message = errorResponse.message; //store the message
     json messageSerialized = { {"message", message} }; //create the json
     unsigned char errorCode = 1; //store the error code (1 byte)
 
     jsonDump = json::to_cbor(messageSerialized); //serialize the json
-    int jsonLength = jsonDump.size(); //length of the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //convert the number to bytes
 
-    //push the error code (1 byte)
+    //insert the code
     buffer.push_back(errorCode);
-    //write the into into the buffer by starting after the erro code
-    std::memcpy(buffer.data() + 1, &jsonLength, sizeof(jsonLength));
+    
+    //insert the number in binary
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
@@ -40,18 +51,21 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse login
 {
     Buffer jsonDump;
     Buffer buffer;
+    Buffer numberInBinary;
 
     int status = loginResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
     unsigned char loginCode = loginResponse.status;
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
-    int jsonLength = jsonDump.size(); //length of the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //convert the number to bytes
 
     //push the login code (1 byte)
     buffer.push_back(loginCode);
-    //write the into into the buffer by starting after the login code
-    JsonResponsePacketSerializer::intToBytesRef(buffer, jsonLength);
+
+    //push the number buffer
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
@@ -59,40 +73,32 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse login
 
 /**
  * @brief serialize signup response (converting to binary)
- * @param loginResponse - struct that holds the status
+ * @param signupResponse - struct that holds the status
  * @return the buffers (vector of unsigned char)
  */
 Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse signupResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
+    Buffer numberInBinary;
 
     int status = signupResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
     unsigned char signUpCode = signupResponse.status;
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
-    int jsonLength = jsonDump.size(); //length of the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //length of the json
 
     //push the signup code (1 byte)
     buffer.push_back(signUpCode);
     //write the into into the buffer by starting after the signup code
-    JsonResponsePacketSerializer::intToBytesRef(buffer, jsonLength);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
 }
 
-void JsonResponsePacketSerializer::intToBytesRef(Buffer& buffer, int number)
-{
-    //little endian more like little inidan hahahahha
-    buffer.push_back((number) & 0xFF);
-    buffer.push_back((number >> 8) & 0xFF);
-    buffer.push_back((number >> 16) & 0xFF);
-    buffer.push_back((number >> 24) & 0xFF);
-}
-
-Buffer JsonResponsePacketSerializer::intToBytesVal(Buffer buffer, int number)
+Buffer JsonResponsePacketSerializer::intToBytesVal(int number)
 {
     //little endian encoding cuz god want me to suffer or whatever
     Buffer intBytes;

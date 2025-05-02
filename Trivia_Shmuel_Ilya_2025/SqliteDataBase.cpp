@@ -60,7 +60,7 @@ bool SqliteDataBase::doesPasswordMatch(const std::string username,const std::str
 //check this function
 void SqliteDataBase::addNewUser(const std::string username ,const std::string password,const std::string email)
 {
-	std::map<std::string, std::string> values;
+	ArgMap values;
 	values["username"] = username;
 	values["password"] = password;
 	values["email"] = email;
@@ -68,10 +68,10 @@ void SqliteDataBase::addNewUser(const std::string username ,const std::string pa
 	bool res = SqliteDataBase::insertQuery("users", values);
 }
 
-std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
+DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
 {
-	std::vector<std::map<std::string, std::string>> selected;
 	sqlite3_stmt* stmt;
+	DBvector selected;
 
 	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
 	if (res != SQLITE_OK)
@@ -83,9 +83,8 @@ std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(cons
 
 	while ((res = sqlite3_step(stmt) == SQLITE_ROW))
 	{
-		std::map<std::string, std::string> row;
+		ArgMap row;
 		int colCount = sqlite3_column_count(stmt);
-
 
 		for (int i = 0; i < colCount; i++)
 		{
@@ -108,7 +107,7 @@ std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(cons
 	return selected;
 }
 
-bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
+bool SqliteDataBase::insertQuery(const std::string table,const ArgMap values)
 {
 	std::string sqlStatement;
 	sqlite3_stmt* stmt;

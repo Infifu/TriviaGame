@@ -41,15 +41,6 @@ LoginStatus LoginManager::login(const std::string& username, const std::string& 
 
 void LoginManager::logout(const std::string& username)
 {
-    for (auto it = m_loggedUsers.begin(); it != m_loggedUsers.end(); ++it)
-    {
-        if (it->getUsername() == username)
-        {
-            m_loggedUsers.erase(it);
-            std::cout << "User '" << username << "' logged out successfully." << std::endl;
-            return;
-        }
-    }
-
-    std::cout << "User '" << username << "' is not logged in." << std::endl;
+    m_loggedUsers.erase(std::remove(m_loggedUsers.begin(), m_loggedUsers.end(), username), m_loggedUsers.end());
+    //maybe compare the sizes to check if it indeed deleted but i think its not needed rn
 }

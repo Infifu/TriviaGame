@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "IDatabase.h"
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
