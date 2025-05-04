@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include "sqlite3.h"
+#include "Question.h"
 
 class IDatabase
 {
@@ -19,7 +20,7 @@ public:
 	virtual void addNewUser(const std::string username, std::string password, const std::string email) = 0;
 
 	//to do:
-	//List<Question> getQuestions(int)
+	virtual std::vector<Question> getQuestions(int amount) = 0;
 	//virtual float getPlayerAverageAnswerTime(std::string);
 	//virtual int getNumOfCorrectAnswers(std::string);
 	//virtual int getNumOfTotalAnswers(std::string);

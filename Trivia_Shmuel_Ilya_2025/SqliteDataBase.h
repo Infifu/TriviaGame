@@ -17,7 +17,7 @@ public:
 	bool doesUserExist(const std::string username) override ;
 	bool doesPasswordMatch(const std::string username,const std::string password) override;
 	void addNewUser(const std::string username,const std::string password,const std::string email) override;
-
+	std::vector<Question> getQuestions(int amount) override;
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
 	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);

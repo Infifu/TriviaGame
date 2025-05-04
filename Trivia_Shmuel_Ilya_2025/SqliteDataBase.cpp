@@ -68,6 +68,11 @@ void SqliteDataBase::addNewUser(const std::string username ,const std::string pa
 	bool res = SqliteDataBase::insertQuery("users", values);
 }
 
+std::vector<Question> SqliteDataBase::getQuestions(int amount)
+{
+	return std::vector<Question>();//:(
+}
+
 std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
 {
 	std::vector<std::map<std::string, std::string>> selected;
