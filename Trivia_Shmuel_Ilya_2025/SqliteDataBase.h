@@ -1,6 +1,9 @@
 #pragma once
 #include "IDatabase.h"
 #include "UsingBuffer.h"
+#include "sqlite3.h"
+#include "Question.h"
+#include "json.hpp"
 
 using DBvector = std::vector<std::map<std::string, std::string>>;
 
@@ -17,7 +20,7 @@ public:
 	bool doesUserExist(const std::string username) override ;
 	bool doesPasswordMatch(const std::string username,const std::string password) override;
 	void addNewUser(const std::string username,const std::string password,const std::string email) override;
-	std::vector<Question> getQuestions(int amount) override;
+	void importTenQuestions();
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
 	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);

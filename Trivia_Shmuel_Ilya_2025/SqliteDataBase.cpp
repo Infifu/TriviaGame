@@ -68,10 +68,50 @@ void SqliteDataBase::addNewUser(const std::string username ,const std::string pa
 	bool res = SqliteDataBase::insertQuery("users", values);
 }
 
-std::vector<Question> SqliteDataBase::getQuestions(int amount)
+
+
+void SqliteDataBase::importTenQuestions()
 {
-	return std::vector<Question>();//:(
+	const char* insertSQL = R"(
+        INSERT INTO QUESTIONS (question, answer0, answer1, answer2, answer3, correct_answer_id)
+        VALUES (?, ?, ?, ?, ?, ?);
+    )";
+
+	std::vector<Question> questions = {
+		Question("What is the capital of France?", {"Berlin", "Madrid", "Paris", "Rome"}, 2),
+		Question("Which planet is known as the Red Planet?", {"Earth", "Mars", "Jupiter", "Venus"}, 1),
+		Question("Who wrote 'Hamlet'?", {"Charles Dickens", "William Shakespeare", "Leo Tolstoy", "Mark Twain"}, 1),
+		Question("Which element has the chemical symbol 'O'?", {"Gold", "Oxygen", "Iron", "Silver"}, 1),
+		Question("How many continents are there?", {"5", "6", "7", "8"}, 2),
+		Question("What is the square root of 64?", {"6", "7", "8", "9"}, 2),
+		Question("In which year did World War II end?", {"1942", "1944", "1945", "1946"}, 2),
+		Question("Which language is primarily spoken in Brazil?", {"Spanish", "Portuguese", "English", "French"}, 1),
+		Question("What is the largest mammal?", {"Elephant", "Blue Whale", "Giraffe", "Hippo"}, 1),
+		Question("Who painted the Mona Lisa?", {"Vincent Van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"}, 2)
+	};
+
+	sqlite3_stmt* stmt = nullptr;
+	for (const auto& q : questions) 
+	{
+		const auto& answers = q.getPossibleAnswers();
+
+		if (sqlite3_prepare_v2(m_database, insertSQL, -1, &stmt, nullptr) == SQLITE_OK) 
+		{
+			sqlite3_bind_text(stmt, 1, q.getQuestion().c_str(), -1, SQLITE_TRANSIENT);
+			sqlite3_bind_text(stmt, 2, answers[0].c_str(), -1, SQLITE_TRANSIENT);
+			sqlite3_bind_text(stmt, 3, answers[1].c_str(), -1, SQLITE_TRANSIENT);
+			sqlite3_bind_text(stmt, 4, answers[2].c_str(), -1, SQLITE_TRANSIENT);
+			sqlite3_bind_text(stmt, 5, answers[3].c_str(), -1, SQLITE_TRANSIENT);
+			sqlite3_bind_int(stmt, 6, q.getCorrectAnswerId());   
+
+			sqlite3_step(stmt);
+			sqlite3_reset(stmt);
+		}
+	}
+	sqlite3_finalize(stmt);
 }
+
+
 
 std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
 {
