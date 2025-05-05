@@ -49,6 +49,11 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
     return request;
 }
 
+/**
+ * @brief Deserialize a request to get players in a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return GetPlayersInRoomRequest struct with the requested room ID
+ */
 GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(const Buffer& buffer) 
 {
     GetPlayersInRoomRequest request;
@@ -59,6 +64,11 @@ GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequ
     return request;
 }
 
+/**
+ * @brief Deserialize a request to join a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return JoinRoomRequest struct with the room ID to join
+ */
 JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer) 
 {
     JoinRoomRequest request;
@@ -69,6 +79,11 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const 
     return request;
 }
 
+/**
+ * @brief Deserialize a request to create a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return CreateRoomRequest struct with room name max users question count and answer timeout
+ */
 CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer) 
 {
     CreateRoomRequest request;
