@@ -17,7 +17,7 @@ enum requestsCodes
  * @param errorResponse - struct that holds the message
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse errorResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse& errorResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
@@ -47,15 +47,23 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const ErrorResponse error
  * @param loginResponse - struct that holds the status
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse loginResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse& loginResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
     Buffer numberInBinary;
+    unsigned char loginCode;
 
     int status = loginResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
-    unsigned char loginCode = loginResponse.status;
+    if (status == 0)
+    {
+        loginCode = 0; // login successfull
+    }
+    else
+    {
+        loginCode = 1; //login failed
+    }
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
     numberInBinary = intToBytesVal(jsonDump.size()); //convert the number to bytes
@@ -76,15 +84,23 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const LoginResponse login
  * @param signupResponse - struct that holds the status
  * @return the buffers (vector of unsigned char)
  */
-Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse signupResponse)
+Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& signupResponse)
 {
     Buffer jsonDump;
     Buffer buffer;
     Buffer numberInBinary;
+    unsigned char signUpCode;
 
     int status = signupResponse.status; //store the message
     json statusSerialized = { {"status", status} }; //create the json
-    unsigned char signUpCode = signupResponse.status;
+    if (status == 0)
+    {
+        signUpCode = 0; // signUp successfull
+    }
+    else
+    {
+        signUpCode = 1; //signUp failed
+    }
 
     jsonDump = json::to_cbor(statusSerialized); //serialize the json
     numberInBinary = intToBytesVal(jsonDump.size()); //length of the json
@@ -96,6 +112,95 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse sign
     //now just push the json
     buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
     return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const LogoutResponse& response)
+{
+    Buffer jsonDump;
+    Buffer buffer;
+    Buffer numberInBinary;
+
+    int status = response.status; //store the message
+    json statusSerialized = { {"status", status} }; //create the json
+
+    unsigned char signUpCode = response.status; //here the codes match (for now)
+
+    jsonDump = json::to_cbor(statusSerialized); //serialize the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //length of the json
+
+    //push the signup code (1 byte)
+    buffer.push_back(signUpCode);
+    //write the into into the buffer by starting after the signup code
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomsResponse& response)
+{
+    return Buffer();
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPlayersInRoomResponse& response)
+{
+    return Buffer();
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const JoinRoomResponse& response)
+{
+    Buffer jsonDump;
+    Buffer buffer;
+    Buffer numberInBinary;
+
+    int status = response.status; //store the message
+    json statusSerialized = { {"status", status} }; //create the json
+
+    unsigned char signUpCode = response.status; //here the codes match (for now)
+
+    jsonDump = json::to_cbor(statusSerialized); //serialize the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //length of the json
+
+    //push the signup code (1 byte)
+    buffer.push_back(signUpCode);
+    //write the into into the buffer by starting after the signup code
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const CreateRoomResponse& response)
+{
+    Buffer jsonDump;
+    Buffer buffer;
+    Buffer numberInBinary;
+
+    int status = response.status; //store the message
+    json statusSerialized = { {"status", status} }; //create the json
+
+    unsigned char signUpCode = response.status; //here the codes match (for now)
+
+    jsonDump = json::to_cbor(statusSerialized); //serialize the json
+    numberInBinary = intToBytesVal(jsonDump.size()); //length of the json
+
+    //push the signup code (1 byte)
+    buffer.push_back(signUpCode);
+    //write the into into the buffer by starting after the signup code
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    //now just push the json
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetHighScoreResponse& response)
+{
+    return Buffer();
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetPersonalStatsResponse& response)
+{
+    return Buffer();
 }
 
 Buffer JsonResponsePacketSerializer::intToBytesVal(int number)

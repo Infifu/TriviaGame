@@ -28,16 +28,18 @@ std::vector<RoomData> RoomManager::getRooms()
     return datas;
 }
 
-std::optional<Room&> RoomManager::getRoom(RoomID id)
+
+//the compiler doesnt let me return std::optional<Room&>
+//only a copy not a reference
+std::optional<Room> RoomManager::getRoom(RoomID id)
 {
     auto it = m_rooms.find(id);
     if (it != m_rooms.end())
     {
-        return std::optional<Room&>(it->second);
+        return it->second; // copy the Room
     }
     else
     {
         return std::nullopt;
     }
 }
-

@@ -13,7 +13,7 @@ public:
 	void deleteRoom(RoomID id);
 	RoomStatus getRoomState(RoomID id);
 	std::vector<RoomData> getRooms();
-	std::optional<Room&> getRoom(RoomID id); 
+	std::optional<Room> getRoom(RoomID id); 
 private:
 	std::map<RoomID, Room> m_rooms;
 };

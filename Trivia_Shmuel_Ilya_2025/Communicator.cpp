@@ -3,7 +3,6 @@
 #include "IDatabase.h"
 #include "TriviaException.h"
 
-#define BUFFERSIZE 1024
 #define PORT 6969
 
 Communicator::Communicator(IDatabase* database, RequestHandlerFactory* handlerFactory) : m_handlerFactory(*handlerFactory), m_database(database), m_serverSocket(Communicator::socketInit()) {}
@@ -59,22 +58,27 @@ void Communicator::bindAndListen()
 //i think i forgot to mutex somewhere but idrc rn so whatever
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	std::vector<char> charBuffer(BUFFERSIZE);
 	LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
 	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
 
-	int sizeRecievesd = recv(clientSocket, &charBuffer[0], BUFFERSIZE, 0);
+	unsigned char code;
+	Buffer msgLength(4);
 
-	Buffer buffer(charBuffer.begin(), charBuffer.end());
+	recv(clientSocket, reinterpret_cast<char*>(&code), 1, 0); //recieve the code
+	recv(clientSocket, reinterpret_cast<char*>(&msgLength[0]), 4, 0); //recieve the length
+
+	int length = 0;
+	std::memcpy(&length, msgLength.data(), sizeof(length));
+
+	Buffer buffer(length);
+	recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0); //recieve the rest of the message
 
 	try
 	{
-		unsigned char code = buffer.at(0);
 		RequestInfo requestinfo;
 		requestinfo.id = code;
 		requestinfo.buffer = buffer;
 		requestinfo.receivalTime = std::time(nullptr);
-
 
 		RequestResult requestResult = loginRequestHandler->handleRequest(requestinfo);
 

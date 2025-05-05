@@ -9,20 +9,14 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const Buffer
 {
     LoginRequest request;
 
-    // See if the buffer has at least 5 bytes
-    if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
-    {
-        throw std::runtime_error("Not Valid buffer length For LoginRequest");
-    }
-
-    // Extract the 4 sbyte length of the json skiping the data 1 byte
-    int length = 0;
-    std::memcpy(&length, buffer.data() + 1, sizeof(length));
-
-    Buffer jsonData(buffer.begin() + 5, buffer.begin() + 5 + length); //starting from byte 5 to byte 5 + length
+    //// See if the buffer has at least 5 bytes
+    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    //{
+    //    throw std::runtime_error("Not Valid buffer length For LoginRequest");
+    //}
 
     // Deserialize the json data into a json 
-    json j = json::from_cbor(jsonData);
+    json j = json::from_cbor(buffer);
 
     request.username = j.at("username").get<std::string>();  // Get the username
     request.password = j.at("password").get<std::string>();  // Get the password
@@ -39,21 +33,14 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 {
     SignupRequest request;
 
-    // See that the buffer has at least 5 bytes
-    if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
-    {
-        throw std::runtime_error("Not Valid buffer length For SignupRequest");
-    }
-
-    // Extract the 4 sbyte length of the json skiping the data 1 byte
-    int length = 0;
-    std::memcpy(&length, buffer.data() + 1, sizeof(length));
-
-    // Extract the json data from the buffer starting at byte 5 using the length
-    Buffer jsonData(buffer.begin() + 5, buffer.begin() + 5 + length); //starting from byte 5 to byte 5 + length
+    //// See that the buffer has at least 5 bytes
+    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    //{
+    //    throw std::runtime_error("Not Valid buffer length For SignupRequest");
+    //}
 
     // Deserialize the json data into a json 
-    json j = json::from_cbor(jsonData);
+    json j = json::from_cbor(buffer);
 
     request.username = j.at("username").get<std::string>(); // Get the username
     request.password = j.at("password").get<std::string>(); // Get the password
