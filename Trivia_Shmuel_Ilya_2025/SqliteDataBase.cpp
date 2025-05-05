@@ -57,7 +57,6 @@ bool SqliteDataBase::doesPasswordMatch(const std::string username,const std::str
 }
 
 
-//check this function
 void SqliteDataBase::addNewUser(const std::string username ,const std::string password,const std::string email)
 {
 	std::map<std::string, std::string> values;
@@ -73,7 +72,7 @@ void SqliteDataBase::addNewUser(const std::string username ,const std::string pa
 void SqliteDataBase::importTenQuestions()
 {
 	const char* insertSQL = R"(
-        INSERT INTO QUESTIONS (question, answer0, answer1, answer2, answer3, correct_answer_id)
+        INSERT INTO questions (question, answer0, answer1, answer2, answer3, correct_answer_id)
         VALUES (?, ?, ?, ?, ?, ?);
     )";
 
@@ -111,11 +110,89 @@ void SqliteDataBase::importTenQuestions()
 	sqlite3_finalize(stmt);
 }
 
-
-
-std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument)
+std::vector<Question> SqliteDataBase::getQuestions(int amount)
 {
-	std::vector<std::map<std::string, std::string>> selected;
+	std::string sqlstmt = "SELECT * FROM questions ORDER BY RANDOM() LIMIT ?";
+	std::vector<Question> questions;
+	std::vector<std::string> possibleAnswers;
+	DBvector selected = selectQuery(sqlstmt, std::to_string(amount));
+	for (auto const& row : selected)
+	{
+		possibleAnswers.clear();
+		possibleAnswers.push_back(row.at("answer0"));
+		possibleAnswers.push_back(row.at("answer1"));
+		possibleAnswers.push_back(row.at("answer2"));
+		possibleAnswers.push_back(row.at("answer3"));
+		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_Index"))));
+	}
+}
+
+float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
+{
+	std::string sqlstmt = "SELECT * FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+	for (auto const& row : selected)
+	{
+		return std::stof(row.at("average_time"));
+	}
+}
+
+int SqliteDataBase::getNumOfCorrectAnswers(std::string username)
+{
+	std::string sqlstmt = "SELECT * FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+	for (auto const& row : selected)
+	{
+		return std::stoi(row.at("correct_answers"));
+	}
+}
+
+int SqliteDataBase::getNumOfTotalAnswers(std::string username)
+{
+	std::string sqlstmt = "SELECT * FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+	for (auto const& row : selected)
+	{
+		return std::stoi(row.at("total_answers"));
+	}
+}
+
+int SqliteDataBase::getNumOfPlayerGames(std::string username)
+{
+	std::string sqlstmt = "SELECT * FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+	for (auto const& row : selected)
+	{
+		return std::stoi(row.at("games_played"));
+	}
+}
+
+int SqliteDataBase::getPlayerScore(std::string username)
+{
+	std::string sqlstmt = "SELECT * FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+	for (auto const& row : selected)
+	{
+		return std::stoi(row.at("score"));
+	}
+}
+
+//return the top 10 for now
+std::vector<std::string> SqliteDataBase::getHighScores()
+{
+	std::vector<std::string> highScores;
+	std::string sqlstmt = "SELECT score FROM statistics ORDER BY score DESC";
+	DBvector selected = selectQuery(sqlstmt);
+	for (auto const& row : selected)
+	{
+		highScores.push_back(row.at("score"));
+	}
+	return highScores;
+}
+
+DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument = "")
+{
+	DBvector selected;
 	sqlite3_stmt* stmt;
 
 	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
@@ -124,11 +201,14 @@ std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(cons
 		std::cerr << "error: Failed to prepare statement" << std::endl;
 		return {};
 	}
-	sqlite3_bind_text(stmt, 1, argument.c_str(), -1, SQLITE_STATIC);
-
-	while ((res = sqlite3_step(stmt) == SQLITE_ROW))
+	if (!argument.empty())
 	{
-		std::map<std::string, std::string> row;
+		sqlite3_bind_text(stmt, 1, argument.c_str(), -1, SQLITE_STATIC);
+	}
+
+	while ((res = sqlite3_step(stmt)) == SQLITE_ROW)
+	{
+		RowMap row;
 		int colCount = sqlite3_column_count(stmt);
 
 
@@ -144,6 +224,10 @@ std::vector<std::map<std::string, std::string>> SqliteDataBase::selectQuery(cons
 			else if (colType == SQLITE_INTEGER)
 			{
 				row[column_name] = sqlite3_column_int(stmt, i);
+			}
+			else if (colType == SQLITE_FLOAT)
+			{
+				row[column_name] = sqlite3_column_double(stmt, i);
 			}
 		}
 		selected.push_back(row);

@@ -21,10 +21,12 @@ public:
 
 	//to do:
 	virtual std::vector<Question> getQuestions(int amount) = 0;
-	//virtual float getPlayerAverageAnswerTime(std::string);
-	//virtual int getNumOfCorrectAnswers(std::string);
-	//virtual int getNumOfTotalAnswers(std::string);
-	//virtual int getNumOfPlayerGames(std::string);
+	virtual float getPlayerAverageAnswerTime(std::string) = 0;
+	virtual int getNumOfCorrectAnswers(std::string) = 0;
+	virtual int getNumOfTotalAnswers(std::string) = 0;
+	virtual int getNumOfPlayerGames(std::string) = 0;
+	virtual int getPlayerScore(std::string) = 0;
+	virtual std::vector<std::string> getHighScores() = 0;
 
 	//virtual void getSecurityKey(std::string);
 };
