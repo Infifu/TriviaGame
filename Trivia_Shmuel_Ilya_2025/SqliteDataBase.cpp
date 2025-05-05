@@ -125,6 +125,7 @@ std::vector<Question> SqliteDataBase::getQuestions(int amount)
 		possibleAnswers.push_back(row.at("answer3"));
 		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_Index"))));
 	}
+	return questions;
 }
 
 float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
@@ -182,7 +183,7 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 {
 	std::vector<std::string> highScores;
 	std::string sqlstmt = "SELECT score FROM statistics ORDER BY score DESC";
-	DBvector selected = selectQuery(sqlstmt);
+	DBvector selected = selectQuery(sqlstmt,"");
 	for (auto const& row : selected)
 	{
 		highScores.push_back(row.at("score"));

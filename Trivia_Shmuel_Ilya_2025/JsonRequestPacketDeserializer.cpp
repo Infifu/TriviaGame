@@ -48,3 +48,37 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 
     return request;
 }
+
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(const Buffer& buffer) 
+{
+    GetPlayersInRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomId = j.at("roomId").get<unsigned int>();
+
+    return request;
+}
+
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer) 
+{
+    JoinRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomId = j.at("roomId").get<unsigned int>();
+
+    return request;
+}
+
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer) 
+{
+    CreateRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomName = j.at("roomName").get<std::string>();
+    request.maxUsers = j.at("maxUsers").get<unsigned int>();
+    request.questionCount = j.at("questionCount").get<unsigned int>();
+    request.answerTimeout = j.at("answerTimeout").get<unsigned int>();
+
+    return request;
+}
+
