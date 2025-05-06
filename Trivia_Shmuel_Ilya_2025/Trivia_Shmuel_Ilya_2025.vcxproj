@@ -146,6 +146,7 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="SqliteDataBase.cpp" />
+    <ClCompile Include="StatisticsManager.cpp" />
     <ClCompile Include="TriviaException.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="Server.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDataBase.h" />
+    <ClInclude Include="StatisticsManager.h" />
     <ClInclude Include="TriviaException.h" />
     <ClInclude Include="UsingBuffer.h" />
     <ClInclude Include="WSAInitializer.h" />

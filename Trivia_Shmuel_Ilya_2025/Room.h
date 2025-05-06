@@ -5,7 +5,9 @@
 
 enum RoomStatus
 {
-
+	LOBBY = 0,
+	INGAME = 1,
+	FINISHED = 2
 };
 
 
