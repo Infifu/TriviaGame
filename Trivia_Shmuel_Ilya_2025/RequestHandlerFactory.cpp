@@ -9,9 +9,10 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 	return loginRequesthandler;
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser user)
 {
-	return nullptr;
+	MenuRequestHandler* menuRequestHandler = new MenuRequestHandler(user, this);
+	return menuRequestHandler;
 }
 
 LoginManager& RequestHandlerFactory::getLoginManager()

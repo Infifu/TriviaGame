@@ -55,10 +55,11 @@ RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
     std::string password = logReq.password;
 
     LoginStatus loginStatus = loginManager->login(username, password);
+    LoggedUser user{ username };
 
     LoginResponse logRes{ loginStatus };
     RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)
-        , _handlerFactory.createMenuRequestHandler()};
+        , _handlerFactory.createMenuRequestHandler(user)};
     return reqRes;
 }
 
@@ -74,8 +75,10 @@ RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
 
 
     SignupResponse signRes{ signUpStatus = loginManager->signup(username, password, email) };
+    LoggedUser user{ username };
+
     RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) ,
-        _handlerFactory.createMenuRequestHandler() };
+        _handlerFactory.createMenuRequestHandler(user) };
 
     return reqRes;
 }
