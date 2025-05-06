@@ -58,29 +58,43 @@ void Communicator::bindAndListen()
 //i think i forgot to mutex somewhere but idrc rn so whatever
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
-	m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
-
-	unsigned char code;
-	Buffer msgLength(4);
-
-	recv(clientSocket, reinterpret_cast<char*>(&code), 1, 0); //recieve the code
-	recv(clientSocket, reinterpret_cast<char*>(&msgLength[0]), 4, 0); //recieve the length
-
-	int length = 0;
-	std::memcpy(&length, msgLength.data(), sizeof(length));
-
-	Buffer buffer(length);
-	recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0); //recieve the rest of the message
-
 	try
-	{
+	{ 
+		LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
+		m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
+
+		unsigned char code;
+		Buffer msgLength(4);
+
+		int recieved = recv(clientSocket, reinterpret_cast<char*>(&code), 1, 0); //recieve the code
+		if (recieved < 1)
+		{
+			throw std::exception("Recieve failed");
+		}
+
+		recieved = recv(clientSocket, reinterpret_cast<char*>(&msgLength[0]), 4, 0); //recieve the length
+		if (recieved < 4)
+		{
+			throw std::exception("Recieve failed");
+		}
+
+		int length = 0;
+		std::memcpy(&length, msgLength.data(), sizeof(length));
+
+		Buffer buffer(length);
+		recieved = recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0); //recieve the rest of the message
+		if (recieved < 5)
+		{
+			throw std::exception("Recieve failed");
+		}
+
 		RequestInfo requestinfo;
 		requestinfo.id = code;
 		requestinfo.buffer = buffer;
 		requestinfo.receivalTime = std::time(nullptr);
 
 		RequestResult requestResult = loginRequestHandler->handleRequest(requestinfo);
+		m_clients.find(clientSocket)->second = requestResult.newHandler;
 
 		send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
 	}

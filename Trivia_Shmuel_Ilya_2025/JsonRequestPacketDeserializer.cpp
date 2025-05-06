@@ -9,12 +9,6 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const Buffer
 {
     LoginRequest request;
 
-    //// See if the buffer has at least 5 bytes
-    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
-    //{
-    //    throw std::runtime_error("Not Valid buffer length For LoginRequest");
-    //}
-
     // Deserialize the json data into a json 
     json j = json::from_cbor(buffer);
 
@@ -33,12 +27,6 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 {
     SignupRequest request;
 
-    //// See that the buffer has at least 5 bytes
-    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
-    //{
-    //    throw std::runtime_error("Not Valid buffer length For SignupRequest");
-    //}
-
     // Deserialize the json data into a json 
     json j = json::from_cbor(buffer);
 
@@ -48,37 +36,3 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 
     return request;
 }
-
-GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(const Buffer& buffer) 
-{
-    GetPlayersInRoomRequest request;
-    json j = json::from_cbor(buffer);
-
-    request.roomId = j.at("roomId").get<unsigned int>();
-
-    return request;
-}
-
-JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer) 
-{
-    JoinRoomRequest request;
-    json j = json::from_cbor(buffer);
-
-    request.roomId = j.at("roomId").get<unsigned int>();
-
-    return request;
-}
-
-CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer) 
-{
-    CreateRoomRequest request;
-    json j = json::from_cbor(buffer);
-
-    request.roomName = j.at("roomName").get<std::string>();
-    request.maxUsers = j.at("maxUsers").get<unsigned int>();
-    request.questionCount = j.at("questionCount").get<unsigned int>();
-    request.answerTimeout = j.at("answerTimeout").get<unsigned int>();
-
-    return request;
-}
-
