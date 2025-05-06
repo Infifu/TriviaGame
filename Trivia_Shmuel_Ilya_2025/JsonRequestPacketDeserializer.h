@@ -20,10 +20,20 @@ struct SignupRequest
 	std::string email;
 };
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 class JsonRequestPacketDeserializer
 {
 public:
 	static LoginRequest deserializeLoginRequest(const Buffer buffer);
 	static SignupRequest deserializeSignupRequest(const Buffer& buffer);
+<<<<<<< Updated upstream
+=======
+	//static GetPlayersInRoomRequest deserializeGetPlayersRequest(const Buffer& buffer);
+	//static JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
+	//static CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
+>>>>>>> Stashed changes
 };
 

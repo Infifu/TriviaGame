@@ -83,6 +83,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse sign
     return buffer;
 }
 
+<<<<<<< Updated upstream
 void JsonResponsePacketSerializer::intToBytesRef(Buffer& buffer, int number)
 {
     //little endian more like little inidan hahahahha
@@ -93,6 +94,9 @@ void JsonResponsePacketSerializer::intToBytesRef(Buffer& buffer, int number)
 }
 
 Buffer JsonResponsePacketSerializer::intToBytesVal(Buffer buffer, int number)
+=======
+Buffer JsonResponsePacketSerializer::intToBytesVal(int number)
+>>>>>>> Stashed changes
 {
     //little endian encoding cuz god want me to suffer or whatever
     Buffer intBytes;
