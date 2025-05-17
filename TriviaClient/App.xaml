@@ -1,7 +1,7 @@
-﻿<Application x:Class="WPFTEST.App"
+﻿<Application x:Class="TriviaClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WPFTEST"
+             xmlns:local="clr-namespace:TriviaClient"
              StartupUri="Views/LoginRegisterScreen.xaml">
     <Application.Resources>
          

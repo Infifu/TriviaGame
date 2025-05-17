@@ -1,9 +1,9 @@
-﻿<Window x:Class="WPFTEST.Views.LoginRegisterScreen"
+﻿<Window x:Class="TriviaClient.Views.LoginRegisterScreen"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPFTEST.Views"
+        xmlns:local="clr-namespace:TriviaClient.Views"
         mc:Ignorable="d"
         Title="LoginRegisterScreen" Height="720" Width="1000"
         Background="Transparent"
@@ -88,7 +88,7 @@
             <StackPanel x:Name="LoginPanel"
                         Grid.Row="1"
                         Orientation="Vertical"
-                        Margin="271,35,270,0">
+                        Margin="270,35,270,0">
                 <Image Source="/Models/TriviaLogo.png" Height="196" Width="448"/>
 
                 <TextBlock Text="Trivia is the art of knowing a little about everything and everything about nothing"

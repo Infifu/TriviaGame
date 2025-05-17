@@ -15,20 +15,18 @@ using System.Windows.Shapes;
 namespace TriviaClient.Views
 {
     /// <summary>
-    /// Interaction logic for LoginRegisterScreen.xaml
+    /// Interaction logic for MainMenu.xaml
     /// </summary>
-    public partial class LoginRegisterScreen : Window
+    public partial class MainMenu : Window
     {
-        public LoginRegisterScreen()
+        public MainMenu()
         {
             InitializeComponent();
         }
 
-
-        //return the ability to drag the window after removing titlebar
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton==MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }
@@ -44,25 +42,19 @@ namespace TriviaClient.Views
             Application.Current.Shutdown();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void btnStatistics_Click(object sender, RoutedEventArgs e)
         {
-            MainMenu mainMenu = new MainMenu();
-            mainMenu.Show();
-            this.Hide();
+            
         }
 
-        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        private void btnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
+
         }
-        private void btnSwitchToRegister_Click(object sender, RoutedEventArgs e)
+
+        private void btnJoinRoom_Click(object sender, RoutedEventArgs e)
         {
-            LoginPanel.Visibility = Visibility.Collapsed;
-            RegisterPanel.Visibility = Visibility.Visible;
-        }
-        private void btnSwitchToLogin_Click(object sender, RoutedEventArgs e)
-        {
-            LoginPanel.Visibility = Visibility.Visible;
-            RegisterPanel.Visibility = Visibility.Collapsed;
+
         }
     }
 }
