@@ -27,6 +27,29 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#7096D1" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontFamily" Value="Montserrat" />
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Border CornerRadius="50" Background="#bad6e8" BorderThickness="2.5">
@@ -51,7 +74,7 @@
                         FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
                         BorderThickness="1" BorderBrush="#7096D1"
                         Background="#ddeeff" Foreground="#081F5C"
-                        HorizontalAlignment="Left" VerticalAlignment="Top">
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMenu_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}"
@@ -119,58 +142,37 @@
                 </Grid.ColumnDefinitions>
 
                 <ScrollViewer Grid.Column="0" Margin="10">
-                    <StackPanel x:Name="RoomListPanel" Orientation="Vertical" Background="Transparent">
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room A" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 1/3" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room B" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 2/5" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room C" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 4/4" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room D" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 0/3" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room E" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 3/5" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room F" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 1/4" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Style="{StaticResource RoomCardStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Room G" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
-                                <TextBlock Text="Players: 2/2" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Rooms}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource RoomCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontFamily="Montserrat" FontSize="18"
+                                                   FontWeight="Bold" Foreground="#081F5C"/>
+                                        <TextBlock Text="{Binding PlayerStatus}"
+                                                   FontFamily="Montserrat" FontSize="14"
+                                                   Foreground="#081F5C"/>
+                                        <Button Content="Join"
+                                                Click="JoinRoom_Click"
+                                                Height="30"
+                                                Tag="{Binding}"
+                                            Cursor="Hand"
+                                                Style="{StaticResource RoundedButtonStyle}" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
-
             </Grid>
+
+
             <StackPanel x:Name="RoomPlayerInfoPanell"
-                Visibility="Visible"
+                Visibility="Collapsed"
                 Grid.Row="1"
                 Orientation="Vertical"
-                Margin="374,5,10,-1" RenderTransformOrigin="0.427,0.5">
+                Margin="374,0,0,21">
 
 
                 <TextBlock Text="Game Managment"
@@ -259,6 +261,7 @@
                     Margin="400,5,0,0"/>
 
             </StackPanel>
+
         </Grid>
     </Border>
 </Window>

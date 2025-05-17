@@ -30,7 +30,8 @@
                         BorderThickness="1" BorderBrush="#7096D1"
                         Background="#ddeeff" Foreground="#081F5C"
                         HorizontalAlignment="Left" VerticalAlignment="Top"
-                        Margin="0,0,0,0">
+                        Margin="0,0,0,0" Click="BackToMenu_Click">
+
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}"
@@ -95,11 +96,15 @@
                 <TextBlock Text="Top 3" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" FontFamily="Montserrat" Foreground="#081F5C"/>
 
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0">
-                    <Image Source="/Models/podium.png" Width="400" Height="160"/>
-                    <Canvas>
-                        <TextBlock Text="Bob McAllister" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="30" Canvas.Top="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <TextBlock Text="Shmul Rabinowitz" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="135" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Text="Ilya Koren" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="277" Canvas.Top="91"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Models/podium.png" Width="400" Height="160" Margin="-24,0,-24,0" Grid.ColumnSpan="2"/>
+                    <Canvas Grid.ColumnSpan="2">
+                        <TextBlock Text="Bob " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="52" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.035,0.613"/>
+                        <TextBlock Text="Shmuel " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="151" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ilya " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="273" Canvas.Top="91" RenderTransformOrigin="-0.443,0.554" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     </Canvas>
                 </Grid>
 

@@ -68,5 +68,11 @@ namespace TriviaClient.Views
                 btnStartGame.Visibility = Visibility.Visible;
             }
         }
+        private void BackToMenu_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Show();
+            this.Hide();
+        }
     }
 }
