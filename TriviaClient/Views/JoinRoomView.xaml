@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:TriviaClient.Views"
         mc:Ignorable="d"
         Title="JoinRoomView" Height="720" Width="1000"
@@ -40,7 +41,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <!-- Top Control Bar -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -172,8 +172,100 @@
                 </ScrollViewer>
 
                 <!-- Logo on the right -->
-                <Image Grid.Column="1" Source="/models/TriviaLogo.png" Width="554" Height="488" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
+            <StackPanel x:Name="RoomPlayerInfoPanell"
+                Visibility="Visible"
+                Grid.Row="1"
+                Orientation="Vertical"
+                Margin="374,5,10,-1" RenderTransformOrigin="0.427,0.5">
+
+
+                <TextBlock Text="Game Managment"
+                    Foreground="#081F5C"
+                    FontSize="25"
+                    FontFamily="Montserrat"
+                    Grid.Column="0"
+                    VerticalAlignment="Top"
+                    Margin="20,0,22,0" Height="30" FontWeight="Bold"/>
+
+                <WrapPanel Margin="25,40,0,0">
+                    <TextBlock Text="Room name: ??????"
+                        x:Name="RoomNameShow"
+                        Foreground="#081F5C"
+                        FontSize="20"
+                        FontFamily="Montserrat"
+                        Width="150"
+                        TextWrapping="Wrap"
+                        Margin="0,0,20,0"/>
+
+                    <TextBlock Text="Player amount: ?"
+                        x:Name="PlayerAmountShow"
+                        Foreground="#081F5C"
+                        FontSize="20"
+                        FontFamily="Montserrat"
+                        Width="170"
+                        TextWrapping="Wrap"
+                        Margin="0,0,20,0"/>
+
+                    <TextBlock Text="Time to answer: ?"
+                        x:Name="TimeToAnswerShow"
+                        Foreground="#081F5C"
+                        FontSize="20"
+                        FontFamily="Montserrat"
+                        Width="170"
+                        TextWrapping="Wrap"/>
+                </WrapPanel>
+
+                <ItemsControl Margin="20,30,20,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#FFFAFAFA"
+                    BorderBrush="#7096D1"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,5,0,5">
+                                <TextBlock Text="{Binding}"
+                           FontSize="13"
+                           FontWeight="Medium"
+                           FontFamily="Montserrat"
+                           Foreground="#081F5C"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                    <ItemsControl.Items>
+                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Player 1</sys:String>
+                        <sys:String>Player 2</sys:String>
+                        <sys:String>Player 3</sys:String>
+                        <sys:String>Player 4</sys:String>
+                        <sys:String>Player 5</sys:String>
+                        <sys:String>Player 6</sys:String>
+                        <sys:String>Player 7</sys:String>
+                        <sys:String>Player 8</sys:String>
+                        <sys:String>Player 9</sys:String>
+                    </ItemsControl.Items>
+                </ItemsControl>
+
+
+                <TextBlock x:Name="ErrorMessage1"
+                    Text="Please fill all the fields!"
+                    Visibility="Hidden"
+                    Foreground="#081F5C"
+                    FontSize="20"
+                    FontFamily="Montserrat"
+                    HorizontalAlignment="Left"
+                    TextWrapping="Wrap"
+                    TextAlignment="Left"
+                    Margin="400,5,0,0"/>
+
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

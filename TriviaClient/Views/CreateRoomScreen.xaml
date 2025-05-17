@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TriviaClient.Views"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainMenu" Height="720" Width="1000"
         Background="Transparent"
@@ -309,7 +308,7 @@
                TextWrapping="Wrap"/>
                 </WrapPanel>
 
-                <ItemsControl Margin="50,30,0,0">
+                <!--<ItemsControl Margin="50,30,0,0">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -344,7 +343,7 @@
                         <sys:String>Player 8</sys:String>
                         <sys:String>Player 9</sys:String>
                     </ItemsControl.Items>
-                </ItemsControl>
+                </ItemsControl> -->
 
 
                 <TextBlock x:Name="ErrorMessage1"
