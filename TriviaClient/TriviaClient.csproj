@@ -9,11 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Models\podium.png" />
     <None Remove="Models\TriviaLogo.png" />
     <None Remove="Models\TriviaWithoutClountLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Models\podium.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Models\TriviaLogo.png" />
     <Resource Include="Models\TriviaWithoutClountLogo.png" />
   </ItemGroup>

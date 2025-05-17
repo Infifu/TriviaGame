@@ -19,21 +19,19 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Controls -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Menu Button -->
                 <Button Content="← Menu" Width="100" Height="36"
                         FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
                         BorderThickness="1" BorderBrush="#7096D1"
                         Background="#ddeeff" Foreground="#081F5C"
                         HorizontalAlignment="Left" VerticalAlignment="Top"
                         Margin="0,0,0,0" Click="BackToMenu_Click">
-                        
+
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}"
@@ -51,7 +49,6 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Minimize and Close Buttons -->
                 <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0">
                     <Button x:Name="btnMinimize"
                             Background="Transparent"
@@ -95,16 +92,19 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Podium Top 3 Section -->
             <StackPanel Grid.Row="0" Margin="0,40,0,20">
                 <TextBlock Text="Top 3" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" FontFamily="Montserrat" Foreground="#081F5C"/>
 
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0">
-                    <Image Source="/Models/podium.png" Width="400" Height="160"/>
-                    <Canvas>
-                        <TextBlock Text="Bob McAllister" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="30" Canvas.Top="53" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <TextBlock Text="Shmul Rabinowitz" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="135" Canvas.Top="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Text="Ilya Koren" FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="277" Canvas.Top="91"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Models/podium.png" Width="400" Height="160" Margin="-24,0,-24,0" Grid.ColumnSpan="2"/>
+                    <Canvas Grid.ColumnSpan="2">
+                        <TextBlock Text="Bob " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="52" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.035,0.613"/>
+                        <TextBlock Text="Shmuel " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="151" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ilya " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="273" Canvas.Top="91" RenderTransformOrigin="-0.443,0.554" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     </Canvas>
                 </Grid>
 
@@ -122,7 +122,6 @@
                            Foreground="#081F5C"/>
             </StackPanel>
 
-            <!-- Statistic Info  -->
             <Grid Grid.Row="1" Margin="0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -130,7 +129,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Your Statistic -->
                 <StackPanel Grid.Column="0" Width="456" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <TextBlock Text="Your Statistic" FontSize="32" FontWeight="Bold"
                                Margin="0,0,0,10"
@@ -139,7 +137,6 @@
                                Foreground="#081F5C"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <!-- Statistic -->
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
@@ -183,17 +180,14 @@
                     </WrapPanel>
                 </StackPanel>
 
-                <!-- Divider -->
                 <Rectangle Grid.Column="1" Fill="#7096D1" Width="2" RadiusX="1" RadiusY="1" HorizontalAlignment="Center"/>
 
-                <!-- Top 1 Statistic -->
                 <StackPanel Grid.Column="2" Width="456" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock Text="Top 1 Statistic:" FontSize="32" FontWeight="Bold"
                                FontFamily="Montserrat"
                                Foreground="#081F5C" Width="443" Margin="0,0,0,10"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <!-- Top Statistic -->
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
