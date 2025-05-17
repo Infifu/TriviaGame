@@ -41,14 +41,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <!-- Top Control Bar -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Menu Button -->
                 <Button Content="← Menu" Width="100" Height="36"
                         FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
                         BorderThickness="1" BorderBrush="#7096D1"
@@ -71,7 +69,6 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Minimize and Close Buttons -->
                 <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <Button x:Name="btnMinimize"
                             Background="Transparent"
@@ -115,17 +112,14 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Main Content -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Room List with Scroll on Left -->
                 <ScrollViewer Grid.Column="0" Margin="10">
                     <StackPanel x:Name="RoomListPanel" Orientation="Vertical" Background="Transparent">
-                        <!-- Multiple Room Cards -->
                         <Border Style="{StaticResource RoomCardStyle}">
                             <StackPanel>
                                 <TextBlock Text="Room A" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
@@ -171,7 +165,6 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Logo on the right -->
             </Grid>
             <StackPanel x:Name="RoomPlayerInfoPanell"
                 Visibility="Visible"
