@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Statistics.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,7 +45,9 @@ namespace TriviaClient.Views
 
         private void btnStatistics_Click(object sender, RoutedEventArgs e)
         {
-            
+            StatisticsView statistics = new StatisticsView();
+            statistics.Show();
+            this.Hide();
         }
 
         private void btnCreateRoom_Click(object sender, RoutedEventArgs e)
@@ -56,7 +59,9 @@ namespace TriviaClient.Views
 
         private void btnJoinRoom_Click(object sender, RoutedEventArgs e)
         {
-
+            JoinRoomView joinRoomView = new JoinRoomView();
+            joinRoomView.Show();
+            this.Hide();
         }
     }
 }

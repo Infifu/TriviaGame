@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TriviaClient.Views;
 
 namespace Statistics.View
 {
@@ -40,6 +41,12 @@ namespace Statistics.View
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void BackToMenu_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Show();
+            this.Hide();
         }
     }
 }

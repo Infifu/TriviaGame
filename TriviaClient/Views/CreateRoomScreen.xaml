@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:TriviaClient.Views"
         mc:Ignorable="d"
         Title="MainMenu" Height="720" Width="1000"
@@ -278,7 +279,7 @@
                     FontFamily="Montserrat"
                     Grid.Column="0"
                     VerticalAlignment="Top"
-                    Margin="50,0,22,0" Height="30" FontWeight="Bold"/>
+                    Margin="20,0,22,0" Height="30" FontWeight="Bold"/>
 
                 <WrapPanel Margin="25,40,0,0">
                 <TextBlock Text="Room name: ??????"
@@ -308,7 +309,7 @@
                TextWrapping="Wrap"/>
                 </WrapPanel>
 
-                <!--<ItemsControl Margin="50,30,0,0">
+                <ItemsControl Margin="20,30,50,0">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -343,7 +344,7 @@
                         <sys:String>Player 8</sys:String>
                         <sys:String>Player 9</sys:String>
                     </ItemsControl.Items>
-                </ItemsControl> -->
+                </ItemsControl>
 
 
                 <TextBlock x:Name="ErrorMessage1"
@@ -358,6 +359,27 @@
                     Margin="400,5,0,0"/>
 
             </StackPanel>
+            <Button Content="← Menu" Width="100" Height="36"
+                FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
+                BorderThickness="1" BorderBrush="#7096D1"
+                Background="#ddeeff" Foreground="#081F5C"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMenu_Click" Margin="36,24,0,0" Grid.RowSpan="2">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
 
 
