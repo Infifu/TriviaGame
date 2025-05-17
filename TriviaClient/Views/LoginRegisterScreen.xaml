@@ -88,7 +88,7 @@
             <StackPanel x:Name="LoginPanel"
                         Grid.Row="1"
                         Orientation="Vertical"
-                        Margin="270,35,270,0">
+                        Margin="271,35,270,0">
                 <Image Source="/Models/TriviaLogo.png" Height="196" Width="448"/>
 
                 <TextBlock Text="Trivia is the art of knowing a little about everything and everything about nothing"

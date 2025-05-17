@@ -49,7 +49,9 @@ namespace TriviaClient.Views
 
         private void btnCreateRoom_Click(object sender, RoutedEventArgs e)
         {
-
+            CreateRoomScreen createRoom = new CreateRoomScreen();
+            createRoom.Show();
+            this.Hide();
         }
 
         private void btnJoinRoom_Click(object sender, RoutedEventArgs e)

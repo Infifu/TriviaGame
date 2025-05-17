@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <None Remove="Models\TriviaLogo.png" />
+    <None Remove="Models\TriviaWithoutClountLogo.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Models\TriviaLogo.png" />
+    <Resource Include="Models\TriviaWithoutClountLogo.png" />
   </ItemGroup>
 
 </Project>
