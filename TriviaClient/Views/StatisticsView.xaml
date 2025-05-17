@@ -32,7 +32,8 @@
                         BorderThickness="1" BorderBrush="#7096D1"
                         Background="#ddeeff" Foreground="#081F5C"
                         HorizontalAlignment="Left" VerticalAlignment="Top"
-                        Margin="0,0,0,0">
+                        Margin="0,0,0,0" Click="BackToMenu_Click">
+                        
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}"
