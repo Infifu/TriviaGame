@@ -19,14 +19,12 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Controls -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Menu Button -->
                 <Button Content="← Menu" Width="100" Height="36"
                         FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
                         BorderThickness="1" BorderBrush="#7096D1"
@@ -50,7 +48,6 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Minimize and Close Buttons -->
                 <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0">
                     <Button x:Name="btnMinimize"
                             Background="Transparent"
@@ -94,7 +91,6 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Podium Top 3 Section -->
             <StackPanel Grid.Row="0" Margin="0,40,0,20">
                 <TextBlock Text="Top 3" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" FontFamily="Montserrat" Foreground="#081F5C"/>
 
@@ -121,7 +117,6 @@
                            Foreground="#081F5C"/>
             </StackPanel>
 
-            <!-- Statistic Info  -->
             <Grid Grid.Row="1" Margin="0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -129,7 +124,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Your Statistic -->
                 <StackPanel Grid.Column="0" Width="456" VerticalAlignment="Top" HorizontalAlignment="Right">
                     <TextBlock Text="Your Statistic" FontSize="32" FontWeight="Bold"
                                Margin="0,0,0,10"
@@ -138,7 +132,6 @@
                                Foreground="#081F5C"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <!-- Statistic -->
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
@@ -182,17 +175,14 @@
                     </WrapPanel>
                 </StackPanel>
 
-                <!-- Divider -->
                 <Rectangle Grid.Column="1" Fill="#7096D1" Width="2" RadiusX="1" RadiusY="1" HorizontalAlignment="Center"/>
 
-                <!-- Top 1 Statistic -->
                 <StackPanel Grid.Column="2" Width="456" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock Text="Top 1 Statistic:" FontSize="32" FontWeight="Bold"
                                FontFamily="Montserrat"
                                Foreground="#081F5C" Width="443" Margin="0,0,0,10"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <!-- Top Statistic -->
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
