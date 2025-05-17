@@ -1,0 +1,179 @@
+﻿<Window x:Class="TriviaClient.Views.JoinRoomView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriviaClient.Views"
+        mc:Ignorable="d"
+        Title="JoinRoomView" Height="720" Width="1000"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+        <Style x:Key="RoomCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#ddeeff"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Margin" Value="0,10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Width" Value="300"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#ffffff"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="50" Background="#bad6e8" BorderThickness="2.5">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#7096D1" Offset="0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Control Bar -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Menu Button -->
+                <Button Content="← Menu" Width="100" Height="36"
+                        FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
+                        BorderThickness="1" BorderBrush="#7096D1"
+                        Background="#ddeeff" Foreground="#081F5C"
+                        HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Minimize and Close Buttons -->
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="btnMinimize"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="−"
+                            Foreground="#7096D1"
+                            FontSize="25"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnMinimize_Click"
+                            Width="40" Height="36">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="-1"/>
+                                <SkewTransform AngleY="-0.616"/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="0.156"/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+
+                    <Button x:Name="btnClose"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="X"
+                            Foreground="#7096D1"
+                            FontSize="20"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Click="btnClose_Click"
+                            Width="40" Height="36">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="-1"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Room List with Scroll on Left -->
+                <ScrollViewer Grid.Column="0" Margin="10">
+                    <StackPanel x:Name="RoomListPanel" Orientation="Vertical" Background="Transparent">
+                        <!-- Multiple Room Cards -->
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room A" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 1/3" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room B" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 2/5" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room C" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 4/4" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room D" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 0/3" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room E" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 3/5" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room F" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 1/4" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource RoomCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Room G" FontFamily="Montserrat" FontSize="18" FontWeight="Bold" Foreground="#081F5C"/>
+                                <TextBlock Text="Players: 2/2" FontFamily="Montserrat" FontSize="14" Foreground="#081F5C"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Logo on the right -->
+                <Image Grid.Column="1" Source="/models/TriviaLogo.png" Width="554" Height="488" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
