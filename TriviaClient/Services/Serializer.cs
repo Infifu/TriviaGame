@@ -9,7 +9,7 @@ using PeterO.Cbor;
 using Buffer = System.Collections.Generic.List<byte>;
 public enum ServerCodes
 {
-    Login = 1,
+    Login = 0,
     Register = 2,
     SignOut = 3,
     CreateRoom = 21,
@@ -20,35 +20,35 @@ public enum ServerCodes
     GetHighScores = 26
 }
 
-struct LoginRequest
+public struct LoginRequest
 {
-    string username;
-    string password;
+    public string username { get; set; }
+    public string password { get; set; }
+}
+
+public struct SignupRequest
+{
+    public string username;
+    public string password;
+    public string email;
 };
 
-struct SignupRequest
+public struct GetPlayersInRoomRequest
 {
-    string username;
-    string password;
-    string email;
+    public byte roomId;
 };
 
-struct GetPlayersInRoomRequest
+public struct JoinRoomRequest
 {
-    byte roomId;
+    public byte roomId;
 };
 
-struct JoinRoomRequest
+public struct CreateRoomRequest
 {
-    byte roomId;
-};
-
-struct CreateRoomRequest
-{
-    string roomName;
-    byte maxUsers;
-    byte questionCount;
-    byte answerTimeout;
+    public string roomName;
+    public byte maxUsers;
+    public byte questionCount;
+    public byte answerTimeout;
 };
 
 //we need an external libary for cbor serialization for json named Peter0.Cbor

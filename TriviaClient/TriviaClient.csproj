@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="PeterO.Cbor" Version="4.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Models\podium.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

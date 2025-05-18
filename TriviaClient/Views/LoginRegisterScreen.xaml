@@ -11,8 +11,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown"
-        Loaded="Window_Loaded">
+        MouseDown="Window_MouseDown">
 
     <Border 
         CornerRadius="50"
@@ -190,6 +189,18 @@
                     </TextBlock>
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock x:Name="ErrorBox"
+                           Visibility="Collapsed"
+                           Text="Password incorrect"
+                           Foreground="#081F5C"
+                           FontSize="12"
+                           FontWeight="Medium"
+                           FontFamily="Montserrat"
+                           Margin="0,5,0,0">
+                    </TextBlock>
+                </StackPanel>
+
 
 
             </StackPanel>
@@ -314,6 +325,8 @@
                         Cursor="Hand"
                         MouseLeftButtonDown="btnSwitchToLogin_Click"/>
                 </StackPanel>
+                
+                
 
 
 
