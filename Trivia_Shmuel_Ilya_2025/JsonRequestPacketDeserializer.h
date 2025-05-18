@@ -41,7 +41,7 @@ struct CreateRoomRequest
 class JsonRequestPacketDeserializer
 {
 public:
-	//I removed the length and code extraction from youre deserializer please note this
+	//I removed the length and code extraction from your deserializer please note this
 	//and dont make it in new ones
 	static LoginRequest deserializeLoginRequest(const Buffer buffer);
 	static SignupRequest deserializeSignupRequest(const Buffer& buffer);
