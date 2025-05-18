@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using WPFTEST.Services;
 namespace TriviaClient.Views
 {
     /// <summary>
@@ -19,11 +19,17 @@ namespace TriviaClient.Views
     /// </summary>
     public partial class LoginRegisterScreen : Window
     {
+        private Communicator communicator;
         public LoginRegisterScreen()
         {
             InitializeComponent();
+            communicator = new Communicator();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            communicator.Connect();
+        }
 
         //return the ability to drag the window after removing titlebar
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -41,6 +47,7 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            communicator.Close();
             Application.Current.Shutdown();
         }
 
