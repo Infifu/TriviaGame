@@ -60,11 +60,11 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	try
 	{ 
+		LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
+		m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
+
 		while (true)
 		{
-			LoginRequestHandler* loginRequestHandler = m_handlerFactory.createLoginRequestHandler();
-			m_clients.insert(std::pair<SOCKET, LoginRequestHandler*>(clientSocket, loginRequestHandler));
-
 			unsigned char code;
 			Buffer msgLength(4);
 
@@ -95,7 +95,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			requestinfo.buffer = buffer;
 			requestinfo.receivalTime = std::time(nullptr);
 
-			RequestResult requestResult = loginRequestHandler->handleRequest(requestinfo);
+			RequestResult requestResult = m_clients.find(clientSocket)->second->handleRequest(requestinfo);
 			m_clients.find(clientSocket)->second = requestResult.newHandler;
 
 			send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);

@@ -28,9 +28,9 @@ public struct LoginRequest
 
 public struct SignupRequest
 {
-    public string username;
-    public string password;
-    public string email;
+    public string username { get; set; }
+    public string password { get; set; }
+    public string email { get; set; }
 };
 
 public struct GetPlayersInRoomRequest
@@ -45,10 +45,10 @@ public struct JoinRoomRequest
 
 public struct CreateRoomRequest
 {
-    public string roomName;
-    public byte maxUsers;
-    public byte questionCount;
-    public byte answerTimeout;
+    public string roomName { get; set; }
+    public byte maxUsers { get; set; }
+    public byte questionCount { get; set; }
+    public byte answerTimeout { get; set; }
 };
 
 //we need an external libary for cbor serialization for json named Peter0.Cbor

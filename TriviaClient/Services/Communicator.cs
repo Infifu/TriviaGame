@@ -60,8 +60,6 @@ namespace WPFTEST.Services
                 MessageBox.Show("ERROR");
             }
 
-
-
             _socket.Send(msg.ToArray());
 
             int received = _socket.Receive(codeInBytes, 0, 1, SocketFlags.None);

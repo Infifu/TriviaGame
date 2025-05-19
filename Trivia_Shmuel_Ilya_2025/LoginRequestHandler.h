@@ -11,9 +11,10 @@ class RequestHandlerFactory;
 
 enum code
 {
-    LoginRec = 0,
+    LoginReq = 0,
     Error = 1,
-    SignupRec = 2
+    SignupReq = 2,
+    CreateRoomReq = 21
 };
 
 class LoginRequestHandler : public IRequestHandler 

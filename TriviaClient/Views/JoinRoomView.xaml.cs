@@ -68,8 +68,6 @@ namespace TriviaClient.Views
                 PlayerAmountShow.Text = "Player amount: " + selectedRoom.PlayerCount.ToString();
                 TimeToAnswerShow.Text = "Time to answer (seconds): " + selectedRoom.TimeToAnswer.ToString();
             }
-
-
         }
 
         private void BackToMenu_Click(object sender, RoutedEventArgs e)

@@ -15,7 +15,7 @@ LoginRequestHandler::~LoginRequestHandler()
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
-    return requestInfo.id == LoginRec || requestInfo.id == SignupRec;
+    return requestInfo.id == LoginReq || requestInfo.id == SignupReq;
 }
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo) 
@@ -25,11 +25,11 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
     try 
     {
-        if (requestInfo.id == LoginRec)
+        if (requestInfo.id == LoginReq)
         {
             reqRes = login(requestInfo);
         }
-        else if (requestInfo.id == SignupRec)
+        else if (requestInfo.id == SignupReq)
         {
             reqRes = signup(requestInfo);
         }
@@ -58,8 +58,17 @@ RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
     LoggedUser user{ username };
 
     LoginResponse logRes{ loginStatus };
-    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)
-        , _handlerFactory.createMenuRequestHandler(user)};
+
+    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)};
+
+    if (loginStatus == 1)
+    {
+        reqRes.newHandler = this;
+    }
+    else
+    {
+        reqRes.newHandler = _handlerFactory.createMenuRequestHandler(user);
+    }
     return reqRes;
 }
 

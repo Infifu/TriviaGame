@@ -20,20 +20,17 @@ namespace TriviaClient.Views
     /// </summary>
     public partial class LoginRegisterScreen : Window
     {
-        private Communicator communicator;
-        private Serializer serializer;
 
         public LoginRegisterScreen()
         {
             InitializeComponent();
-            communicator = new Communicator();
-            serializer = new Serializer();
 
+            //check this goofy ahh thread
             Thread thread = new Thread(() =>
             {
                 try
                 {
-                    communicator.Connect();
+                    Client.Instance.communicator.Connect();
                     Console.WriteLine("Connected");
                 }
                 catch (Exception ex)
@@ -62,7 +59,7 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            communicator.Close();
+            Client.Instance.communicator.Close();
             Application.Current.Shutdown();
         }
 
@@ -80,10 +77,10 @@ namespace TriviaClient.Views
                 logReq.password = txtPAssword.Password;
 
                 //might freeze when waiting for answer
-                ServerAnswer answer = communicator.SendAndReceive(serializer.SerializeResponse(logReq));
+                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(Client.Instance.serializer.SerializeResponse(logReq));
                 if (answer.code == 0)
                 {
-                    PlayerData.username = txtUsername.Text;
+                    Client.Instance.nameofuser = txtUsername.Text;
                     MainMenu mainMenu = new MainMenu();
                     mainMenu.Show();
                     this.Hide();
@@ -98,32 +95,32 @@ namespace TriviaClient.Views
 
         private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
-            //if (txtUsernameInReg.Text == "" || txtPAsswordInReg.Password == "" || txtEmailInReg.Text == "")
-            //{
-            //    ErrorBox.Visibility = Visibility.Visible;
-            //    ErrorBox.Text = "Please fill all the fields";
-            //}
-            //else
-            //{
-            //    SignupRequest signUpReq = new SignupRequest();
-            //    signUpReq.username = txtUsernameInReg.Text;
-            //    signUpReq.password = txtPAsswordInReg.Password;
-            //    signUpReq.email = txtEmailInReg.Text;
+            if (txtUsernameInReg.Text == "" || txtPAsswordInReg.Password == "" || txtEmailInReg.Text == "")
+            {
+                ErrorBox.Visibility = Visibility.Visible;
+                ErrorBox.Text = "Please fill all the fields";
+            }
+            else
+            {
+                SignupRequest signUpReq = new SignupRequest();
+                signUpReq.username = txtUsernameInReg.Text;
+                signUpReq.password = txtPAsswordInReg.Password;
+                signUpReq.email = txtEmailInReg.Text;
 
-            //    //might freeze when waiting for answer
-            //    ServerAnswer answer = communicator.SendAndReceive(serializer.SerializeResponse(signUpReq));
-            //    if (answer.code == 0)
-            //    {
-            //        ErrorBox.Visibility = Visibility.Collapsed;
-            //        LoginPanel.Visibility = Visibility.Visible;
-            //        RegisterPanel.Visibility = Visibility.Collapsed;
-            //    }
-            //    else
-            //    {
-            //        ErrorBox.Visibility = Visibility.Visible;
-            //        ErrorBox.Text = "Register error";
-            //    }
-            //}
+                //might freeze when waiting for answer
+                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(Client.Instance.serializer.SerializeResponse(signUpReq));
+                if (answer.code == 0)
+                {
+                    ErrorBox.Visibility = Visibility.Collapsed;
+                    LoginPanel.Visibility = Visibility.Visible;
+                    RegisterPanel.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ErrorBox.Visibility = Visibility.Visible;
+                    ErrorBox.Text = "Register error";
+                }
+            }
         }
         private void btnSwitchToRegister_Click(object sender, RoutedEventArgs e)
         {

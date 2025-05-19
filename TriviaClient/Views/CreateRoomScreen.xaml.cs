@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TriviaClient.Services;
+using WPFTEST.Services;
 
 namespace TriviaClient.Views
 {
@@ -19,9 +22,15 @@ namespace TriviaClient.Views
     /// </summary>
     public partial class CreateRoomScreen : Window
     {
+        public ObservableCollection<string> Players { get; set; }
+
         public CreateRoomScreen()
         {
             InitializeComponent();
+            Players = new ObservableCollection<string> { };
+
+            DataContext = this;
+
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -58,14 +67,30 @@ namespace TriviaClient.Views
             }
             else
             {
-                CreateRoomPanel.Visibility = Visibility.Collapsed;
-                RoomPlayerInfoPanell.Visibility = Visibility.Visible;
+                CreateRoomRequest roomReq = new CreateRoomRequest();
+                roomReq.roomName = txtRoomname.Text;
+                roomReq.maxUsers = (Byte)Int32.Parse(PlayerAmountBox.Text);
+                roomReq.answerTimeout = (Byte)Int32.Parse(txtTimeToAnswer.Text);
+                roomReq.questionCount = (Byte)Int32.Parse("20");
 
-                TimeToAnswerShow.Text = "Time to answer: " + txtTimeToAnswer.Text;
-                PlayerAmountShow.Text = "Player amount: " + PlayerAmountBox.Text;
-                RoomNameShow.Text = "Room Name: " + txtRoomname.Text;
+                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(Client.Instance.serializer.SerializeResponse(roomReq));
+                
+                if (answer.code == 0)
+                {
+                    CreateRoomPanel.Visibility = Visibility.Collapsed;
+                    RoomPlayerInfoPanell.Visibility = Visibility.Visible;
 
-                btnStartGame.Visibility = Visibility.Visible;
+                    TimeToAnswerShow.Text = "Time to answer: " + txtTimeToAnswer.Text;
+                    PlayerAmountShow.Text = "Player amount: " + PlayerAmountBox.Text;
+                    RoomNameShow.Text = "Room Name: " + txtRoomname.Text;
+                    Players.Add(Client.Instance.nameofuser);
+
+                    btnStartGame.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    //add here an error message
+                }
             }
         }
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
