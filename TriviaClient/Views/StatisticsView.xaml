@@ -137,6 +137,7 @@
                                Foreground="#081F5C"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
+                        
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
@@ -209,7 +210,8 @@
                                 <TextBlock Text="Total Answers:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="388" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <ListBox x:Name="StatisticsList" Margin="20" FontSize="14"/>
+
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">

@@ -17,7 +17,7 @@ public enum ServerCodes
     GetRooms = 23,
     GetPlayersInRooms = 24,
     GetPersonalStats = 25,
-    GetHighScores = 26
+    GetStatistics = 26
 }
 
 public struct LoginRequest
@@ -51,6 +51,10 @@ public struct CreateRoomRequest
     public byte answerTimeout { get; set; }
 };
 
+public struct GetStatsRequest
+{
+    public string username { get; set; }
+};
 //we need an external libary for cbor serialization for json named Peter0.Cbor
 namespace TriviaClient.Services
 {
@@ -67,7 +71,7 @@ namespace TriviaClient.Services
             codes.Add(typeof(SignupRequest), ServerCodes.Register);
 
             //codes.Add(typeof(GetRoomsRequest), ServerCodes.CreateRoom); -- No get rooms request
-            //codes.Add(typeof(GetPersonalStatsRequest), ServerCodes.GetPersonalStats); -- No personal stats request
+            codes.Add(typeof(GetStatsRequest), ServerCodes.GetPersonalStats);
         }
 
         public Buffer SerializeResponse<T>(T requestToServer)
