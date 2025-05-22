@@ -14,6 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TriviaClient.Services;
 using TriviaClient.Views;
+using WPFTEST.Services;
+
+namespace TriviaClient.Services
+{
+    public class GetPersonalStatsResponse
+    {
+        public int status { get; set; }
+        public List<string> statistics { get; set; }
+    }
+}
 
 namespace Statistics.View
 {
@@ -32,19 +42,24 @@ namespace Statistics.View
         {
             try
             {
-                var req = new GetStatsRequest { username = Client.Instance.nameofuser };
-                var answer = Client.Instance.communicator.SendAndReceive(
-                    Client.Instance.serializer.SerializeResponse(req)
-                );
+                GetStatsRequest req = new GetStatsRequest
+                {
+                    username = Client.Instance.nameofuser
+                };
 
-                var statsList = JsonSerializer.Deserialize<List<string>>(answer.json);
-                StatisticsList.ItemsSource = statsList;
+                List<byte> serializedRequest = Client.Instance.serializer.SerializeResponse(req);
+                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(serializedRequest);
+
+                GetPersonalStatsResponse response = JsonSerializer.Deserialize<GetPersonalStatsResponse>(answer.json);
+                StatisticsList.ItemsSource = response.statistics;
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show($"Failed to fetch stats: {ex.Message}");
             }
         }
+
+
 
 
 
