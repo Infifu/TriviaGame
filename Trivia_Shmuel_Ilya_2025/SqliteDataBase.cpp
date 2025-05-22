@@ -243,6 +243,7 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::
 }
 
 
+
 bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
 {
 	std::string sqlStatement;
