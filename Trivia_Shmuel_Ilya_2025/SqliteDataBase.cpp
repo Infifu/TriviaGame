@@ -134,6 +134,7 @@ float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
 	DBvector selected = selectQuery(sqlstmt, username);
 	for (auto const& row : selected)
 	{
+		std::cout << row.at("average_time") << std::endl;
 		return std::stof(row.at("average_time"));
 	}
 }
@@ -191,7 +192,7 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 	return highScores;
 }
 
-DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument = "")
+DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::string argument)
 {
 	DBvector selected;
 	sqlite3_stmt* stmt;
@@ -212,7 +213,6 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 		RowMap row;
 		int colCount = sqlite3_column_count(stmt);
 
-
 		for (int i = 0; i < colCount; i++)
 		{
 			std::string column_name = sqlite3_column_name(stmt, i);
@@ -224,11 +224,15 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 			}
 			else if (colType == SQLITE_INTEGER)
 			{
-				row[column_name] = sqlite3_column_int(stmt, i);
+				row[column_name] = std::to_string(sqlite3_column_int(stmt, i));
 			}
 			else if (colType == SQLITE_FLOAT)
 			{
-				row[column_name] = sqlite3_column_double(stmt, i);
+				row[column_name] = std::to_string(sqlite3_column_double(stmt, i));
+			}
+			else if (colType == SQLITE_NULL)
+			{
+				row[column_name] = "";
 			}
 		}
 		selected.push_back(row);
@@ -237,6 +241,7 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 	sqlite3_finalize(stmt);
 	return selected;
 }
+
 
 bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
 {

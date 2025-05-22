@@ -46,20 +46,21 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 
 RequestResult MenuRequestHandler::getPeronsalStats(RequestInfo info)
 {
-	StatisticsManager stats;
+	IDatabase* db = m_handlerFactory.getDatabase();
+	StatisticsManager stats(db);
 	std::vector<std::string> userStat = stats.getUserStatistics(m_user.getUsername());
 	GetPersonalStatsResponse personalStats{ 0, stats.getUserStatistics(m_user.getUsername())};
 	RequestResult reqRes{ m_serializer.serializeResponse(personalStats) , nullptr};
 	return reqRes;
 }
 
-RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
-{
-	StatisticsManager stats;
-	GetHighScoreResponse highScoreRes{0,stats.getHighScore()};
-	RequestResult reqRes{ m_serializer.serializeResponse(highScoreRes),nullptr };
-	return reqRes;
-}
+//RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
+//{
+//	StatisticsManager stats;
+//  GetHighScoreResponse highScoreRes{0,stats.getHighScore()};
+//	RequestResult reqRes{ m_serializer.serializeResponse(highScoreRes),nullptr };
+//	return reqRes;
+//}
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
@@ -136,7 +137,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			reqRes = getPeronsalStats(requestInfo);
 			break;
 		case 26:
-			reqRes = getHighScore(requestInfo);
+			//reqRes = getHighScore(requestInfo);
 			break;
 		default:
 			throw TriviaException("Error occured in menu handler");

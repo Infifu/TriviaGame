@@ -26,7 +26,7 @@ private:
 	RequestResult getRooms(RequestInfo);
 	RequestResult getPlayersInRoom(RequestInfo);
 	RequestResult getPeronsalStats(RequestInfo);
-	RequestResult getHighScore(RequestInfo);
+	//RequestResult getHighScore(RequestInfo);
 	RequestResult joinRoom(RequestInfo);
 	RequestResult createRoom(RequestInfo);
 public:
