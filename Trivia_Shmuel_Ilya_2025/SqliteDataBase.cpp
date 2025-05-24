@@ -179,18 +179,22 @@ int SqliteDataBase::getPlayerScore(std::string username)
 	}
 }
 
-//return the top 10 for now
 std::vector<std::string> SqliteDataBase::getHighScores()
 {
 	std::vector<std::string> highScores;
-	std::string sqlstmt = "SELECT score FROM statistics ORDER BY score DESC";
-	DBvector selected = selectQuery(sqlstmt,"");
-	for (auto const& row : selected)
+	std::string sqlstmt = "SELECT username, score FROM statistics ORDER BY score DESC LIMIT 3";
+	DBvector selected = selectQuery(sqlstmt, "");
+
+	for (const auto& row : selected)
 	{
-		highScores.push_back(row.at("score"));
+		std::string name = row.at("username");
+		std::string score = row.at("score");
+		highScores.push_back(name + ": " + score);
 	}
+
 	return highScores;
 }
+
 
 DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::string argument)
 {

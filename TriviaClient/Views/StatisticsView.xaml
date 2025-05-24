@@ -102,9 +102,37 @@
                     </Grid.ColumnDefinitions>
                     <Image Source="/Models/podium.png" Width="400" Height="160" Margin="-24,0,-24,0" Grid.ColumnSpan="2"/>
                     <Canvas Grid.ColumnSpan="2">
-                        <TextBlock Text="Bob " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="52" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-0.035,0.613"/>
-                        <TextBlock Text="Shmuel " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="151" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <TextBlock Text="Ilya " FontSize="14" FontFamily="Montserrat" Foreground="#081F5C" Canvas.Left="273" Canvas.Top="91" RenderTransformOrigin="-0.443,0.554" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="Top2Value"
+                        Text="..."
+                        FontSize="14"
+                        FontFamily="Montserrat"
+                        Foreground="#081F5C"
+                        Canvas.Left="171"
+                        Canvas.Top="10"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock x:Name="Top1Value"
+                        Text="..."
+                        FontSize="14"
+                        FontFamily="Montserrat"
+                        Foreground="#081F5C"
+                        Canvas.Left="54"
+                        Canvas.Top="55"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        RenderTransformOrigin="-0.035,0.613"/>
+                        
+                        <TextBlock x:Name="Top3Value"
+                        Text="..."
+                        FontSize="14"
+                        FontFamily="Montserrat"
+                        Foreground="#081F5C"
+                        Canvas.Left="286"
+                        Canvas.Top="90"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        RenderTransformOrigin="-0.443,0.554"/>
                     </Canvas>
                 </Grid>
 
@@ -137,13 +165,17 @@
                                Foreground="#081F5C"/>
 
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        
+
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Margin="0,0,5,0" Width="158">
                                 <TextBlock Text="Score:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="42" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <TextBlock x:Name="ScoreValue"
+                                    FontSize="18"
+                                    FontFamily="Montserrat"
+                                    Foreground="#081F5C"
+                                    Text="..." />
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">
@@ -151,7 +183,11 @@
                                 <TextBlock Text="Games Played:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="17" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <TextBlock x:Name="GamesPlayedValue"
+                                    FontSize="18"
+                                    FontFamily="Montserrat"
+                                    Foreground="#081F5C"
+                                    Text="..." />
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">
@@ -159,7 +195,11 @@
                                 <TextBlock Text="Total Answers:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="143" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <TextBlock x:Name="TotalAnswersValue"
+                                    FontSize="18"
+                                    FontFamily="Montserrat"
+                                    Foreground="#081F5C"
+                                    Text="..." />
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">
@@ -167,7 +207,11 @@
                                 <TextBlock Text="Correct Answers:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="99" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <TextBlock x:Name="CorrectAnswersValue"
+                                    FontSize="18"
+                                    FontFamily="Montserrat"
+                                    Foreground="#081F5C"
+                                    Text="..." />
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="5">
@@ -175,7 +219,11 @@
                                 <TextBlock Text="Average Time:" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
                             </Border>
                             <Border Background="#ddeeff" Padding="10" CornerRadius="5" Width="285">
-                                <TextBlock Text="4.2s" FontSize="18" FontFamily="Montserrat" Foreground="#081F5C"/>
+                                <TextBlock x:Name="AverageTimeValue"
+                                    FontSize="18"
+                                    FontFamily="Montserrat"
+                                    Foreground="#081F5C"
+                                Text="..." />
                             </Border>
                         </StackPanel>
                     </WrapPanel>

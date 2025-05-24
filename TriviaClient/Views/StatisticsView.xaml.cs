@@ -24,6 +24,12 @@ namespace TriviaClient.Services
         public List<string> statistics { get; set; }
     }
 }
+public class GetHighScoreResponse
+{
+    public int status { get; set; }
+    public List<string> statistics { get; set; }
+}
+
 
 namespace Statistics.View
 {
@@ -42,26 +48,50 @@ namespace Statistics.View
         {
             try
             {
-                GetStatsRequest req = new GetStatsRequest
+                // === Personal Stats ===
+                GetStatsRequest statsReq = new GetStatsRequest
                 {
                     username = Client.Instance.nameofuser
                 };
 
-                List<byte> serializedRequest = Client.Instance.serializer.SerializeResponse(req);
-                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(serializedRequest);
+                List<byte> statsBuffer = Client.Instance.serializer.SerializeResponse(statsReq);
+                ServerAnswer statsAnswer = Client.Instance.communicator.SendAndReceive(statsBuffer);
 
-                GetPersonalStatsResponse response = JsonSerializer.Deserialize<GetPersonalStatsResponse>(answer.json);
-                StatisticsList.ItemsSource = response.statistics;
+                GetPersonalStatsResponse statsResponse = JsonSerializer.Deserialize<GetPersonalStatsResponse>(statsAnswer.json);
+
+                foreach (string stat in statsResponse.statistics)
+                {
+                    if (stat.StartsWith("PlayerScore: "))
+                        ScoreValue.Text = stat.Substring("PlayerScore: ".Length);
+                    else if (stat.StartsWith("NumOfPlayerGames: "))
+                        GamesPlayedValue.Text = stat.Substring("NumOfPlayerGames: ".Length);
+                    else if (stat.StartsWith("NumOfTotalAnswers: "))
+                        TotalAnswersValue.Text = stat.Substring("NumOfTotalAnswers: ".Length);
+                    else if (stat.StartsWith("NumOfCorrectAnswers: "))
+                        CorrectAnswersValue.Text = stat.Substring("NumOfCorrectAnswers: ".Length);
+                    else if (stat.StartsWith("PlayerAverageAnswerTime: "))
+                        AverageTimeValue.Text = stat.Substring("PlayerAverageAnswerTime: ".Length) + "s";
+                }
+
+                // === Top 3 ===
+                GetTop3Request top3Req = new GetTop3Request();
+                List<byte> top3Buffer = Client.Instance.serializer.SerializeResponse(top3Req);
+                ServerAnswer top3Answer = Client.Instance.communicator.SendAndReceive(top3Buffer);
+
+                GetHighScoreResponse top3Response = JsonSerializer.Deserialize<GetHighScoreResponse>(top3Answer.json);
+
+                if (top3Response.statistics.Count > 0)
+                    Top1Value.Text = top3Response.statistics[0];
+                if (top3Response.statistics.Count > 1)
+                    Top2Value.Text = top3Response.statistics[1];
+                if (top3Response.statistics.Count > 2)
+                    Top3Value.Text = top3Response.statistics[2];
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Failed to fetch stats: {ex.Message}");
             }
         }
-
-
-
-
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
