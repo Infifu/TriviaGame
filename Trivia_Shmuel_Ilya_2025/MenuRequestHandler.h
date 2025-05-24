@@ -9,7 +9,6 @@
 #include "StatisticsManager.h"
 #include "TriviaException.h"
 
-
 class RequestHandlerFactory;
 
 class MenuRequestHandler : public IRequestHandler

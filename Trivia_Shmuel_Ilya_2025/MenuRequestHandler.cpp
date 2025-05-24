@@ -48,11 +48,15 @@ RequestResult MenuRequestHandler::getPeronsalStats(RequestInfo info)
 {
 	IDatabase* db = m_handlerFactory.getDatabase();
 	StatisticsManager stats(db);
-	std::vector<std::string> userStat = stats.getUserStatistics(m_user.getUsername());
-	GetPersonalStatsResponse personalStats{ 0, stats.getUserStatistics(m_user.getUsername())};
-	RequestResult reqRes{ m_serializer.serializeResponse(personalStats) , nullptr};
-	return reqRes;
+
+	JsonRequestPacketDeserializer deserializer;
+	GetStatsRequest req = deserializer.deserializeGetStatsRequest(info.buffer);
+
+	std::vector<std::string> userStat = stats.getUserStatistics(req.username);
+	GetPersonalStatsResponse personalStats{ 0, userStat };
+	return { m_serializer.serializeResponse(personalStats), nullptr };
 }
+
 
 RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
 {

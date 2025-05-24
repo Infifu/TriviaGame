@@ -97,3 +97,12 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(co
     return request;
 }
 
+GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer buffer)
+{
+    nlohmann::json j = nlohmann::json::from_cbor(buffer);
+
+    GetStatsRequest req;
+    req.username = j["username"];
+    return req;
+}
+

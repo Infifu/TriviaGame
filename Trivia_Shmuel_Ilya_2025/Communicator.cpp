@@ -84,10 +84,13 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			std::memcpy(&length, msgLength.data(), sizeof(length));
 
 			Buffer buffer(length);
-			recieved = recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0); //recieve the rest of the message
-			if (recieved < 5)
+			if (length > 0)
 			{
-				throw std::exception("Recieve failed");
+				recieved = recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0);
+				if (recieved < length)
+				{
+					throw std::exception("Failed to receive full message body");
+				}
 			}
 
 			RequestInfo requestinfo;
@@ -95,10 +98,22 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			requestinfo.buffer = buffer;
 			requestinfo.receivalTime = std::time(nullptr);
 
-			RequestResult requestResult = m_clients.find(clientSocket)->second->handleRequest(requestinfo);
-			m_clients.find(clientSocket)->second = requestResult.newHandler;
+			auto it = m_clients.find(clientSocket);
+
+			if (it == m_clients.end() || it->second == nullptr)
+			{
+				throw std::exception("Client socket not registered or handler is null");
+			}
+
+			RequestResult requestResult = it->second->handleRequest(requestinfo);
+
+			if (requestResult.newHandler)
+			{
+				it->second = requestResult.newHandler;
+			}
 
 			send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
+
 		}
 	}
 	catch (const std::exception&)
