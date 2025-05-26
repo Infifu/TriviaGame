@@ -35,8 +35,9 @@ public struct SignupRequest
 
 public struct GetPlayersInRoomRequest
 {
-    public byte roomId;
-};
+    public byte roomId { get; set; }
+}
+
 
 public struct CreateRoomRequest
 {

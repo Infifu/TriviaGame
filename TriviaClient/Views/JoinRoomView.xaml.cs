@@ -49,7 +49,10 @@ public class GetRoomsResponse
     public int status { get; set; }
     public List<RoomData> rooms { get; set; }
 }
-
+public class GetPlayersInRoomResponse
+{
+    public List<string> players { get; set; }
+}
 
 namespace TriviaClient.Views
 {
@@ -125,6 +128,16 @@ namespace TriviaClient.Views
                         RoomNameShow.Text = "Room name: " + selectedRoom.Name;
                         PlayerAmountShow.Text = "Player amount: " + selectedRoom.PlayerCount;
                         TimeToAnswerShow.Text = "Time to answer (seconds): " + selectedRoom.TimeToAnswer;
+
+                        GetPlayersInRoomRequest playerReq = new GetPlayersInRoomRequest { roomId = selectedRoom.Id };
+                        List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(playerReq);
+                        ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
+
+                        GetPlayersInRoomResponse playerRes = JsonSerializer.Deserialize<GetPlayersInRoomResponse>(playerAnswer.json);
+                        if (playerRes != null && playerRes.players != null)
+                        {
+                            PlayerListShow.ItemsSource = playerRes.players;
+                        }
                     }
                     else
                     {
