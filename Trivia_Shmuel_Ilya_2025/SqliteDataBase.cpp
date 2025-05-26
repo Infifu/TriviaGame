@@ -134,6 +134,7 @@ float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
 	DBvector selected = selectQuery(sqlstmt, username);
 	for (auto const& row : selected)
 	{
+		std::cout << row.at("average_time") << std::endl;
 		return std::stof(row.at("average_time"));
 	}
 }
@@ -178,20 +179,25 @@ int SqliteDataBase::getPlayerScore(std::string username)
 	}
 }
 
-//return the top 10 for now
 std::vector<std::string> SqliteDataBase::getHighScores()
 {
 	std::vector<std::string> highScores;
-	std::string sqlstmt = "SELECT score FROM statistics ORDER BY score DESC";
-	DBvector selected = selectQuery(sqlstmt,"");
-	for (auto const& row : selected)
+	std::string sqlstmt = "SELECT username, score FROM statistics ORDER BY score DESC LIMIT 3";
+	DBvector selected = selectQuery(sqlstmt, "");
+
+	for (const auto& row : selected)
 	{
-		highScores.push_back(row.at("score"));
+		std::string name = row.at("username");
+		std::string score = row.at("score");
+		std::cout << name << " " << score << std::endl;
+		highScores.push_back(name + ": " + score);
 	}
+
 	return highScores;
 }
 
-DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::string argument = "")
+
+DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::string argument)
 {
 	DBvector selected;
 	sqlite3_stmt* stmt;
@@ -212,7 +218,6 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 		RowMap row;
 		int colCount = sqlite3_column_count(stmt);
 
-
 		for (int i = 0; i < colCount; i++)
 		{
 			std::string column_name = sqlite3_column_name(stmt, i);
@@ -224,11 +229,15 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 			}
 			else if (colType == SQLITE_INTEGER)
 			{
-				row[column_name] = sqlite3_column_int(stmt, i);
+				row[column_name] = std::to_string(sqlite3_column_int(stmt, i));
 			}
 			else if (colType == SQLITE_FLOAT)
 			{
-				row[column_name] = sqlite3_column_double(stmt, i);
+				row[column_name] = std::to_string(sqlite3_column_double(stmt, i));
+			}
+			else if (colType == SQLITE_NULL)
+			{
+				row[column_name] = "";
 			}
 		}
 		selected.push_back(row);
@@ -237,6 +246,8 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement,const std::s
 	sqlite3_finalize(stmt);
 	return selected;
 }
+
+
 
 bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
 {
