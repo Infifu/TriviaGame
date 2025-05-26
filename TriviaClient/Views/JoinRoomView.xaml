@@ -1,17 +1,11 @@
 ﻿<Window x:Class="TriviaClient.Views.JoinRoomView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:TriviaClient.Views"
-        mc:Ignorable="d"
         Title="JoinRoomView" Height="720" Width="1000"
-        WindowStyle="None"
-        ResizeMode="NoResize"
+        WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent"
-        AllowsTransparency="True"
+        Background="Transparent" AllowsTransparency="True"
         MouseDown="Window_MouseDown">
 
     <Window.Resources>
@@ -29,11 +23,11 @@
         </Style>
 
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#7096D1" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontFamily" Value="Montserrat" />
-            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="Background" Value="#7096D1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="Padding" Value="5,2"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -43,8 +37,7 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True" />
+                                              VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -64,6 +57,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
+            <!-- Header -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -74,90 +69,40 @@
                         FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
                         BorderThickness="1" BorderBrush="#7096D1"
                         Background="#ddeeff" Foreground="#081F5C"
-                        HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMenu_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="White"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Click="BackToMenu_Click"/>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Button x:Name="btnMinimize"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="−"
-                            Foreground="#7096D1"
-                            FontSize="25"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            Click="btnMinimize_Click"
-                            Width="40" Height="36">
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="-1"/>
-                                <SkewTransform AngleY="-0.616"/>
-                                <RotateTransform/>
-                                <TranslateTransform Y="0.156"/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
-                    </Button>
-
-                    <Button x:Name="btnClose"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Content="X"
-                            Foreground="#7096D1"
-                            FontSize="20"
-                            FontFamily="Montserrat"
-                            Cursor="Hand"
-                            Click="btnClose_Click"
-                            Width="40" Height="36">
-                        <Button.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="-1"/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Button.RenderTransform>
-                    </Button>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                    <Button x:Name="btnMinimize" Background="Transparent" BorderThickness="0"
+                            Content="−" Foreground="#7096D1" FontSize="25" FontFamily="Montserrat"
+                            Cursor="Hand" Click="btnMinimize_Click" Width="40" Height="36"/>
+                    <Button x:Name="btnClose" Background="Transparent" BorderThickness="0"
+                            Content="X" Foreground="#7096D1" FontSize="20" FontFamily="Montserrat"
+                            Cursor="Hand" Click="btnClose_Click" Width="40" Height="36"/>
                 </StackPanel>
             </Grid>
 
+            <!-- Main Content -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Room list -->
                 <ScrollViewer Grid.Column="0" Margin="10">
                     <ItemsControl ItemsSource="{Binding Rooms}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Style="{StaticResource RoomCardStyle}">
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontFamily="Montserrat" FontSize="18"
+                                        <TextBlock Text="{Binding Name}" FontFamily="Montserrat" FontSize="18"
                                                    FontWeight="Bold" Foreground="#081F5C"/>
-                                        <TextBlock Text="{Binding PlayerStatus}"
-                                                   FontFamily="Montserrat" FontSize="14"
+                                        <TextBlock Text="{Binding PlayerStatus}" FontFamily="Montserrat" FontSize="14"
                                                    Foreground="#081F5C"/>
                                         <Button Content="Join"
                                                 Click="JoinRoom_Click"
-                                                Height="30"
                                                 Tag="{Binding}"
-                                            Cursor="Hand"
                                                 Style="{StaticResource RoundedButtonStyle}" />
                                     </StackPanel>
                                 </Border>
@@ -165,103 +110,55 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
+
+                <!-- Room Info Panel -->
+                <StackPanel x:Name="RoomPlayerInfoPanel" Grid.Column="1"
+                            Orientation="Vertical" Margin="30,10,10,10"
+                            Visibility="Collapsed">
+
+                    <TextBlock Text="Game Management"
+                               Foreground="#081F5C" FontSize="25" FontWeight="Bold"
+                               FontFamily="Montserrat" Margin="0,0,0,10"/>
+
+                    <WrapPanel Margin="0,0,0,10">
+                        <TextBlock x:Name="RoomNameShow" Width="300" Margin="0,0,20,0"
+                                   FontSize="20" FontFamily="Montserrat" Foreground="#081F5C"/>
+                        <TextBlock x:Name="PlayerAmountShow" Width="300" Margin="0,0,20,0"
+                                   FontSize="20" FontFamily="Montserrat" Foreground="#081F5C"/>
+                        <TextBlock x:Name="TimeToAnswerShow" Width="300"
+                                   FontSize="20" FontFamily="Montserrat" Foreground="#081F5C"/>
+                    </WrapPanel>
+
+                    <!-- Placeholder players list -->
+                    <ItemsControl Margin="0,10,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#FFFAFAFA" BorderBrush="#7096D1" BorderThickness="1"
+                                        CornerRadius="8" Padding="10" Margin="0,5,0,5">
+                                    <TextBlock Text="{Binding}" FontSize="13" FontWeight="Medium"
+                                               FontFamily="Montserrat" Foreground="#081F5C"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Items>
+                            <sys:String>Player 1</sys:String>
+                            <sys:String>Player 2</sys:String>
+                            <sys:String>Player 3</sys:String>
+                        </ItemsControl.Items>
+                    </ItemsControl>
+
+                    <TextBlock x:Name="ErrorMessage1"
+                               Text="Error joining room"
+                               Visibility="Hidden"
+                               Foreground="#081F5C" FontSize="16"
+                               FontFamily="Montserrat" Margin="10,10,0,0"/>
+                </StackPanel>
             </Grid>
-
-
-            <StackPanel x:Name="RoomPlayerInfoPanell"
-                Visibility="Collapsed"
-                Grid.Row="1"
-                Orientation="Vertical"
-                Margin="374,0,0,21">
-
-
-                <TextBlock Text="Game Managment"
-                    Foreground="#081F5C"
-                    FontSize="25"
-                    FontFamily="Montserrat"
-                    Grid.Column="0"
-                    VerticalAlignment="Top"
-                    Margin="20,0,22,0" Height="30" FontWeight="Bold"/>
-
-                <WrapPanel Margin="25,40,0,0">
-                    <TextBlock Text="Room name: ??????"
-                        x:Name="RoomNameShow"
-                        Foreground="#081F5C"
-                        FontSize="20"
-                        FontFamily="Montserrat"
-                        Width="150"
-                        TextWrapping="Wrap"
-                        Margin="0,0,20,0"/>
-
-                    <TextBlock Text="Player amount: ?"
-                        x:Name="PlayerAmountShow"
-                        Foreground="#081F5C"
-                        FontSize="20"
-                        FontFamily="Montserrat"
-                        Width="170"
-                        TextWrapping="Wrap"
-                        Margin="0,0,20,0"/>
-
-                    <TextBlock Text="Time to answer: ?"
-                        x:Name="TimeToAnswerShow"
-                        Foreground="#081F5C"
-                        FontSize="20"
-                        FontFamily="Montserrat"
-                        Width="170"
-                        TextWrapping="Wrap"/>
-                </WrapPanel>
-
-                <ItemsControl Margin="20,30,20,0">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="#FFFAFAFA"
-                    BorderBrush="#7096D1"
-                    BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="10"
-                    Margin="0,5,0,5">
-                                <TextBlock Text="{Binding}"
-                           FontSize="13"
-                           FontWeight="Medium"
-                           FontFamily="Montserrat"
-                           Foreground="#081F5C"/>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-
-                    <ItemsControl.Items>
-                        <sys:String xmlns:sys="clr-namespace:System;assembly=mscorlib">Player 1</sys:String>
-                        <sys:String>Player 2</sys:String>
-                        <sys:String>Player 3</sys:String>
-                        <sys:String>Player 4</sys:String>
-                        <sys:String>Player 5</sys:String>
-                        <sys:String>Player 6</sys:String>
-                        <sys:String>Player 7</sys:String>
-                        <sys:String>Player 8</sys:String>
-                        <sys:String>Player 9</sys:String>
-                    </ItemsControl.Items>
-                </ItemsControl>
-
-
-                <TextBlock x:Name="ErrorMessage1"
-                    Text="Please fill all the fields!"
-                    Visibility="Hidden"
-                    Foreground="#081F5C"
-                    FontSize="20"
-                    FontFamily="Montserrat"
-                    HorizontalAlignment="Left"
-                    TextWrapping="Wrap"
-                    TextAlignment="Left"
-                    Margin="400,5,0,0"/>
-
-            </StackPanel>
-
         </Grid>
     </Border>
 </Window>

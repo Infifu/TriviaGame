@@ -38,11 +38,6 @@ public struct GetPlayersInRoomRequest
     public byte roomId;
 };
 
-public struct JoinRoomRequest
-{
-    public byte roomId;
-};
-
 public struct CreateRoomRequest
 {
     public string roomName { get; set; }
@@ -61,6 +56,15 @@ public struct GetTop3Request
     
 }
 
+public struct GetRoomsRequest
+{
+
+}
+public struct JoinRoomRequest
+{
+    public byte RoomId { get; set; }
+}
+
 //we need an external libary for cbor serialization for json named Peter0.Cbor
 namespace TriviaClient.Services
 {
@@ -71,14 +75,14 @@ namespace TriviaClient.Services
         {
             codes = new Dictionary<Type, ServerCodes>();
             codes.Add(typeof(CreateRoomRequest), ServerCodes.CreateRoom);
-            codes.Add(typeof(JoinRoomRequest), ServerCodes.JoinRoom);
             codes.Add(typeof(GetPlayersInRoomRequest), ServerCodes.GetPlayersInRooms);
             codes.Add(typeof(LoginRequest), ServerCodes.Login);
             codes.Add(typeof(SignupRequest), ServerCodes.Register);
 
-            //codes.Add(typeof(GetRoomsRequest), ServerCodes.CreateRoom); -- No get rooms request
+            codes.Add(typeof(GetRoomsRequest), ServerCodes.GetRooms);
             codes.Add(typeof(GetStatsRequest), ServerCodes.GetPersonalStats);
             codes.Add(typeof(GetTop3Request), ServerCodes.GetTop3);
+            codes.Add(typeof(JoinRoomRequest), ServerCodes.JoinRoom);
         }
 
         public Buffer SerializeResponse<T>(T requestToServer)
