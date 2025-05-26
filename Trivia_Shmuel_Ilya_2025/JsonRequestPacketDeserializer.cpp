@@ -74,7 +74,7 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const 
     JoinRoomRequest request;
     json j = json::from_cbor(buffer);
 
-    request.roomId = j.at("roomId").get<unsigned int>();
+    request.roomId = j.at("RoomId").get<unsigned int>();
 
     return request;
 }
