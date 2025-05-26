@@ -74,7 +74,7 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const 
     JoinRoomRequest request;
     json j = json::from_cbor(buffer);
 
-    request.roomId = j.at("roomId").get<unsigned int>();
+    request.roomId = j.at("RoomId").get<unsigned int>();
 
     return request;
 }
@@ -95,5 +95,14 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(co
     request.answerTimeout = j.at("answerTimeout").get<unsigned int>();
 
     return request;
+}
+
+GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer buffer)
+{
+    nlohmann::json j = nlohmann::json::from_cbor(buffer);
+
+    GetStatsRequest req;
+    req.username = j["username"];
+    return req;
 }
 

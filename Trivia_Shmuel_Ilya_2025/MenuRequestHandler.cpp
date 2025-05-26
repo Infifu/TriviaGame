@@ -46,20 +46,29 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 
 RequestResult MenuRequestHandler::getPeronsalStats(RequestInfo info)
 {
-	StatisticsManager stats;
-	std::vector<std::string> userStat = stats.getUserStatistics(m_user.getUsername());
-	GetPersonalStatsResponse personalStats{ 0, stats.getUserStatistics(m_user.getUsername())};
-	RequestResult reqRes{ m_serializer.serializeResponse(personalStats) , nullptr};
-	return reqRes;
+	IDatabase* db = m_handlerFactory.getDatabase();
+	StatisticsManager stats(db);
+
+	JsonRequestPacketDeserializer deserializer;
+	GetStatsRequest req = deserializer.deserializeGetStatsRequest(info.buffer);
+
+	std::vector<std::string> userStat = stats.getUserStatistics(req.username);
+	GetPersonalStatsResponse personalStats{ 0, userStat };
+	return { m_serializer.serializeResponse(personalStats), nullptr };
 }
+
 
 RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
 {
-	StatisticsManager stats;
-	GetHighScoreResponse highScoreRes{0,stats.getHighScore()};
-	RequestResult reqRes{ m_serializer.serializeResponse(highScoreRes),nullptr };
+	IDatabase* db = m_handlerFactory.getDatabase();
+	StatisticsManager stats(db);
+
+	GetHighScoreResponse highScoreRes{ 0, stats.getHighScore() };
+	RequestResult reqRes{ m_serializer.serializeResponse(highScoreRes), nullptr };
 	return reqRes;
 }
+
+
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {

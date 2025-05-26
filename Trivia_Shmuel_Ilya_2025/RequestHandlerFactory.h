@@ -17,5 +17,6 @@ public:
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser user);
 	LoginManager& getLoginManager();
+	IDatabase* getDatabase() const { return _database; }
 };
 
