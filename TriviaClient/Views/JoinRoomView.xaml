@@ -12,7 +12,8 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        Loaded="LoadRooms">
 
     <Window.Resources>
         <Style x:Key="RoomCardStyle" TargetType="Border">

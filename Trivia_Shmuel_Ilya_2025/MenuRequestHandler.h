@@ -19,7 +19,7 @@ private:
 	unsigned int m_curID;
 	JsonResponsePacketSerializer m_serializer;
 	JsonRequestPacketDeserializer m_deserializer;
-	RoomManager m_manager;
+	RoomManager& m_manager;
 
 	RequestResult signout(RequestInfo);
 	RequestResult getRooms(RequestInfo);
@@ -29,7 +29,7 @@ private:
 	RequestResult joinRoom(RequestInfo);
 	RequestResult createRoom(RequestInfo);
 public:
-	MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory);
+	MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager);
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
 

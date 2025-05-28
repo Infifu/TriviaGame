@@ -1,8 +1,8 @@
 #include "MenuRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory) : m_user(user), m_handlerFactory(*handlerFactory) , m_curID(0) 
-, m_serializer(), m_deserializer()
+MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory), m_curID(0)
+, m_serializer(), m_deserializer(), m_manager(*roomManger)
 {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)

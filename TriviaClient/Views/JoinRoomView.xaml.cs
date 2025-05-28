@@ -69,25 +69,6 @@ namespace TriviaClient.Views
 
             Rooms = new ObservableCollection<Room>();
             DataContext = this;
-
-            try
-            {
-
-                GetRoomsRequest req = new GetRoomsRequest();
-                List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
-                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
-
-                GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
-
-                foreach (RoomData room in response.rooms)
-                {
-                    Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to fetch rooms: " + ex.Message);
-            }
         }
 
 
@@ -107,6 +88,27 @@ namespace TriviaClient.Views
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void LoadRooms(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                GetRoomsRequest req = new GetRoomsRequest();
+                List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
+                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
+
+                GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
+
+                foreach (RoomData room in response.rooms)
+                {
+                    Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to fetch rooms: " + ex.Message);
+            }
         }
 
         private void JoinRoom_Click(object sender, RoutedEventArgs e)

@@ -3,6 +3,7 @@
 #include "IDatabase.h"
 #include "MenuRequestHandler.h"
 #include "LoginRequestHandler.h" 
+#include "RoomManager.h"
 
 class LoginRequestHandler;
 class MenuRequestHandler;
@@ -12,6 +13,7 @@ class RequestHandlerFactory
 private:
 	LoginManager _loginManager;
 	IDatabase* _database; //IM GOOFY GOOBER RAAAHHHH
+	RoomManager _roomManager;
 public:
 	RequestHandlerFactory(IDatabase* database);
 	LoginRequestHandler* createLoginRequestHandler();
