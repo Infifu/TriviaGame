@@ -1,9 +1,12 @@
 #pragma once
 #include <string>
 #include <list>
+#include <vector>
 #include "UsingBuffer.h"
 #include <iostream>
 #include <map>
+#include "Question.h"
+#include <vector>
 #include "sqlite3.h"
 
 class IDatabase
@@ -18,13 +21,12 @@ public:
 	virtual bool doesPasswordMatch(const std::string username, const std::string password) = 0;
 	virtual void addNewUser(const std::string username, std::string password, const std::string email) = 0;
 
-	//to do:
-	//List<Question> getQuestions(int)
-	//virtual float getPlayerAverageAnswerTime(std::string);
-	//virtual int getNumOfCorrectAnswers(std::string);
-	//virtual int getNumOfTotalAnswers(std::string);
-	//virtual int getNumOfPlayerGames(std::string);
-
-	//virtual void getSecurityKey(std::string);
+	virtual std::vector<Question> getQuestions(int) = 0;
+	virtual float getPlayerAverageAnswerTime(std::string) = 0;
+	virtual int getNumOfCorrectAnswers(std::string) = 0;
+	virtual int getNumOfTotalAnswers(std::string) = 0;
+	virtual int getNumOfPlayerGames(std::string) = 0;
+	virtual int getPlayerScore(std::string) = 0;
+	virtual std::vector<std::string> getHighScores() = 0;
 };
 

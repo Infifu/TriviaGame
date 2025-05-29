@@ -20,12 +20,38 @@ struct SignupRequest
 	std::string email;
 };
 
+struct GetPlayersInRoomRequest 
+{
+	unsigned int roomId;
+};
+
+struct JoinRoomRequest 
+{
+	unsigned int roomId;
+};
+
+struct CreateRoomRequest 
+{
+	std::string roomName;
+	unsigned int maxUsers;
+	unsigned int questionCount;
+	unsigned int answerTimeout;
+};
+
+struct GetStatsRequest
+{
+	std::string username;
+};
 class JsonRequestPacketDeserializer
 {
 public:
-	//I removed the length and code extraction from youre deserializer please note this
+	//I removed the length and code extraction from your deserializer please note this
 	//and dont make it in new ones
+	GetStatsRequest deserializeGetStatsRequest(Buffer buffer);
 	static LoginRequest deserializeLoginRequest(const Buffer buffer);
 	static SignupRequest deserializeSignupRequest(const Buffer& buffer);
+	static GetPlayersInRoomRequest deserializeGetPlayersRequest(const Buffer& buffer);
+	static JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
+	static CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
 };
 
