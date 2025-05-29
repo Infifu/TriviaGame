@@ -3,6 +3,7 @@
 void RoomManager::createRoom(LoggedUser user, RoomData roomData)
 {
     Room room(roomData);
+    room.addUser(user);
     m_rooms.insert({ roomData.id,room });
 }
 
@@ -29,17 +30,17 @@ std::vector<RoomData> RoomManager::getRooms()
 }
 
 
-//the compiler doesnt let me return std::optional<Room&>
-//only a copy not a reference
-std::optional<Room> RoomManager::getRoom(RoomID id)
+//Hello dear ido, im rejecting the std::optional<Room> because of the fact that you cant pass it by reference by defult
+//only with fuckass workarounds
+Room* RoomManager::getRoom(RoomID id)
 {
     auto it = m_rooms.find(id);
     if (it != m_rooms.end())
     {
-        return it->second; // copy the Room
+        return &it->second; // copy the Room
     }
     else
     {
-        return std::nullopt;
+        return nullptr;
     }
 }

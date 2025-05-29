@@ -170,7 +170,7 @@
 
 
             <StackPanel x:Name="RoomPlayerInfoPanel"
-                Visibility="Collapsed"
+                Visibility="Visible"
                 Grid.Row="1"
                 Orientation="Vertical"
                 Margin="374,0,0,21">
