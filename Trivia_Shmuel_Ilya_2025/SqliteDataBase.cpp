@@ -65,6 +65,19 @@ void SqliteDataBase::addNewUser(const std::string username ,const std::string pa
 	values["email"] = email;
 
 	bool res = SqliteDataBase::insertQuery("users", values);
+
+	if (res) 
+	{
+		std::map<std::string, std::string> statsValues;
+		statsValues["username"] = username;
+		statsValues["games_played"] = "0";
+		statsValues["total_answers"] = "0";
+		statsValues["correct_answers"] = "0";
+		statsValues["average_time"] = "0.0";
+		statsValues["score"] = "0";
+
+		SqliteDataBase::insertQuery("statistics", statsValues);
+	}
 }
 
 
@@ -249,7 +262,7 @@ DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::
 
 
 
-bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::string, std::string> values)
+bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::string, std::string> values)
 {
 	std::string sqlStatement;
 	sqlite3_stmt* stmt;
@@ -257,24 +270,41 @@ bool SqliteDataBase::insertQuery(const std::string table,const std::map<std::str
 
 	if (table == "users")
 		sqlStatement = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
+	else if (table == "statistics")
+		sqlStatement = "INSERT INTO statistics (username, games_played, total_answers, correct_answers, average_time, score) VALUES (?,?,?,?,?,?)";
+	else
+	{
+		std::cerr << "error: Invalid table name" << std::endl;
+		return false;
+	}
 
 	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
 	if (res != SQLITE_OK)
 	{
-		std::cerr << "error: " << errMessage << std::endl;
+		std::cerr << "prepare error: " << sqlite3_errmsg(m_database) << std::endl;
 		return false;
 	}
 
-	sqlite3_bind_text(stmt, 1, values.at("username").c_str(), -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 2, values.at("password").c_str(), -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 3, values.at("email").c_str(), -1, SQLITE_STATIC);
+	if (table == "statistics")
+	{
+		sqlite3_bind_text(stmt, 1, values.at("username").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_int(stmt, 2, std::stoi(values.at("games_played")));
+		sqlite3_bind_int(stmt, 3, std::stoi(values.at("total_answers")));
+		sqlite3_bind_int(stmt, 4, std::stoi(values.at("correct_answers")));
+		sqlite3_bind_double(stmt, 5, std::stod(values.at("average_time")));
+		sqlite3_bind_int(stmt, 6, std::stoi(values.at("score")));
+	}
+	else if (table == "users")
+	{
+		sqlite3_bind_text(stmt, 1, values.at("username").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 2, values.at("password").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 3, values.at("email").c_str(), -1, SQLITE_STATIC);
+	}
 
 	res = sqlite3_step(stmt);
-	if (res != SQLITE_DONE)
-	{
-		return false;
-	}
+	sqlite3_finalize(stmt);
 
 	return true;
 }
+
 

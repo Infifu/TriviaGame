@@ -86,8 +86,7 @@ RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
     SignupResponse signRes{ signUpStatus = loginManager->signup(username, password, email) };
     LoggedUser user{ username };
 
-    RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) ,
-        _handlerFactory.createMenuRequestHandler(user) };
+    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(signRes) , this };
 
     return reqRes;
 }
