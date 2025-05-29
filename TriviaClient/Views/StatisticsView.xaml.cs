@@ -57,10 +57,14 @@ namespace Statistics.View
                 ServerAnswer statsAnswer = Client.Instance.communicator.SendAndReceive(statsBuffer);
                 GetPersonalStatsResponse statsResponse = JsonSerializer.Deserialize<GetPersonalStatsResponse>(statsAnswer.json);
 
+                string userScoreStr = "";
                 foreach (string stat in statsResponse.statistics)
                 {
                     if (stat.StartsWith("PlayerScore: "))
-                        ScoreValue.Text = stat.Substring("PlayerScore: ".Length);
+                    {
+                        userScoreStr = stat.Substring("PlayerScore: ".Length).Trim();
+                        ScoreValue.Text = userScoreStr;
+                    }
                     else if (stat.StartsWith("NumOfPlayerGames: "))
                         GamesPlayedValue.Text = stat.Substring("NumOfPlayerGames: ".Length);
                     else if (stat.StartsWith("NumOfTotalAnswers: "))
@@ -76,29 +80,33 @@ namespace Statistics.View
                 ServerAnswer top3Answer = Client.Instance.communicator.SendAndReceive(top3Buffer);
                 GetHighScoreResponse top3Response = JsonSerializer.Deserialize<GetHighScoreResponse>(top3Answer.json);
 
-                string top1Name = null;
+                string top1Name = "";
+                string top3ScoreStr = "0";
 
                 if (top3Response.statistics.Count > 0)
                 {
                     string[] parts = top3Response.statistics[0].Split(':');
-                    top1Name = parts[0].Trim();
+                    top1Name = parts[0];
                     Top1Value.Text = top1Name;
-                    Top1ScoreValue.Text = $"Top 1 = {parts[1].Trim()}";
+                    Top1ScoreValue.Text = "Top 1 = " + parts[1];
                 }
+
                 if (top3Response.statistics.Count > 1)
                 {
                     string[] parts = top3Response.statistics[1].Split(':');
-                    Top2Value.Text = parts[0].Trim();
-                    Top2ScoreValue.Text = $"Top 2 = {parts[1].Trim()}";
+                    Top2Value.Text = parts[0];
+                    Top2ScoreValue.Text = "Top 2 = " + parts[1];
                 }
+
                 if (top3Response.statistics.Count > 2)
                 {
                     string[] parts = top3Response.statistics[2].Split(':');
-                    Top3Value.Text = parts[0].Trim();
-                    Top3ScoreValue.Text = $"Top 3 = {parts[1].Trim()}";
+                    Top3Value.Text = parts[0];
+                    Top3ScoreValue.Text = "Top 3 = " + parts[1];
+                    top3ScoreStr = parts[1];
                 }
 
-                if (!string.IsNullOrEmpty(top1Name))
+                if (top1Name != "")
                 {
                     GetStatsRequest top1StatsReq = new GetStatsRequest { username = top1Name };
                     List<byte> top1StatsBuffer = Client.Instance.serializer.SerializeResponse(top1StatsReq);
@@ -119,13 +127,24 @@ namespace Statistics.View
                             Top1AverageTimeStatValue.Text = stat.Substring("PlayerAverageAnswerTime: ".Length) + "s";
                     }
                 }
+
+                int userScore = int.Parse(userScoreStr);
+                int top3Score = int.Parse(top3ScoreStr);
+
+                if (top3Score > userScore)
+                {
+                    PointsToPodiumText.Text = "You need " + (top3Score - userScore) + " more points to get on podium";
+                }
+                else
+                {
+                    PointsToPodiumText.Text = "You are on the podium!";
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to fetch stats: {ex.Message}");
+                MessageBox.Show("Failed to fetch stats: " + ex.Message);
             }
         }
-
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {

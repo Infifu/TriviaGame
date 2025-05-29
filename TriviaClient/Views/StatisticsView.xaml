@@ -143,11 +143,12 @@
                     <TextBlock x:Name="Top3ScoreValue" Text="Top 3 = ..." FontSize="20" Foreground="#081F5C" FontFamily="Montserrat" Margin="20,0"/>
                 </StackPanel>
 
-                <TextBlock Text="You need 250 more points to get on podium"
-                           FontSize="20" HorizontalAlignment="Center"
-                           Margin="0,10,0,0"
-                           FontFamily="Montserrat"
-                           Foreground="#081F5C"/>
+                <TextBlock x:Name="PointsToPodiumText"
+                            Text=""
+                            FontSize="20" HorizontalAlignment="Center"
+                            Margin="0,10,0,0"
+                            FontFamily="Montserrat"
+                            Foreground="#081F5C"/>
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="0,0">
