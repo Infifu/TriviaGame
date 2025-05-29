@@ -86,7 +86,9 @@ RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
     SignupResponse signRes{ signUpStatus = loginManager->signup(username, password, email) };
     LoggedUser user{ username };
 
-    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(signRes) , this };
+
+    //loginhandler returned due to login and client logic
+    RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) , this };
 
     return reqRes;
 }

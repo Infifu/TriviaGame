@@ -62,12 +62,16 @@ namespace TriviaClient.Views
     public partial class JoinRoomView : Window
     {
         public ObservableCollection<Room> Rooms { get; set; }
+        public ObservableCollection<string> Players { get; set; }
+
 
         public JoinRoomView()
         {
             InitializeComponent();
 
             Rooms = new ObservableCollection<Room>();
+            Players = new ObservableCollection<string> { };
+
             DataContext = this;
         }
 
@@ -154,7 +158,6 @@ namespace TriviaClient.Views
                 }
             }
         }
-
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
             MainMenu mainMenu = new MainMenu();

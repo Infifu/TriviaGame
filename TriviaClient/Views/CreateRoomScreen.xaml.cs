@@ -56,7 +56,7 @@ namespace TriviaClient.Views
 
         private void txtTimeToAnswer_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !int.TryParse(e.Text, out _); // Allow only numbers
+            e.Handled = !int.TryParse(e.Text, out _); // allow only numbers
         }
 
         private void btnCreateRoom_Click(object sender, RoutedEventArgs e)

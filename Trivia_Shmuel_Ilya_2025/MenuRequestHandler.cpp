@@ -34,10 +34,10 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 	GetPlayersInRoomRequest roomReq = m_deserializer.deserializeGetPlayersRequest(info.buffer);
 	GetPlayersInRoomResponse roomRes;
 	roomReq.roomId;
-	std::optional<Room> roomObject = m_manager.getRoom(roomReq.roomId);
-	if (roomObject.has_value())
+	Room* roomObject = m_manager.getRoom(roomReq.roomId);
+	if (roomObject != nullptr)
 	{
-		roomRes.players = roomObject.value().getAllUsers();
+		roomRes.players = roomObject->getAllUsers();
 	}
 	
 	RequestResult reqRes{ m_serializer.serializeResponse(roomRes) , nullptr};
@@ -72,24 +72,23 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
 
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
-	JoinRoomRequest joinRoomReq = m_deserializer.deserializeJoinRoomRequest(info.buffer);
-	JoinRoomResponse joinRoomRes;
+    JoinRoomRequest joinRoomReq = m_deserializer.deserializeJoinRoomRequest(info.buffer);
+    JoinRoomResponse joinRoomRes;
 
-	std::optional<Room> optionalRoom = m_manager.getRoom(joinRoomReq.roomId);
-	if (optionalRoom.has_value())
-	{
-		Room room = optionalRoom.value();
-		room.addUser(m_user);
-		joinRoomRes.status = 0;
-	}
-	else
-	{
-		joinRoomRes.status = 1;
-	}
+    Room* room = m_manager.getRoom(joinRoomReq.roomId);
+	if (room != nullptr)
+    {
+        room->addUser(m_user);
+        joinRoomRes.status = 0;
+    }
+    else
+    {
+        joinRoomRes.status = 1;
+    }
 
-	RequestResult reqRes{ m_serializer.serializeResponse(joinRoomRes), nullptr }; //not sure about the new handler
+    RequestResult reqRes{ m_serializer.serializeResponse(joinRoomRes), nullptr };
 
-	return reqRes;
+    return reqRes;
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
