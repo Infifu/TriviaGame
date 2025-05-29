@@ -302,15 +302,13 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 	}
 
 	res = sqlite3_step(stmt);
-<<<<<<< HEAD
 	sqlite3_finalize(stmt);
-=======
+
 	if (res != SQLITE_DONE)
 	{
-		std::cerr << "[DEBUG] Failed to prepare statement: " << sqlite3_errmsg(m_database) << std::endl;
+		std::cerr << "error: " << sqlite3_errmsg(m_database) << std::endl;
 		return false;
 	}
->>>>>>> da94e5073d6b09c9cf75a05e93161ed51a307721
 
 	return true;
 }
