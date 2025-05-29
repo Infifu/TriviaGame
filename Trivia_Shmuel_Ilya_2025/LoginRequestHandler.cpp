@@ -15,7 +15,7 @@ LoginRequestHandler::~LoginRequestHandler()
 
 bool LoginRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {
-    return requestInfo.id == LoginRec || requestInfo.id == SignupRec;
+    return requestInfo.id == LoginReq || requestInfo.id == SignupReq;
 }
 
 RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo) 
@@ -25,11 +25,11 @@ RequestResult LoginRequestHandler::handleRequest(const RequestInfo& requestInfo)
 
     try 
     {
-        if (requestInfo.id == LoginRec)
+        if (requestInfo.id == LoginReq)
         {
             reqRes = login(requestInfo);
         }
-        else if (requestInfo.id == SignupRec)
+        else if (requestInfo.id == SignupReq)
         {
             reqRes = signup(requestInfo);
         }
@@ -55,10 +55,20 @@ RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
     std::string password = logReq.password;
 
     LoginStatus loginStatus = loginManager->login(username, password);
+    LoggedUser user{ username };
 
     LoginResponse logRes{ loginStatus };
-    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)
-        , _handlerFactory.createMenuRequestHandler()};
+
+    RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)};
+
+    if (loginStatus == 1 || loginStatus == 2)
+    {
+        reqRes.newHandler = this;
+    }
+    else
+    {
+        reqRes.newHandler = _handlerFactory.createMenuRequestHandler(user);
+    }
     return reqRes;
 }
 
@@ -74,8 +84,11 @@ RequestResult LoginRequestHandler::signup(const RequestInfo requestInfo)
 
 
     SignupResponse signRes{ signUpStatus = loginManager->signup(username, password, email) };
-    RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) ,
-        _handlerFactory.createMenuRequestHandler() };
+    LoggedUser user{ username };
+
+
+    //loginhandler returned due to login and client logic
+    RequestResult reqRes { JsonResponsePacketSerializer::serializeResponse(signRes) , this };
 
     return reqRes;
 }

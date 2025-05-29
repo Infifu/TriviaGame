@@ -9,6 +9,12 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(const Buffer
 {
     LoginRequest request;
 
+    //// See if the buffer has at least 5 bytes
+    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    //{
+    //    throw std::runtime_error("Not Valid buffer length For LoginRequest");
+    //}
+
     // Deserialize the json data into a json 
     json j = json::from_cbor(buffer);
 
@@ -27,6 +33,12 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 {
     SignupRequest request;
 
+    //// See that the buffer has at least 5 bytes
+    //if (buffer.size() < uint32_t(5)) //Just as you wish ido bobido <3
+    //{
+    //    throw std::runtime_error("Not Valid buffer length For SignupRequest");
+    //}
+
     // Deserialize the json data into a json 
     json j = json::from_cbor(buffer);
 
@@ -36,3 +48,61 @@ SignupRequest JsonRequestPacketDeserializer::deserializeSignupRequest(const Buff
 
     return request;
 }
+
+/**
+ * @brief Deserialize a request to get players in a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return GetPlayersInRoomRequest struct with the requested room ID
+ */
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(const Buffer& buffer)
+{
+    GetPlayersInRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomId = j.at("roomId").get<unsigned int>();
+
+    return request;
+}
+
+/**
+ * @brief Deserialize a request to join a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return JoinRoomRequest struct with the room ID to join
+ */
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(const Buffer& buffer)
+{
+    JoinRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomId = j.at("RoomId").get<unsigned int>();
+
+    return request;
+}
+
+/**
+ * @brief Deserialize a request to create a room from a binary buffer
+ * @param buffer - the raw binary data received from the client
+ * @return CreateRoomRequest struct with room name max users question count and answer timeout
+ */
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(const Buffer& buffer)
+{
+    CreateRoomRequest request;
+    json j = json::from_cbor(buffer);
+
+    request.roomName = j.at("roomName").get<std::string>();
+    request.maxUsers = j.at("maxUsers").get<unsigned int>();
+    request.questionCount = j.at("questionCount").get<unsigned int>();
+    request.answerTimeout = j.at("answerTimeout").get<unsigned int>();
+
+    return request;
+}
+
+GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer buffer)
+{
+    nlohmann::json j = nlohmann::json::from_cbor(buffer);
+
+    GetStatsRequest req;
+    req.username = j["username"];
+    return req;
+}
+
