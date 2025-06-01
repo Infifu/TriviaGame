@@ -74,16 +74,34 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
     JoinRoomRequest joinRoomReq = m_deserializer.deserializeJoinRoomRequest(info.buffer);
     JoinRoomResponse joinRoomRes;
+	bool found = false;
 
     Room* room = m_manager.getRoom(joinRoomReq.roomId);
 	if (room != nullptr)
     {
-        room->addUser(m_user);
-        joinRoomRes.status = 0;
+		std::vector <std::string> users = room->getAllUsers();
+		for (auto user : users)
+		{
+			if (user == m_user)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			room->addUser(m_user);
+			joinRoomRes.status = 0;
+		}
+		else
+		{
+			joinRoomRes.status = 1;
+		}
     }
     else
     {
-        joinRoomRes.status = 1;
+		joinRoomRes.status = 1;
     }
 
     RequestResult reqRes{ m_serializer.serializeResponse(joinRoomRes), nullptr };
