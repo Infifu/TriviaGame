@@ -1,0 +1,49 @@
+#include "RoomAdminRequestHandler.h"
+
+RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
+{
+    LeaveRoomResponse response{ 0 };
+    Buffer buffer = m_serializer.serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
+{
+    StartGameResponse response{ 0 };
+    Buffer buffer = m_serializer.serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
+{
+    RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
+    GetRoomStateResponse response{ 0, status };
+    Buffer buffer = m_serializer.serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
+    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory) {
+}
+
+bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
+{
+    return requestInfo.id == CLOSE_ROOM_REQUEST ||
+        requestInfo.id == START_GAME_REQUEST ||
+        requestInfo.id == GET_ROOM_STATE_REQUEST;
+}
+
+RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestInfo)
+{
+    switch (requestInfo.id)
+    {
+    case CLOSE_ROOM_REQUEST:
+        return closeRoom(requestInfo);
+    case START_GAME_REQUEST:
+        return startGame(requestInfo);
+    case GET_ROOM_STATE_REQUEST:
+        return getRoomState(requestInfo);
+    default:
+        throw std::exception("invalid request id in RoomAdminRequestHandler");
+    }
+}
