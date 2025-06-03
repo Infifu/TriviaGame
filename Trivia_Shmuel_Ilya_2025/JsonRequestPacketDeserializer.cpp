@@ -97,6 +97,26 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(co
     return request;
 }
 
+CloseRoomRequest JsonRequestPacketDeserializer::deserializeCloseRoomRequest(Buffer)
+{
+    return CloseRoomRequest();
+}
+
+StartGameRequest JsonRequestPacketDeserializer::deserializeStartGameRequest(Buffer)
+{
+    return StartGameRequest();
+}
+
+GetRoomStateRequest JsonRequestPacketDeserializer::deserializeGetRoomStateRequest(Buffer)
+{
+    return GetRoomStateRequest();
+}
+
+LeaveRoomRequest JsonRequestPacketDeserializer::deserializeLeaveRoomRequest(Buffer)
+{
+    return LeaveRoomRequest();
+}
+
 GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer buffer)
 {
     nlohmann::json j = nlohmann::json::from_cbor(buffer);
