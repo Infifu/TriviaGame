@@ -57,7 +57,31 @@ struct SignupResponse
 struct ErrorResponse
 {
 	std::string message;
-}; 
+};
+
+struct CloseRoomResponse 
+{
+	unsigned int status;
+};
+
+struct StartGameResponse 
+{
+	unsigned int status;
+};
+
+struct LeaveRoomResponse 
+{
+	unsigned int status;
+};
+
+struct GetRoomStateResponse 
+{
+	unsigned int status;
+	bool hasGameBegun;
+	std::vector<std::string> players;
+	unsigned int answerCount;
+	unsigned int answerTimeout;
+};
 
 class JsonResponsePacketSerializer
 {
@@ -74,7 +98,13 @@ public:
 	static Buffer serializeResponse(const CreateRoomResponse& response);
 	static Buffer serializeResponse(const GetHighScoreResponse& response);
 	static Buffer serializeResponse(const GetPersonalStatsResponse& response);
-	
+
+	//room
+	static Buffer serializeResponse(const CloseRoomResponse& response);
+	static Buffer serializeResponse(const StartGameResponse& response);
+	static Buffer serializeResponse(const LeaveRoomResponse& response);
+	static Buffer serializeResponse(const GetRoomStateResponse& response);
+
 private:
 	static Buffer intToBytesVal(int number);
 
