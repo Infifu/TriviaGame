@@ -1,16 +1,21 @@
 #include "RoomAdminRequestHandler.h"
 
+RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
+    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+{
+}
+
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 {
     LeaveRoomResponse response{ 0 };
-    Buffer buffer = m_serializer.serializeResponse(response);
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 {
     StartGameResponse response{ 0 };
-    Buffer buffer = m_serializer.serializeResponse(response);
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }
 
@@ -18,12 +23,8 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
 {
     RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
     GetRoomStateResponse response{ 0, status };
-    Buffer buffer = m_serializer.serializeResponse(response);
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
-}
-
-RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
-    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory) {
 }
 
 bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)

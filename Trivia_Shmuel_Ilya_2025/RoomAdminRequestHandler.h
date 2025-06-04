@@ -14,6 +14,22 @@ enum RequestCode
     GET_ROOM_STATE_REQUEST = 29
 };
 
+struct LeaveRoomResponse
+{
+    unsigned int status; 
+};
+
+struct StartGameResponse
+{
+    unsigned int status; 
+};
+
+struct GetRoomStateResponse
+{
+    unsigned int status; 
+    unsigned int roomStatus;
+};
+
 class RoomAdminRequestHandler : public IRequestHandler
 {
 private:
@@ -21,15 +37,14 @@ private:
     LoggedUser m_user;
     RoomManager& m_roomManager;
     RequestHandlerFactory& m_handlerFactory;
-    JsonResponsePacketSerializer m_serializer;
-    JsonRequestPacketDeserializer m_deserializer;
 
-    RequestResult closeRoom(RequestInfo info);
-    RequestResult startGame(RequestInfo info);
-    RequestResult getRoomState(RequestInfo info);
+    RequestResult closeRoom(RequestInfo request);
+    RequestResult startGame(RequestInfo request);
+    RequestResult getRoomState(RequestInfo request);
 
 public:
     RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory);
+
     bool isRequestRelevant(const RequestInfo& requestInfo) override;
     RequestResult handleRequest(const RequestInfo& requestInfo) override;
 };
