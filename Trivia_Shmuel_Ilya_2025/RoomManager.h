@@ -14,6 +14,7 @@ public:
 	RoomStatus getRoomState(RoomID id);
 	std::vector<RoomData> getRooms();
 	Room* getRoom(RoomID id); 
+	unsigned int m_currRoomId = 0;
 private:
 	std::map<RoomID, Room> m_rooms;
 };

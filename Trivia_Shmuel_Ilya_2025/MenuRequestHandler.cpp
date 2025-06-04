@@ -114,8 +114,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	CreateRoomRequest createRoomReq = m_deserializer.deserializeCreateRoomRequest(info.buffer);
 	RoomData roomData;
 
-	roomData.id = m_curID;
-	m_curID++;
+	roomData.id = m_manager.m_currRoomId;
+	m_manager.m_currRoomId++;
 	roomData.name = createRoomReq.roomName;
 	roomData.maxPlayers = createRoomReq.maxUsers;
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;
