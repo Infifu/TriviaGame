@@ -79,6 +79,7 @@ namespace TriviaClient.Views
 
             loadRoomThread = new Thread(loadRoomThreadFunction);
             isLoading = true;
+            loadRoomThread.Start();
         }
 
         private void loadRoomThreadFunction()
