@@ -14,24 +14,6 @@ enum RequestCode
     GET_ROOM_STATE_REQUEST = 29
 };
 
-struct LeaveRoomResponse
-{
-    unsigned int status; 
-};
-
-struct StartGameResponse
-{
-    unsigned int status; 
-};
-
-struct GetRoomStateResponse
-{
-    unsigned int status; 
-    unsigned int roomStatus;
-};
-
-
-
 class RoomAdminRequestHandler : public IRequestHandler
 {
 private:

@@ -4,10 +4,10 @@ RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, Roo
     : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
 {
 }
+
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 {
     m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::FINISHED);
-
     LeaveRoomResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
@@ -16,7 +16,6 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 {
     m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::INGAME);
-
     StartGameResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
@@ -25,7 +24,7 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
 {
     RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
-    GetRoomStateResponse response{ 0, status };
+    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status) };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }
@@ -48,6 +47,11 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
     case GET_ROOM_STATE_REQUEST:
         return getRoomState(requestInfo);
     default:
-        throw std::exception("invalid request id in RoomAdminRequestHandler");
+        throw std::exception("Invalid request id in RoomAdminRequestHandler");
     }
+}
+
+void RoomAdminRequestHandler::setStatus(RoomStatus newStatus)
+{
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, newStatus);
 }
