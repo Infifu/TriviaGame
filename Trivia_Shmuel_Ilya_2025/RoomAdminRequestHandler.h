@@ -30,6 +30,8 @@ struct GetRoomStateResponse
     unsigned int roomStatus;
 };
 
+
+
 class RoomAdminRequestHandler : public IRequestHandler
 {
 private:
@@ -47,4 +49,5 @@ public:
 
     bool isRequestRelevant(const RequestInfo& requestInfo) override;
     RequestResult handleRequest(const RequestInfo& requestInfo) override;
+    void setStatus(RoomStatus newStatus);
 };

@@ -33,5 +33,6 @@ public:
 	void removeUser(LoggedUser);
 	std::vector<std::string> getAllUsers();
 	RoomData getMetadata();
+	void setStatus(RoomStatus newStatus);
 };
 

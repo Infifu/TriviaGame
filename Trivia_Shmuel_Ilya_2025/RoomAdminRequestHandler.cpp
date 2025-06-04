@@ -4,9 +4,10 @@ RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, Roo
     : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
 {
 }
-
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 {
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::FINISHED);
+
     LeaveRoomResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
@@ -14,6 +15,8 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 {
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::INGAME);
+
     StartGameResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
