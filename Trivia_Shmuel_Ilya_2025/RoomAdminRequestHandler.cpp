@@ -47,7 +47,7 @@ RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestI
     case GET_ROOM_STATE_REQUEST:
         return getRoomState(requestInfo);
     default:
-        throw std::exception("Invalid request id in RoomAdminRequestHandler");
+        throw std::exception("invalid request id in RoomAdminRequestHandler");
     }
 }
 

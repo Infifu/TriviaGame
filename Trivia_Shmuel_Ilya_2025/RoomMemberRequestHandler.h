@@ -8,8 +8,7 @@
 #include "JsonResponsePacketSerializer.h"
 #include "Response.h"
 
-
-class RoomAdminRequestHandler : public IRequestHandler
+class RoomMemberRequestHandler : public IRequestHandler
 {
 private:
     Room m_room;
@@ -17,14 +16,12 @@ private:
     RoomManager& m_roomManager;
     RequestHandlerFactory& m_handlerFactory;
 
-    RequestResult closeRoom(RequestInfo request);
-    RequestResult startGame(RequestInfo request);
+    RequestResult leaveRoom(RequestInfo request);
     RequestResult getRoomState(RequestInfo request);
 
 public:
-    RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory);
+    RoomMemberRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory);
 
     bool isRequestRelevant(const RequestInfo& requestInfo) override;
     RequestResult handleRequest(const RequestInfo& requestInfo) override;
-    void setStatus(RoomStatus newStatus);
 };
