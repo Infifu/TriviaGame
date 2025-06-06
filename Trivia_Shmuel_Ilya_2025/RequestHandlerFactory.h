@@ -10,6 +10,7 @@
 class LoginRequestHandler;
 class MenuRequestHandler;
 class RoomAdminRequestHandler;
+class RoomMemberRequestHandler;
 
 class RequestHandlerFactory
 {
@@ -26,6 +27,7 @@ public:
 	IDatabase* getDatabase() const { return _database; }
 
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(LoggedUser user, Room room);
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(LoggedUser user, Room room);
 	RoomManager& getRoomManager();
 	StatisticsManager& getStatisticsManager();
 

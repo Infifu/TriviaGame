@@ -77,6 +77,8 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	bool found = false;
 
     Room* room = m_manager.getRoom(joinRoomReq.roomId);
+	IRequestHandler* nextHandler = nullptr;
+
 	if (room != nullptr)
     {
 		std::vector <std::string> users = room->getAllUsers();
@@ -93,6 +95,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 		{
 			room->addUser(m_user);
 			joinRoomRes.status = 0;
+			nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
 		}
 		else
 		{
@@ -104,9 +107,9 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 		joinRoomRes.status = 1;
     }
 
-    RequestResult reqRes{ m_serializer.serializeResponse(joinRoomRes), nullptr };
+	Buffer buffer = m_serializer.serializeResponse(joinRoomRes);
 
-    return reqRes;
+	return { buffer, nextHandler };
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
@@ -124,10 +127,18 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 
 	m_manager.createRoom(m_user,roomData);
 
-	CreateRoomResponse roomRes{0};
-	
-	RequestResult ReqRes{ m_serializer.serializeResponse(roomRes),nullptr};
-	return ReqRes;
+	Room* room = m_manager.getRoom(roomData.id);
+	IRequestHandler* nextHandler = nullptr;
+
+	if (room != nullptr)
+	{
+		nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
+	}
+
+	CreateRoomResponse roomRes{ 0 };
+	Buffer buffer = m_serializer.serializeResponse(roomRes);
+
+	return { buffer, nextHandler };
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)

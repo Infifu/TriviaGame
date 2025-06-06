@@ -8,6 +8,8 @@
 #include "UsingBuffer.h"
 #include "StatisticsManager.h"
 #include "TriviaException.h"
+#include "RoomAdminRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
 
 class RequestHandlerFactory;
 
@@ -34,4 +36,3 @@ public:
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
 
 };
-
