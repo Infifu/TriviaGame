@@ -3,6 +3,7 @@
 #include <string>
 #include "Room.h"
 #include "json.hpp"
+#include "Response.h"
 
 using json = nlohmann::json; //so the class could be accessed just by json::foo keyword
 
@@ -64,24 +65,6 @@ struct CloseRoomResponse
 	unsigned int status;
 };
 
-struct StartGameResponse 
-{
-	unsigned int status;
-};
-
-struct LeaveRoomResponse 
-{
-	unsigned int status;
-};
-
-struct GetRoomStateResponse 
-{
-	unsigned int status;
-	bool hasGameBegun;
-	std::vector<std::string> players;
-	unsigned int answerCount;
-	unsigned int answerTimeout;
-};
 
 class JsonResponsePacketSerializer
 {

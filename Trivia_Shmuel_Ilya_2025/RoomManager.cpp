@@ -2,6 +2,7 @@
 
 void RoomManager::createRoom(LoggedUser user, RoomData roomData)
 {
+    roomData.status = LOBBY;
     Room room(roomData);
     room.addUser(user);
     m_rooms.insert({ roomData.id,room });
@@ -42,5 +43,13 @@ Room* RoomManager::getRoom(RoomID id)
     else
     {
         return nullptr;
+    }
+}
+
+void RoomManager::setRoomStatus(RoomID id, RoomStatus newStatus)
+{
+    if (m_rooms.find(id) != m_rooms.end())
+    {
+        m_rooms[id].setStatus(newStatus);
     }
 }
