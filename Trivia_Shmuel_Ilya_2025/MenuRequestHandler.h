@@ -18,7 +18,6 @@ class MenuRequestHandler : public IRequestHandler
 private:
 	LoggedUser m_user;
 	RequestHandlerFactory& m_handlerFactory;
-	unsigned int m_curID;
 	JsonResponsePacketSerializer m_serializer;
 	JsonRequestPacketDeserializer m_deserializer;
 	RoomManager& m_manager;

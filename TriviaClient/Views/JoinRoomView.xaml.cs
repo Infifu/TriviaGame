@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -73,6 +74,12 @@ namespace TriviaClient.Views
         public ObservableCollection<Room> Rooms { get; set; }
         public ObservableCollection<string> Players { get; set; }
 
+        Thread loadRoomsThread;
+        bool is_loading;
+
+        Thread refreshPlayerList;
+        bool is_refreshing;
+
 
         public JoinRoomView()
         {
@@ -80,6 +87,10 @@ namespace TriviaClient.Views
 
             Rooms = new ObservableCollection<Room>();
             Players = new ObservableCollection<string> { };
+
+            loadRoomsThread = new Thread(LoadRoomsThread);
+            is_loading = true;
+            loadRoomsThread.Start();
 
             DataContext = this;
         }
@@ -104,6 +115,19 @@ namespace TriviaClient.Views
         }
 
 
+        private void LoadRoomsThread()
+        {
+            while (is_loading)
+            {
+                Thread.Sleep(3000);
+                this.Dispatcher.Invoke(() =>
+                {
+                    LoadRooms(new Object(), new RoutedEventArgs());
+                });
+            }
+        }
+
+
         private void LoadRooms(object sender, RoutedEventArgs e)
         {
             try
@@ -114,9 +138,13 @@ namespace TriviaClient.Views
 
                 GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
 
-                foreach (RoomData room in response.rooms)
+                Rooms.Clear();
+                if (response != null && response.rooms!= null)
                 {
-                    Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                    foreach (RoomData room in response.rooms)
+                    {
+                        Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                    }
                 }
             }
             catch (Exception ex)

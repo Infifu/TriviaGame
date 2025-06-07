@@ -1,7 +1,7 @@
 #include "MenuRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory), m_curID(0)
+MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory)
 , m_serializer(), m_deserializer(), m_manager(*roomManger)
 {}
 
@@ -117,8 +117,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	CreateRoomRequest createRoomReq = m_deserializer.deserializeCreateRoomRequest(info.buffer);
 	RoomData roomData;
 
-	roomData.id = m_curID;
-	m_curID++;
+	roomData.id = m_manager.m_curID;
+	m_manager.m_curID++;
 	roomData.name = createRoomReq.roomName;
 	roomData.maxPlayers = createRoomReq.maxUsers;
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;

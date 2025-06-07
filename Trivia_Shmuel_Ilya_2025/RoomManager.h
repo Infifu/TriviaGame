@@ -15,7 +15,7 @@ public:
 	std::vector<RoomData> getRooms();
 	Room* getRoom(RoomID id);
 	void setRoomStatus(RoomID id, RoomStatus newStatus);
-
+	unsigned int m_curID = 0;
 private:
 	std::map<RoomID, Room> m_rooms;
 };
