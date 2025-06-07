@@ -54,6 +54,15 @@ public class GetPlayersInRoomResponse
     public List<string> players { get; set; }
 }
 
+public class GetRoomStateResponse
+{
+    public int status { get; set; }
+    public bool hasGameBegun { get; set; }
+    public List<string> players { get; set; }
+    public int AnswerCount { get; set; }
+    public int answerTimeOut { get; set; }
+}
+
 namespace TriviaClient.Views
 {
     /// <summary>
@@ -91,8 +100,9 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
+
 
         private void LoadRooms(object sender, RoutedEventArgs e)
         {
@@ -135,11 +145,11 @@ namespace TriviaClient.Views
                         PlayerAmountShow.Text = "Player amount: " + selectedRoom.PlayerCount;
                         TimeToAnswerShow.Text = "Time to answer (seconds): " + selectedRoom.TimeToAnswer;
 
-                        GetPlayersInRoomRequest playerReq = new GetPlayersInRoomRequest { roomId = selectedRoom.Id };
-                        List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(playerReq);
+                        GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
+                        List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
                         ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
-                        GetPlayersInRoomResponse playerRes = JsonSerializer.Deserialize<GetPlayersInRoomResponse>(playerAnswer.json);
+                        GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
                         if (playerRes != null && playerRes.players != null)
                         {
                             PlayerListShow.ItemsSource = playerRes.players;

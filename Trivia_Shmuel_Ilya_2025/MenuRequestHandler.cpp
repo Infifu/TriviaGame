@@ -159,7 +159,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			break;
 		case 21:
 			reqRes = createRoom(requestInfo);
-			break;
+			break; 
 		case 22:
 			reqRes = joinRoom(requestInfo);
 			break;

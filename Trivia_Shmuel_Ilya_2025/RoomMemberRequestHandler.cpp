@@ -2,8 +2,7 @@
 
 RoomMemberRequestHandler::RoomMemberRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
     : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
-{
-}
+{}
 
 RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 {
@@ -21,7 +20,7 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
 {
     RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
-    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status) };
+    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status),m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion}; //Fixed wrong response initalization
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }
