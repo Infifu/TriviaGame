@@ -26,8 +26,8 @@ public:
 	LoginManager& getLoginManager();
 	IDatabase* getDatabase() const { return _database; }
 
-	RoomAdminRequestHandler* createRoomAdminRequestHandler(LoggedUser user, Room room);
-	RoomMemberRequestHandler* createRoomMemberRequestHandler(LoggedUser user, Room room);
+	RoomAdminRequestHandler* createRoomAdminRequestHandler(LoggedUser user, Room& room);
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(LoggedUser user, Room& room);
 	RoomManager& getRoomManager();
 	StatisticsManager& getStatisticsManager();
 

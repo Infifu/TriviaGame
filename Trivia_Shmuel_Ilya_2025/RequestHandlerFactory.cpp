@@ -23,12 +23,12 @@ LoginManager& RequestHandlerFactory::getLoginManager()
 	return _loginManager;
 }
 
-RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(LoggedUser user, Room room)
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(LoggedUser user, Room& room)
 {
 	return new RoomAdminRequestHandler(user, room, _roomManager, *this);
 }
 
-RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(LoggedUser user, Room room)
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(LoggedUser user, Room& room)
 {
 	return new RoomMemberRequestHandler(user, room, _roomManager, *this);
 }

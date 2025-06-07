@@ -119,11 +119,11 @@ namespace TriviaClient.Views
         {
             while (is_loading)
             {
-                Thread.Sleep(3000);
                 this.Dispatcher.Invoke(() =>
                 {
                     LoadRooms(new Object(), new RoutedEventArgs());
                 });
+                Thread.Sleep(3000);
             }
         }
 
@@ -153,6 +153,42 @@ namespace TriviaClient.Views
             }
         }
 
+        private void refreshMembersListThread()
+        {
+            while(is_refreshing)
+            {
+                Thread.Sleep(3000);
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    refreshMembersList();
+                }));
+            }
+        }
+
+        private void refreshMembersList()
+        {
+            try
+            {
+                GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
+                List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
+                ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
+
+                GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
+                if (playerRes != null && playerRes.players != null)
+                {
+                    Players.Clear();
+                    foreach (var player in playerRes.players)
+                    {
+                        Players.Add(player);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in refreshMembersList: " + ex.Message);
+            }
+        }
+
         private void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -168,6 +204,7 @@ namespace TriviaClient.Views
 
                     if (answer.code == 0)
                     {
+                        is_loading = false; //disable the room loading
                         RoomPlayerInfoPanel.Visibility = Visibility.Visible;
                         RoomNameShow.Text = "Room name: " + selectedRoom.Name;
                         PlayerAmountShow.Text = "Player amount: " + selectedRoom.PlayerCount;
@@ -178,10 +215,16 @@ namespace TriviaClient.Views
                         ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
                         GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
-                        if (playerRes != null && playerRes.players != null)
+                        Players.Clear();
+                        foreach (string player in playerRes.players)
                         {
-                            PlayerListShow.ItemsSource = playerRes.players;
+                            Players.Add(player);
                         }
+                        PlayerListShow.ItemsSource = Players;
+
+                        refreshPlayerList = new Thread(refreshMembersListThread);
+                        is_refreshing = true;
+                        refreshPlayerList.Start();
                     }
                     else
                     {
