@@ -241,6 +241,7 @@ namespace TriviaClient.Views
         }
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
+            is_refreshing = false;
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
             this.Hide();
