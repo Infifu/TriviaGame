@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,45 @@ namespace TriviaClient.Views
     public partial class CreateRoomScreen : Window
     {
         public ObservableCollection<string> Players { get; set; }
+
+        Thread refreshMembers;
+        bool is_refreshing;
+
+        private void refreshMembersListThread()
+        {
+            while (is_refreshing)
+            {
+                Thread.Sleep(3000);
+                this.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    refreshMembersList();
+                }));
+            }
+        }
+
+        private void refreshMembersList()
+        {
+            try
+            {
+                GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
+                List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
+                ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
+
+                GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
+                if (playerRes != null && playerRes.players != null)
+                {
+                    Players.Clear();
+                    foreach (var player in playerRes.players)
+                    {
+                        Players.Add(player);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in refreshMembersList: " + ex.Message);
+            }
+        }
 
         public CreateRoomScreen()
         {
@@ -86,6 +126,11 @@ namespace TriviaClient.Views
                     Players.Add(Client.Instance.nameofuser);
 
                     btnStartGame.Visibility = Visibility.Visible;
+
+                    refreshMembers = new Thread(refreshMembersListThread);
+                    is_refreshing = true;
+                    refreshMembers.Start();
+
                 }
                 else
                 {
@@ -95,6 +140,7 @@ namespace TriviaClient.Views
         }
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
+            is_refreshing = false;
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
             this.Hide();
