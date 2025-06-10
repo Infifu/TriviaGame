@@ -26,3 +26,8 @@ RoomData Room::getMetadata()
 {
 	return m_metadata;
 }
+
+void Room::setStatus(RoomStatus newStatus)
+{
+	m_metadata.status = newStatus;
+}

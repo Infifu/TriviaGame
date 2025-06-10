@@ -1,0 +1,57 @@
+#include "RoomAdminRequestHandler.h"
+
+RoomAdminRequestHandler::RoomAdminRequestHandler(LoggedUser user, Room room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
+    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+{
+}
+
+RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
+{
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::FINISHED);
+    LeaveRoomResponse response{ 0 };
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
+{
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::INGAME);
+    StartGameResponse response{ 0 };
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
+{
+    RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
+    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status) };
+    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+    return { buffer, nullptr };
+}
+
+bool RoomAdminRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
+{
+    return requestInfo.id == CLOSE_ROOM_REQUEST ||
+        requestInfo.id == START_GAME_REQUEST ||
+        requestInfo.id == GET_ROOM_STATE_REQUEST;
+}
+
+RequestResult RoomAdminRequestHandler::handleRequest(const RequestInfo& requestInfo)
+{
+    switch (requestInfo.id)
+    {
+    case CLOSE_ROOM_REQUEST:
+        return closeRoom(requestInfo);
+    case START_GAME_REQUEST:
+        return startGame(requestInfo);
+    case GET_ROOM_STATE_REQUEST:
+        return getRoomState(requestInfo);
+    default:
+        throw std::exception("Invalid request id in RoomAdminRequestHandler");
+    }
+}
+
+void RoomAdminRequestHandler::setStatus(RoomStatus newStatus)
+{
+    m_roomManager.setRoomStatus(m_room.getMetadata().id, newStatus);
+}

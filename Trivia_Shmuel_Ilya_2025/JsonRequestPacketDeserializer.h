@@ -42,6 +42,12 @@ struct GetStatsRequest
 {
 	std::string username;
 };
+
+struct CloseRoomRequest {};
+struct StartGameRequest {};
+struct GetRoomStateRequest {};
+struct LeaveRoomRequest {};
+
 class JsonRequestPacketDeserializer
 {
 public:
@@ -53,5 +59,11 @@ public:
 	static GetPlayersInRoomRequest deserializeGetPlayersRequest(const Buffer& buffer);
 	static JoinRoomRequest deserializeJoinRoomRequest(const Buffer& buffer);
 	static CreateRoomRequest deserializeCreateRoomRequest(const Buffer& buffer);
+
+	static CloseRoomRequest deserializeCloseRoomRequest(Buffer);
+	static StartGameRequest deserializeStartGameRequest(Buffer);
+	static GetRoomStateRequest deserializeGetRoomStateRequest(Buffer);
+	static LeaveRoomRequest deserializeLeaveRoomRequest(Buffer);
+
 };
 

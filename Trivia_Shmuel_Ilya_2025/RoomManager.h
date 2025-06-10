@@ -13,8 +13,9 @@ public:
 	void deleteRoom(RoomID id);
 	RoomStatus getRoomState(RoomID id);
 	std::vector<RoomData> getRooms();
-	Room* getRoom(RoomID id); 
-	unsigned int m_currRoomId = 0;
+	Room* getRoom(RoomID id);
+	void setRoomStatus(RoomID id, RoomStatus newStatus);
+
 private:
 	std::map<RoomID, Room> m_rooms;
 };
