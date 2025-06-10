@@ -64,6 +64,9 @@ namespace TriviaClient.Views
         public ObservableCollection<Room> Rooms { get; set; }
         public ObservableCollection<string> Players { get; set; }
 
+        private Thread loadRoomThread;
+        private bool isLoading;
+
 
         public JoinRoomView()
         {
@@ -73,8 +76,23 @@ namespace TriviaClient.Views
             Players = new ObservableCollection<string> { };
 
             DataContext = this;
+
+            loadRoomThread = new Thread(loadRoomThreadFunction);
+            isLoading = true;
+            loadRoomThread.Start();
         }
 
+        private void loadRoomThreadFunction()
+        {
+            while (isLoading)
+            {
+                Thread.Sleep(3000);
+                Dispatcher.Invoke(() =>
+                {
+                    LoadRooms(this, new RoutedEventArgs());
+                });
+            }
+        }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -91,7 +109,7 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
 
         private void LoadRooms(object sender, RoutedEventArgs e)
@@ -103,7 +121,7 @@ namespace TriviaClient.Views
                 ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
                 GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
-
+                Rooms.Clear();
                 foreach (RoomData room in response.rooms)
                 {
                     Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
@@ -162,6 +180,7 @@ namespace TriviaClient.Views
         {
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
+            isLoading = false;
             this.Hide();
         }
     }
