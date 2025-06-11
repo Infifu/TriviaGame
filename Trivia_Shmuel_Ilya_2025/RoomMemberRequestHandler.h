@@ -8,6 +8,8 @@
 #include "JsonResponsePacketSerializer.h"
 #include "Response.h"
 
+class RequestHandlerFactory;
+
 class RoomMemberRequestHandler : public IRequestHandler
 {
 private:

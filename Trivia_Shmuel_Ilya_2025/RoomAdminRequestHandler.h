@@ -6,6 +6,7 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "Response.h" 
+#include "RequestHandlerFactory.h"
 
 class RequestHandlerFactory;
 

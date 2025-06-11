@@ -32,7 +32,16 @@ namespace TriviaClient.Views
         {
             while (is_refreshing)
             {
-                Thread.Sleep(3000);
+                int waited = 0;
+                while (waited < 3000 && is_refreshing)
+                {
+                    Thread.Sleep(100);
+                    waited += 100;
+                }
+
+                if (!is_refreshing)
+                    break;
+
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     refreshMembersList();
