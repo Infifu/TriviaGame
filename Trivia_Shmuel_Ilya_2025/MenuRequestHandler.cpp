@@ -132,7 +132,7 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 
 	if (room != nullptr)
 	{
-		nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
+		nextHandler = m_handlerFactory.createRoomAdminRequestHandler(m_user, *room);
 	}
 
 	CreateRoomResponse roomRes{ 0 };

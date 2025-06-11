@@ -32,11 +32,16 @@ namespace TriviaClient.Views
         {
             while (is_refreshing)
             {
-                Thread.Sleep(3000);
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     refreshMembersList();
                 }));
+
+                int sleepMs = 3000;
+                for (int i = 0; i < sleepMs / 100 && is_refreshing; i++)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -138,9 +143,20 @@ namespace TriviaClient.Views
                 }
             }
         }
+        private void closeRoom()
+        {
+            CloseRoomStruct closeRoomReq = new CloseRoomStruct();
+            List<byte> leaveRoomBuffer = Client.Instance.serializer.SerializeResponse(closeRoomReq);
+            ServerAnswer leaveRoomAnswer = Client.Instance.communicator.SendAndReceive(leaveRoomBuffer);
+        }
+
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            is_refreshing = false;
+            if (is_refreshing)
+            {
+                is_refreshing = false;
+                closeRoom();
+            }
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
             this.Hide();

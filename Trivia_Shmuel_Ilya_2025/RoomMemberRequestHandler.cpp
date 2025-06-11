@@ -18,7 +18,8 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
 {
     RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
-    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status),m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion}; //Fixed wrong response initalization
+    bool hasGameBegun = status == 1 ? true : false;
+    GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }

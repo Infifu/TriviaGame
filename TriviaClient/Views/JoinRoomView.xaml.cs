@@ -179,7 +179,11 @@ namespace TriviaClient.Views
                 ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
                 GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
-                if (playerRes != null && playerRes.players != null)
+                if (playerRes.status == 2)
+                {
+                    BackToMenu_Click(null,null);
+                }
+                else if (playerRes != null && playerRes.players != null)
                 {
                     Players.Clear();
                     foreach (var player in playerRes.players)

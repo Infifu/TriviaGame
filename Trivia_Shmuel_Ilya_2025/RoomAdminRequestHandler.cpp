@@ -23,7 +23,8 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
 {
     RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
-    GetRoomStateResponse response{ 0, static_cast<unsigned int>(status) };
+    bool hasGameBegun = status == 1 ? true : false;
+    GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }
