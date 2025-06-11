@@ -155,13 +155,18 @@ namespace TriviaClient.Views
 
         private void refreshMembersListThread()
         {
-            while(is_refreshing)
+            while (is_refreshing)
             {
-                Thread.Sleep(3000);
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     refreshMembersList();
                 }));
+
+                int sleepMs = 3000;
+                for (int i = 0; i < sleepMs / 100 && is_refreshing; i++)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -247,10 +252,9 @@ namespace TriviaClient.Views
             ServerAnswer leaveRoomAnswer = Client.Instance.communicator.SendAndReceive(leaveRoomBuffer);
         }
 
-
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            if(loadRoomsThread.IsAlive)
+            if (loadRoomsThread.IsAlive)
             {
                 is_loading = false;
                 loadRoomsThread.Join();
@@ -259,11 +263,6 @@ namespace TriviaClient.Views
             if (is_refreshing)
             {
                 is_refreshing = false;
-                if (refreshPlayerList != null && refreshPlayerList.IsAlive)
-                {
-                    refreshPlayerList.Join();
-                }
-
                 leaveRoom();
             }
             MainMenu mainMenu = new MainMenu();
