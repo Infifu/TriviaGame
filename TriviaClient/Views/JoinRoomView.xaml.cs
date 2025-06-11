@@ -239,9 +239,33 @@ namespace TriviaClient.Views
                 }
             }
         }
+
+        private void leaveRoom()
+        {
+            leaveRoomStruct leaveRoomReq = new leaveRoomStruct();
+            List<byte> leaveRoomBuffer = Client.Instance.serializer.SerializeResponse(leaveRoomReq);
+            ServerAnswer leaveRoomAnswer = Client.Instance.communicator.SendAndReceive(leaveRoomBuffer);
+        }
+
+
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            is_refreshing = false;
+            if(loadRoomsThread.IsAlive)
+            {
+                is_loading = false;
+                loadRoomsThread.Join();
+            }
+
+            if (is_refreshing)
+            {
+                is_refreshing = false;
+                if (refreshPlayerList != null && refreshPlayerList.IsAlive)
+                {
+                    refreshPlayerList.Join();
+                }
+
+                leaveRoom();
+            }
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
             this.Hide();
