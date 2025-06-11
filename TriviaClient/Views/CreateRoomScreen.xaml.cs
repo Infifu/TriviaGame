@@ -140,10 +140,35 @@ namespace TriviaClient.Views
         }
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            is_refreshing = false;
-            MainMenu mainMenu = new MainMenu();
-            mainMenu.Show();
-            this.Hide();
+            try
+            {
+                is_refreshing = false;
+
+                if (refreshMembers != null && refreshMembers.IsAlive)
+                {
+                    refreshMembers.Join();
+                }
+
+                CloseRoomStruct closeReq = new CloseRoomStruct();
+                List<byte> closeBuffer = Client.Instance.serializer.SerializeResponse(closeReq);
+                ServerAnswer closeResponse = Client.Instance.communicator.SendAndReceive(closeBuffer);
+
+                if (closeResponse.code == 0)
+                {
+                    MainMenu mainMenu = new MainMenu();
+                    mainMenu.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to close room.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while closing room: " + ex.Message);
+            }
         }
+
     }
 }
