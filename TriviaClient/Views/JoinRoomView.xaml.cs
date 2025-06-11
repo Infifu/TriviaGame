@@ -167,13 +167,13 @@ namespace TriviaClient.Views
                     ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
                     GetRoomStateResponse response = JsonSerializer.Deserialize<GetRoomStateResponse>(answer.json);
-
+                    MessageBox.Show("Room status: " + response.status);
                     if (response.status == 2)
                     {
                         is_monitoringRoomStatus = false;
                         is_refreshing = false;
 
-                        leaveRoom();
+                        BackToMenu_Click(null,null);
 
                         MessageBox.Show("Room closed");
 
@@ -187,7 +187,6 @@ namespace TriviaClient.Views
                 Thread.Sleep(3000);
             }
 
-            MessageBox.Show("MonitorRoomStatusThread exiting");
         }
 
         private void refreshMembersListThread()
@@ -308,11 +307,7 @@ namespace TriviaClient.Views
                 leaveRoom();
             }
 
-            if (is_monitoringRoomStatus)
-            {
-                is_monitoringRoomStatus = false;
-                leaveRoom();
-            }
+            is_monitoringRoomStatus = false;
 
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
