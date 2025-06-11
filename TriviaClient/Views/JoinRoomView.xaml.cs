@@ -80,6 +80,8 @@ namespace TriviaClient.Views
         Thread refreshPlayerList;
         bool is_refreshing;
 
+        Thread monitorRoomStatusThread;
+        bool is_monitoringRoomStatus;
 
         public JoinRoomView()
         {
@@ -139,7 +141,7 @@ namespace TriviaClient.Views
                 GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
 
                 Rooms.Clear();
-                if (response != null && response.rooms!= null)
+                if (response != null && response.rooms != null)
                 {
                     foreach (RoomData room in response.rooms)
                     {
@@ -152,16 +154,56 @@ namespace TriviaClient.Views
                 MessageBox.Show("Failed to fetch rooms: " + ex.Message);
             }
         }
+        private void MonitorRoomStatusThread()
+        {
+            MessageBox.Show("MonitorRoomStatusThread started");
+
+            while (is_monitoringRoomStatus)
+            {
+                try
+                {
+                    GetRoomStateStruct statusRequest = new GetRoomStateStruct();
+                    List<byte> buffer = Client.Instance.serializer.SerializeResponse(statusRequest);
+                    ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
+
+                    GetRoomStateResponse response = JsonSerializer.Deserialize<GetRoomStateResponse>(answer.json);
+
+                    if (response.status == 2)
+                    {
+                        is_monitoringRoomStatus = false;
+                        is_refreshing = false;
+
+                        leaveRoom();
+
+                        MessageBox.Show("Room closed");
+
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("MonitorRoomStatusThread error: " + ex.Message);
+                }
+                Thread.Sleep(3000);
+            }
+
+            MessageBox.Show("MonitorRoomStatusThread exiting");
+        }
 
         private void refreshMembersListThread()
         {
-            while(is_refreshing)
+            while (is_refreshing)
             {
-                Thread.Sleep(3000);
                 this.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     refreshMembersList();
                 }));
+
+                int sleepMs = 3000;
+                for (int i = 0; i < sleepMs / 100 && is_refreshing; i++)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
 
@@ -225,6 +267,11 @@ namespace TriviaClient.Views
                         refreshPlayerList = new Thread(refreshMembersListThread);
                         is_refreshing = true;
                         refreshPlayerList.Start();
+
+                        is_monitoringRoomStatus = true;
+                        monitorRoomStatusThread = new Thread(MonitorRoomStatusThread);
+                        monitorRoomStatusThread.Start();
+
                     }
                     else
                     {
@@ -239,9 +286,34 @@ namespace TriviaClient.Views
                 }
             }
         }
+
+        private void leaveRoom()
+        {
+            leaveRoomStruct leaveRoomReq = new leaveRoomStruct();
+            List<byte> leaveRoomBuffer = Client.Instance.serializer.SerializeResponse(leaveRoomReq);
+            ServerAnswer leaveRoomAnswer = Client.Instance.communicator.SendAndReceive(leaveRoomBuffer);
+        }
+
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            is_refreshing = false;
+            if (loadRoomsThread.IsAlive)
+            {
+                is_loading = false;
+                loadRoomsThread.Join();
+            }
+
+            if (is_refreshing)
+            {
+                is_refreshing = false;
+                leaveRoom();
+            }
+
+            if (is_monitoringRoomStatus)
+            {
+                is_monitoringRoomStatus = false;
+                leaveRoom();
+            }
+
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
             this.Hide();

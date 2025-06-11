@@ -10,6 +10,8 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
     LeaveRoomResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     IRequestHandler* newHandler = m_handlerFactory.createMenuRequestHandler(m_user);
+    std::string message = "Room closed";
+	std::cout << message << std::endl;
     return { buffer, newHandler };
 }
 

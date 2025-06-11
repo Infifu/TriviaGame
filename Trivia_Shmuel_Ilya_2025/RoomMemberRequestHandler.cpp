@@ -6,10 +6,6 @@ RoomMemberRequestHandler::RoomMemberRequestHandler(LoggedUser user, Room& room, 
 
 RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 {
-    RoomID roomId = m_room.getMetadata().id;
-
-    m_roomManager.setRoomStatus(roomId, RoomStatus::FINISHED);
-
     LeaveRoomResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
