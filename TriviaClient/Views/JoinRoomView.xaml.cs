@@ -183,6 +183,13 @@ namespace TriviaClient.Views
                 {
                     BackToMenu_Click(null,null);
                 }
+                else if (playerRes.status == 1)
+                {
+                    is_refreshing = false;
+                    MessageBox.Show("Game started successfully!");
+                    BackToMenu_Click(null, null);
+
+                }
                 else if (playerRes != null && playerRes.players != null)
                 {
                     Players.Clear();
