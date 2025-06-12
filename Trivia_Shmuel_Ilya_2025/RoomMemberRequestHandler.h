@@ -7,6 +7,9 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "Response.h"
+#include "LoginRequestHandler.h"
+
+class RequestHandlerFactory;
 
 class RoomMemberRequestHandler : public IRequestHandler
 {
