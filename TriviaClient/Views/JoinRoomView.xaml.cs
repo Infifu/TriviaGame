@@ -5,6 +5,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,9 +67,6 @@ public class GetRoomStateResponse
 
 namespace TriviaClient.Views
 {
-    /// <summary>
-    /// Логика взаимодействия для JoinRoomView.xaml
-    /// </summary>
     public partial class JoinRoomView : Window
     {
         public ObservableCollection<Room> Rooms { get; set; }
@@ -97,7 +95,6 @@ namespace TriviaClient.Views
             DataContext = this;
         }
 
-
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -116,7 +113,6 @@ namespace TriviaClient.Views
             Application.Current.Shutdown();
         }
 
-
         private void LoadRoomsThread()
         {
             while (is_loading)
@@ -128,7 +124,6 @@ namespace TriviaClient.Views
                 Thread.Sleep(3000);
             }
         }
-
 
         private void LoadRooms(object sender, RoutedEventArgs e)
         {
@@ -154,9 +149,10 @@ namespace TriviaClient.Views
                 MessageBox.Show("Failed to fetch rooms: " + ex.Message);
             }
         }
+
         private void MonitorRoomStatusThread()
         {
-            MessageBox.Show("MonitorRoomStatusThread started");
+            this.Dispatcher.Invoke(() => MessageBox.Show("MonitorRoomStatusThread started"));
 
             while (is_monitoringRoomStatus)
             {
@@ -167,27 +163,35 @@ namespace TriviaClient.Views
                     ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
                     GetRoomStateResponse response = JsonSerializer.Deserialize<GetRoomStateResponse>(answer.json);
-                    MessageBox.Show("Room status: " + response.status);
-                    if (response.status == 2)
+
+                    this.Dispatcher.Invoke(() =>
                     {
-                        is_monitoringRoomStatus = false;
-                        is_refreshing = false;
+                        MessageBox.Show("Room status: " + response.status);
+                        if (response.status == 2)
+                        {
+                            is_monitoringRoomStatus = false;
+                            is_refreshing = false;
 
-                        BackToMenu_Click(null,null);
+                            BackToMenu_Click(null, null);
+                            MessageBox.Show("Room closed");
+                        }
+                    });
 
-                        MessageBox.Show("Room closed");
-
+                    if (response.status == 2)
                         break;
-                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("MonitorRoomStatusThread error: " + ex.Message);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        MessageBox.Show("MonitorRoomStatusThread error: " + ex.Message);
+                    });
                 }
                 Thread.Sleep(3000);
             }
-
         }
+
+
 
         private void refreshMembersListThread()
         {
@@ -215,6 +219,7 @@ namespace TriviaClient.Views
                 ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
                 GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
+
                 if (playerRes != null && playerRes.players != null)
                 {
                     Players.Clear();
@@ -245,7 +250,7 @@ namespace TriviaClient.Views
 
                     if (answer.code == 0)
                     {
-                        is_loading = false; //disable the room loading
+                        is_loading = false;
                         RoomPlayerInfoPanel.Visibility = Visibility.Visible;
                         RoomNameShow.Text = "Room name: " + selectedRoom.Name;
                         PlayerAmountShow.Text = "Player amount: " + selectedRoom.PlayerCount;
@@ -270,7 +275,6 @@ namespace TriviaClient.Views
                         is_monitoringRoomStatus = true;
                         monitorRoomStatusThread = new Thread(MonitorRoomStatusThread);
                         monitorRoomStatusThread.Start();
-
                     }
                     else
                     {
