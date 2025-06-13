@@ -1,7 +1,7 @@
 #include "RoomMemberRequestHandler.h"
 
 RoomMemberRequestHandler::RoomMemberRequestHandler(LoggedUser user, Room& room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory)
-    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+    : m_user(user), m_room(room), m_roomManager(roomManager), m_handlerFactory(handlerFactory),m_roomID(m_room.getMetadata().id)
 {}
 
 RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
@@ -17,11 +17,30 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 
 RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
 {
-    RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
-    bool hasGameBegun = status == 1 ? true : false;
-    GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
-    Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
-    return { buffer, nullptr };
+    if (hasRoom(m_roomID))
+    {
+        RoomStatus status = m_roomManager.getRoomState(m_room.getMetadata().id);
+        bool hasGameBegun = status == 1 ? true : false;
+        GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
+        Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+        return { buffer, nullptr };
+    }
+    else
+    {
+        RoomStatus status = RoomStatus::FINISHED;
+        GetRoomStateResponse response{ static_cast<unsigned int>(status), false }; //Fixed wrong response initalization
+        Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+        return { buffer, m_handlerFactory.createMenuRequestHandler(m_user) };
+    }
+}
+
+bool RoomMemberRequestHandler::hasRoom(RoomID id)
+{
+    if (m_roomManager.getRoom(id) == nullptr)
+    {
+        return false;
+    }
+    return true;
 }
 
 bool RoomMemberRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)

@@ -176,19 +176,22 @@ namespace TriviaClient.Views
             {
                 GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
                 List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
-                ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
+                if(is_refreshing)
+                {
+                    ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
-                GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
-                if (playerRes.status == 2)
-                {
-                    BackToMenu_Click(null,null);
-                }
-                else if (playerRes != null && playerRes.players != null)
-                {
-                    Players.Clear();
-                    foreach (var player in playerRes.players)
+                    GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
+                    if (playerRes.status == 2)
                     {
-                        Players.Add(player);
+                        RoomGotClosed();
+                    }
+                    else if (playerRes != null && playerRes.players != null)
+                    {
+                        Players.Clear();
+                        foreach (var player in playerRes.players)
+                        {
+                            Players.Add(player);
+                        }
                     }
                 }
             }
@@ -255,6 +258,25 @@ namespace TriviaClient.Views
             List<byte> leaveRoomBuffer = Client.Instance.serializer.SerializeResponse(leaveRoomReq);
             ServerAnswer leaveRoomAnswer = Client.Instance.communicator.SendAndReceive(leaveRoomBuffer);
         }
+
+
+        private void RoomGotClosed()
+        {
+            if (loadRoomsThread.IsAlive)
+            {
+                is_loading = false;
+                loadRoomsThread.Join();
+            }
+
+            if (is_refreshing)
+            {
+                is_refreshing = false;
+            }
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Show();
+            this.Hide();
+        }
+         
 
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
