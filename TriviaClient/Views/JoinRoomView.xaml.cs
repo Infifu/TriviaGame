@@ -181,6 +181,11 @@ namespace TriviaClient.Views
                     {
                         RoomGotClosed();
                     }
+                    else if(playerRes.status == 1)
+                    {
+                        MessageBox.Show("Game Started!");
+                        BackToMenu_Click(null,null);
+                    }
                     else if (playerRes != null && playerRes.players != null)
                     {
                         Players.Clear();

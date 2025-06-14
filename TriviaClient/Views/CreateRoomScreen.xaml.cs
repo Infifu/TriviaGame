@@ -87,8 +87,27 @@ namespace TriviaClient.Views
 
         private void btnStartGame_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                StartGameStruct startGameReq = new StartGameStruct();
+                List<byte> startGameBuffer = Client.Instance.serializer.SerializeResponse(startGameReq);
+                ServerAnswer startGameAnswer = Client.Instance.communicator.SendAndReceive(startGameBuffer);
 
+                if (startGameAnswer.code == 0)
+                {
+                    MessageBox.Show("Game started successfully!");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to start game.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sending start game request: " + ex.Message);
+            }
         }
+
 
         private void txtTimeToAnswer_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
