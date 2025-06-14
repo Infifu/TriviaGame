@@ -31,9 +31,13 @@ public:
 	int getPlayerScore(std::string) override;
 	std::vector<std::string> getHighScores() override;
 
+	bool submitGameStatistics(GameData gameData,LoggedUser loggedUser) override;
+
+
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
 	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);
+	bool updateStatistics(std::map<std::string, std::string> values);
 
 private:
 	sqlite3* m_database;

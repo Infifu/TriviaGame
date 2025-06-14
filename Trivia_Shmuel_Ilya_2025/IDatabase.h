@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Game.h"
 #include <list>
 #include <vector>
 #include "UsingBuffer.h"
@@ -28,5 +29,7 @@ public:
 	virtual int getNumOfPlayerGames(std::string) = 0;
 	virtual int getPlayerScore(std::string) = 0;
 	virtual std::vector<std::string> getHighScores() = 0;
+
+	virtual bool submitGameStatistics(GameData gameData,LoggedUser loggedUser) = 0;
 };
 
