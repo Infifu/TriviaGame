@@ -126,3 +126,13 @@ GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer
     return req;
 }
 
+SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(Buffer buffer)
+{
+    json j = json::from_cbor(buffer);
+
+    SubmitAnswerRequest request{};
+    request.answerId = j["answerId"];
+    return request;
+}
+
+

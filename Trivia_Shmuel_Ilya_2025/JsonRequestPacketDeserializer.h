@@ -48,6 +48,11 @@ struct StartGameRequest {};
 struct GetRoomStateRequest {};
 struct LeaveRoomRequest {};
 
+struct SubmitAnswerRequest
+{
+	unsigned int answerId;
+};
+
 class JsonRequestPacketDeserializer
 {
 public:
@@ -64,6 +69,8 @@ public:
 	static StartGameRequest deserializeStartGameRequest(Buffer);
 	static GetRoomStateRequest deserializeGetRoomStateRequest(Buffer);
 	static LeaveRoomRequest deserializeLeaveRoomRequest(Buffer);
+
+	SubmitAnswerRequest deserializeSubmitAnswerRequest(Buffer buffer);
 
 };
 

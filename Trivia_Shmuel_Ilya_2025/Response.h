@@ -10,6 +10,14 @@ enum RequestCode
 	LEAVE_ROOM_REQUEST = 30
 };
 
+enum ResponseCode
+{
+	Leave_Game_Response = 40,
+	Get_Question_Response = 41,
+	Submit_Answer_Response = 42,
+	Get_GameResults_Response = 43
+};
+
 struct StartGameResponse
 {
 	unsigned int status;

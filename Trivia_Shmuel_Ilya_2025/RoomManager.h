@@ -16,6 +16,7 @@ public:
 	Room* getRoom(RoomID id);
 	void setRoomStatus(RoomID id, RoomStatus newStatus);
 	unsigned int m_curID = 0;
+	void removeUserFromRoom(const LoggedUser& user);
 private:
 	std::map<RoomID, Room> m_rooms;
 };
