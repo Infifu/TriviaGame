@@ -7,11 +7,15 @@
 #include "JsonRequestPacketDeserializer.h"
 #include "JsonResponsePacketSerializer.h"
 #include "Response.h"
+#include "LoginRequestHandler.h"
+
+class RequestHandlerFactory;
 
 class RoomMemberRequestHandler : public IRequestHandler
 {
 private:
-    Room& m_room;
+    Room& m_room; //smart pointer
+    RoomID m_roomID;
     LoggedUser m_user;
     RoomManager& m_roomManager;
     RequestHandlerFactory& m_handlerFactory;
@@ -19,6 +23,7 @@ private:
     RequestResult leaveRoom(RequestInfo request);
     RequestResult getRoomState(RequestInfo request);
 
+    bool hasRoom(RoomID id);
 public:
     RoomMemberRequestHandler(LoggedUser user, Room& room, RoomManager& roomManager, RequestHandlerFactory& handlerFactory);
 

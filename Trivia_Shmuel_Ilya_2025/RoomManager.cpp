@@ -15,7 +15,15 @@ void RoomManager::deleteRoom(RoomID id)
 
 RoomStatus RoomManager::getRoomState(RoomID id)
 {
-    return m_rooms.find(id)->second.getMetadata().status;
+    auto it = m_rooms.find(id);
+    if (it != m_rooms.end())
+    {
+        return it->second.getMetadata().status;
+    }
+    else
+    {
+        return RoomStatus::FINISHED;
+    }
 }
 
 std::vector<RoomData> RoomManager::getRooms()
@@ -32,7 +40,7 @@ std::vector<RoomData> RoomManager::getRooms()
 
 
 //Hello dear ido, im rejecting the std::optional<Room> because of the fact that you cant pass it by reference by defult
-//only with fuckass workarounds
+//only with workarounds
 Room* RoomManager::getRoom(RoomID id)
 {
     auto it = m_rooms.find(id);
