@@ -57,7 +57,7 @@ namespace WPFTEST.Services
 
             if (!_socket.Connected)
             {
-                MessageBox.Show("ERROR");
+                //MessageBox.Show("ERROR");
             }
 
             _socket.Send(msg.ToArray());
