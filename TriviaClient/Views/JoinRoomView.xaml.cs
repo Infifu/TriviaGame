@@ -21,13 +21,13 @@ using System.Threading;
 
 public class Room
 {
-    public byte Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public int PlayerCount { get; set; }
     public int TimeToAnswer { get; set; }
     public string PlayerStatus => $"Players: {PlayerCount}";
 
-    public Room(string name, int playerCount, int timeToAnswer, byte id = 0)
+    public Room(string name, int playerCount, int timeToAnswer, int id)
     {
         Name = name;
         PlayerCount = playerCount;
@@ -141,7 +141,7 @@ namespace TriviaClient.Views
                     {
                         foreach (RoomData room in response.rooms)
                         {
-                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion,room.id));
                         }
                     }
                 }
@@ -161,12 +161,12 @@ namespace TriviaClient.Views
         {
             while (is_refreshing)
             {
-                await refreshMembersList();
+                await RefreshMembersList();
                 await Task.Delay(3000);
             }
         }
 
-        private async Task refreshMembersList()
+        private async Task RefreshMembersList()
         {
             try
             {
@@ -206,7 +206,7 @@ namespace TriviaClient.Views
             {
                 try
                 {
-                    JoinRoomRequest req = new JoinRoomRequest { RoomId = selectedRoom.Id };
+                    JoinRoomRequest req = new JoinRoomRequest { RoomId = (byte)selectedRoom.Id };
                     List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
                     ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
