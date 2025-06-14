@@ -176,8 +176,22 @@ namespace TriviaClient.Views
                 {
                     ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
-                    GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
-                    if (playerRes.status == 2)
+                GetRoomStateResponse playerRes = JsonSerializer.Deserialize<GetRoomStateResponse>(playerAnswer.json);
+                if (playerRes.status == 2)
+                {
+                    BackToMenu_Click(null,null);
+                }
+                else if (playerRes.status == 1)
+                {
+                    is_refreshing = false;
+                    MessageBox.Show("Game started successfully!");
+                    BackToMenu_Click(null, null);
+
+                }
+                else if (playerRes != null && playerRes.players != null)
+                {
+                    Players.Clear();
+                    foreach (var player in playerRes.players)
                     {
                         RoomGotClosed();
                     }
