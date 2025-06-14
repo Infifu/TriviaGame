@@ -14,10 +14,7 @@ enum results
     FAIL = 1
 };
 
-
-//i still need to work out the code relations
 //Thank you ido for you great cr's I really appreciate it 
-
 
 //ERROR 1
 //LOGIN 0
@@ -293,6 +290,70 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomStateRespons
         {"AnswerCount", response.answerCount},
         {"answerTimeOut", response.answerTimeout}
     };
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& response)
+{
+    json statusSerialized = {
+    {"status", response.status},
+    {"results", response.results} };
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+};
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerResponse& response)
+{
+    json statusSerialized = {
+    {"status", response.status},
+    {"correctAnswerId", response.correctAnswerId}};
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& response)
+{
+    json statusSerialized = {
+    {"status", response.status},
+    {"question", response.question},
+    {"answers", response.answers} };
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& response)
+{
+    json statusSerialized = {
+    {"status", response.status} };
 
     Buffer jsonDump = json::to_cbor(statusSerialized);
     Buffer numberInBinary = intToBytesVal(jsonDump.size());
