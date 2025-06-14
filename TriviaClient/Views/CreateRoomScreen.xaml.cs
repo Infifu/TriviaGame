@@ -25,27 +25,19 @@ namespace TriviaClient.Views
     {
         public ObservableCollection<string> Players { get; set; }
 
-        Thread refreshMembers;
+        Task refreshMembers;
         bool is_refreshing;
 
-        private void refreshMembersListThread()
+        private async Task RefreshMembersListLoopAsync()
         {
             while (is_refreshing)
             {
-                this.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    refreshMembersList();
-                }));
-
-                int sleepMs = 3000;
-                for (int i = 0; i < sleepMs / 100 && is_refreshing; i++)
-                {
-                    Thread.Sleep(100);
-                }
+                await RefreshMembersList();
+                await Task.Delay(3000);
             }
         }
 
-        private void refreshMembersList()
+        private async Task RefreshMembersList()
         {
             try
             {
@@ -73,7 +65,6 @@ namespace TriviaClient.Views
         {
             InitializeComponent();
             Players = new ObservableCollection<string> { };
-
             DataContext = this;
 
         }
@@ -150,9 +141,8 @@ namespace TriviaClient.Views
 
                     btnStartGame.Visibility = Visibility.Visible;
 
-                    refreshMembers = new Thread(refreshMembersListThread);
                     is_refreshing = true;
-                    refreshMembers.Start();
+                    refreshMembers = RefreshMembersListLoopAsync();
 
                 }
                 else
