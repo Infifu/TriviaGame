@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using TriviaClient.Services;
 using TriviaClient.ViewModel;
 using WPFTEST.Services;
+using System.Threading;
 
 public class Room
 {
@@ -74,10 +75,10 @@ namespace TriviaClient.Views
         public ObservableCollection<Room> Rooms { get; set; }
         public ObservableCollection<string> Players { get; set; }
 
-        Thread loadRoomsThread;
+        Task loadRoomsTask;
         bool is_loading;
 
-        Thread refreshPlayerList;
+        Task refreshPlayerListTask;
         bool is_refreshing;
 
 
@@ -88,9 +89,8 @@ namespace TriviaClient.Views
             Rooms = new ObservableCollection<Room>();
             Players = new ObservableCollection<string> { };
 
-            loadRoomsThread = new Thread(LoadRoomsThread);
             is_loading = true;
-            loadRoomsThread.Start();
+            loadRoomsTask = LoadRoomsLoopAsync();
 
             DataContext = this;
         }
@@ -115,35 +115,34 @@ namespace TriviaClient.Views
         }
 
 
-        private void LoadRoomsThread()
+        private async Task LoadRoomsLoopAsync()
         {
             while (is_loading)
             {
-                this.Dispatcher.Invoke(() =>
-                {
-                    LoadRooms(new Object(), new RoutedEventArgs());
-                });
-                Thread.Sleep(3000);
+                await LoadRoomsAsync();
+                await Task.Delay(3000);
             }
         }
-
-
-        private void LoadRooms(object sender, RoutedEventArgs e)
+        private async Task LoadRoomsAsync()
         {
             try
             {
                 GetRoomsRequest req = new GetRoomsRequest();
                 List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
-                ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
-                GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
-
-                Rooms.Clear();
-                if (response != null && response.rooms!= null)
+                if (is_loading)
                 {
-                    foreach (RoomData room in response.rooms)
+                    ServerAnswer answer = await Task.Run(() => Client.Instance.communicator.SendAndReceive(buffer));
+
+                    GetRoomsResponse response = JsonSerializer.Deserialize<GetRoomsResponse>(answer.json);
+
+                    Rooms.Clear();
+                    if (response != null && response.rooms != null)
                     {
-                        Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                        foreach (RoomData room in response.rooms)
+                        {
+                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion));
+                        }
                     }
                 }
             }
@@ -152,25 +151,22 @@ namespace TriviaClient.Views
                 MessageBox.Show("Failed to fetch rooms: " + ex.Message);
             }
         }
+        private async void LoadRooms(object sender, RoutedEventArgs e)
+        {
+            await LoadRoomsAsync();
+        }
 
-        private void refreshMembersListThread()
+
+        private async Task refreshMembersListLoopAsync()
         {
             while (is_refreshing)
             {
-                this.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    refreshMembersList();
-                }));
-
-                int sleepMs = 3000;
-                for (int i = 0; i < sleepMs / 100 && is_refreshing; i++)
-                {
-                    Thread.Sleep(100);
-                }
+                await refreshMembersList();
+                await Task.Delay(3000);
             }
         }
 
-        private void refreshMembersList()
+        private async Task refreshMembersList()
         {
             try
             {
@@ -234,9 +230,8 @@ namespace TriviaClient.Views
                         }
                         PlayerListShow.ItemsSource = Players;
 
-                        refreshPlayerList = new Thread(refreshMembersListThread);
                         is_refreshing = true;
-                        refreshPlayerList.Start();
+                        refreshPlayerListTask = refreshMembersListLoopAsync();
                     }
                     else
                     {
@@ -262,34 +257,24 @@ namespace TriviaClient.Views
 
         private void RoomGotClosed()
         {
-            if (loadRoomsThread.IsAlive)
-            {
-                is_loading = false;
-                loadRoomsThread.Join();
-            }
+            is_loading = false;
+            is_refreshing = false;
 
-            if (is_refreshing)
-            {
-                is_refreshing = false;
-            }
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
-            this.Hide();
+            this.Close();
         }
          
 
-        private void BackToMenu_Click(object sender, RoutedEventArgs e)
+        private async void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (loadRoomsThread.IsAlive)
-            {
-                is_loading = false;
-                loadRoomsThread.Join();
-            }
+            is_loading = false;
 
             if (is_refreshing)
             {
                 is_refreshing = false;
                 leaveRoom();
+                if (refreshPlayerListTask != null) await refreshPlayerListTask;
             }
             MainMenu mainMenu = new MainMenu();
             mainMenu.Show();
