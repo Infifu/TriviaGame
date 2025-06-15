@@ -7,11 +7,6 @@
 
 using json = nlohmann::json; //so the class could be accessed just by json::foo keyword
 
-struct GetGameResultsResponse
-{
-	unsigned int status;
-	std::vector<PlayerResults> results;
-};
 
 struct PlayerResults
 {
@@ -21,8 +16,14 @@ struct PlayerResults
 	unsigned int averageAnswerTime;
 };
 
+struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+};
+
 //how to serialize playerResults
-void to_json(nlohmann::json& j, const PlayerResults& p)
+inline void to_json(nlohmann::json& j, const PlayerResults& p)
 {
 	j = nlohmann::json{
 		{"username", p.username},

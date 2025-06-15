@@ -1,9 +1,13 @@
+﻿#pragma once
+
 #include "Question.h"
 #include <map>
 #include "LoggedUser.h"
 #include "IDatabase.h"
 
-#pragma once
+
+class IDatabase; 
+
 
 struct GameData
 {

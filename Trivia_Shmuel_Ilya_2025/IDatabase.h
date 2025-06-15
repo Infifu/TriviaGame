@@ -9,6 +9,9 @@
 #include "Question.h"
 #include <vector>
 #include "sqlite3.h"
+#include "Game.h"
+
+struct GameData;
 
 class IDatabase
 {

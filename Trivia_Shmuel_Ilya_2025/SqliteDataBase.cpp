@@ -221,7 +221,8 @@ bool SqliteDataBase::submitGameStatistics(GameData gameData, LoggedUser loggedUs
 	statsValues["average_time"] = std::to_string(gameData.averageAnswerTime);
 	statsValues["score"] = "0"; //calculate score //maybe delete this later
 
-	SqliteDataBase::insertQuery("statistics", statsValues);
+	SqliteDataBase::updateStatistics(statsValues);
+	return true;
 }
 
 
