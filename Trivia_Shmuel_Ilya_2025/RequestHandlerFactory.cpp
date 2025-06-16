@@ -33,5 +33,14 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
 	return new RoomMemberRequestHandler(user, room, _roomManager, *this);
 }
 
+
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser user, Room& room)
+{
+	Game game = _gameManager.createGame(room);
+	return new GameRequestHandler(user, game, _gameManager, *this);
+}
+
+
 RoomManager& RequestHandlerFactory::getRoomManager() { return _roomManager; }
 StatisticsManager& RequestHandlerFactory::getStatisticsManager() { return _statisticsManager; }
+GameManager& RequestHandlerFactory::getGameManager() { return _gameManager; }
