@@ -29,7 +29,7 @@ private:
 	std::vector <LoggedUser> m_users;
 public:
 	Room(RoomData data);
-	Room() : m_metadata{ 0, "", 0, 0, 0, RoomStatus::LOBBY } {}
+	Room();
 	void addUser(LoggedUser);
 	void removeUser(LoggedUser);
 	std::vector<std::string> getAllUsers();
