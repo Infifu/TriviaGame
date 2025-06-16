@@ -304,6 +304,80 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetRoomStateRespons
     return buffer;
 }
 
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetGameResultsResponse& response)
+{
+    json statusSerialized;
+    statusSerialized["status"] = response.status;
+    json playersJsonArray = json::array(); //array for the players
+
+    for (const PlayerResults& player : response.results)
+    {
+        json playerJson;
+        playerJson["username"] = player.username;
+        playerJson["correctAnswerCount"] = player.correctAnswerCount;
+        playerJson["wrongAnswerCount"] = player.wrongAnswerCount;
+        playerJson["averageAnswerTime"] = player.averageAnswerTime;
+        playersJsonArray.push_back(playerJson);
+    }
+    statusSerialized["results"] = playersJsonArray;
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerResponse& response)
+{
+    json statusSerialized = {
+        {"status", response.status},
+        {"correctAnswerID", response.correctAnswerID}};
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& response)
+{
+    json statusSerialized = {
+     {"status", response.status},
+     {"question", response.question},
+     {"answers",response.answers} };
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& response)
+{
+    json statusSerialized = {{"status", response.status}};
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
 Buffer JsonResponsePacketSerializer::intToBytesVal(int number)
 {
     //little endian encoding cuz god want me to suffer or whatever
