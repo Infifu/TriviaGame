@@ -57,7 +57,8 @@ namespace WPFTEST.Services
 
             if (!_socket.Connected)
             {
-                //MessageBox.Show("ERROR");
+                MessageBox.Show("Server was disconnected");
+                Application.Current.Shutdown();
             }
 
             _socket.Send(msg.ToArray());

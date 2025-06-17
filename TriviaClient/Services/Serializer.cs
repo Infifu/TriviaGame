@@ -26,13 +26,12 @@ public enum ServerCodes
 
 public struct CloseRoomStruct
 {}
-
 public struct StartGameStruct
 {}
 public struct GetRoomStateStruct
-{ }
+{}
 public struct leaveRoomStruct
-{ }
+{}
 
 public struct LoginRequest
 {
