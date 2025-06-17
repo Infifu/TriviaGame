@@ -17,7 +17,10 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
     m_roomManager.setRoomStatus(m_room.getMetadata().id, RoomStatus::INGAME);
     StartGameResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
-    return { buffer, nullptr };
+
+    IRequestHandler* nextHandler = m_handlerFactory.createGameRequestHandler(m_user, m_room);
+
+    return { buffer, nextHandler };
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)

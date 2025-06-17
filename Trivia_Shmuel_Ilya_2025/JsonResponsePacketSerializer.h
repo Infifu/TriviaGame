@@ -121,6 +121,7 @@ public:
 	static Buffer serializeResponse(const LeaveRoomResponse& response);
 	static Buffer serializeResponse(const GetRoomStateResponse& response);
 
+	//in game
 	static Buffer serializeResponse(const GetGameResultsResponse& response);
 	static Buffer serializeResponse(const SubmitAnswerResponse& response);
 	static Buffer serializeResponse(const GetQuestionResponse& response);
