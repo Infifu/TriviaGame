@@ -1,7 +1,7 @@
 #include "MenuRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory), m_curID(0)
+MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory)
 , m_serializer(), m_deserializer(), m_manager(*roomManger)
 {}
 
@@ -74,21 +74,42 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
     JoinRoomRequest joinRoomReq = m_deserializer.deserializeJoinRoomRequest(info.buffer);
     JoinRoomResponse joinRoomRes;
+	bool found = false;
 
     Room* room = m_manager.getRoom(joinRoomReq.roomId);
+	IRequestHandler* nextHandler = nullptr;
+
 	if (room != nullptr)
     {
-        room->addUser(m_user);
-        joinRoomRes.status = 0;
+		std::vector <std::string> users = room->getAllUsers();
+		for (auto user : users)
+		{
+			if (user == m_user)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			room->addUser(m_user);
+			joinRoomRes.status = 0;
+			nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
+		}
+		else
+		{
+			joinRoomRes.status = 1;
+		}
     }
     else
     {
-        joinRoomRes.status = 1;
+		joinRoomRes.status = 1;
     }
 
-    RequestResult reqRes{ m_serializer.serializeResponse(joinRoomRes), nullptr };
+	Buffer buffer = m_serializer.serializeResponse(joinRoomRes);
 
-    return reqRes;
+	return { buffer, nextHandler };
 }
 
 RequestResult MenuRequestHandler::createRoom(RequestInfo info)
@@ -96,8 +117,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	CreateRoomRequest createRoomReq = m_deserializer.deserializeCreateRoomRequest(info.buffer);
 	RoomData roomData;
 
-	roomData.id = m_curID;
-	m_curID++;
+	roomData.id = m_manager.m_curID;
+	m_manager.m_curID++;
 	roomData.name = createRoomReq.roomName;
 	roomData.maxPlayers = createRoomReq.maxUsers;
 	roomData.numOfQuestionsInGame = createRoomReq.questionCount;
@@ -106,10 +127,18 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 
 	m_manager.createRoom(m_user,roomData);
 
-	CreateRoomResponse roomRes{0};
-	
-	RequestResult ReqRes{ m_serializer.serializeResponse(roomRes),nullptr};
-	return ReqRes;
+	Room* room = m_manager.getRoom(roomData.id);
+	IRequestHandler* nextHandler = nullptr;
+
+	if (room != nullptr)
+	{
+		nextHandler = m_handlerFactory.createRoomAdminRequestHandler(m_user, *room);
+	}
+
+	CreateRoomResponse roomRes{ 0 };
+	Buffer buffer = m_serializer.serializeResponse(roomRes);
+
+	return { buffer, nextHandler };
 }
 
 RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)
@@ -130,7 +159,7 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			break;
 		case 21:
 			reqRes = createRoom(requestInfo);
-			break;
+			break; 
 		case 22:
 			reqRes = joinRoom(requestInfo);
 			break;

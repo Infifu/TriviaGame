@@ -8,6 +8,8 @@
 #include "UsingBuffer.h"
 #include "StatisticsManager.h"
 #include "TriviaException.h"
+#include "RoomAdminRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
 
 class RequestHandlerFactory;
 
@@ -16,7 +18,6 @@ class MenuRequestHandler : public IRequestHandler
 private:
 	LoggedUser m_user;
 	RequestHandlerFactory& m_handlerFactory;
-	unsigned int m_curID;
 	JsonResponsePacketSerializer m_serializer;
 	JsonRequestPacketDeserializer m_deserializer;
 	RoomManager& m_manager;
@@ -34,4 +35,3 @@ public:
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
 
 };
-
