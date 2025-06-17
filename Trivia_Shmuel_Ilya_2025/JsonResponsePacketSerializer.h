@@ -3,6 +3,7 @@
 #include <string>
 #include "Room.h"
 #include "json.hpp"
+#include "Response.h"
 
 using json = nlohmann::json; //so the class could be accessed just by json::foo keyword
 
@@ -57,7 +58,13 @@ struct SignupResponse
 struct ErrorResponse
 {
 	std::string message;
-}; 
+};
+
+struct CloseRoomResponse 
+{
+	unsigned int status;
+};
+
 
 class JsonResponsePacketSerializer
 {
@@ -74,7 +81,13 @@ public:
 	static Buffer serializeResponse(const CreateRoomResponse& response);
 	static Buffer serializeResponse(const GetHighScoreResponse& response);
 	static Buffer serializeResponse(const GetPersonalStatsResponse& response);
-	
+
+	//room
+	static Buffer serializeResponse(const CloseRoomResponse& response);
+	static Buffer serializeResponse(const StartGameResponse& response);
+	static Buffer serializeResponse(const LeaveRoomResponse& response);
+	static Buffer serializeResponse(const GetRoomStateResponse& response);
+
 private:
 	static Buffer intToBytesVal(int number);
 

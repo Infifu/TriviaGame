@@ -2,6 +2,8 @@
 
 Room::Room(RoomData data) : m_metadata(data) {}
 
+Room::Room() : m_metadata{ 0, "", 0, 0, 0, RoomStatus::LOBBY } {}
+
 void Room::addUser(LoggedUser user)
 {
 	m_users.push_back(user);
@@ -25,4 +27,9 @@ std::vector<std::string> Room::getAllUsers()
 RoomData Room::getMetadata()
 {
 	return m_metadata;
+}
+
+void Room::setStatus(RoomStatus newStatus)
+{
+	m_metadata.status = newStatus;
 }

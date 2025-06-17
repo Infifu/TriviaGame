@@ -17,8 +17,21 @@ public enum ServerCodes
     GetRooms = 23,
     GetPlayersInRooms = 24,
     GetPersonalStats = 25,
-    GetTop3 = 26
+    GetTop3 = 26,
+    CloseRoomReq = 27,
+    StartGameReq = 28,
+    GetRoomStateReq = 29,
+    leaveRoomReq = 30,
 }
+
+public struct CloseRoomStruct
+{}
+public struct StartGameStruct
+{}
+public struct GetRoomStateStruct
+{}
+public struct leaveRoomStruct
+{}
 
 public struct LoginRequest
 {
@@ -84,6 +97,11 @@ namespace TriviaClient.Services
             codes.Add(typeof(GetStatsRequest), ServerCodes.GetPersonalStats);
             codes.Add(typeof(GetTop3Request), ServerCodes.GetTop3);
             codes.Add(typeof(JoinRoomRequest), ServerCodes.JoinRoom);
+
+            codes.Add(typeof(CloseRoomStruct), ServerCodes.CloseRoomReq);
+            codes.Add(typeof(StartGameStruct), ServerCodes.StartGameReq);
+            codes.Add(typeof(GetRoomStateStruct), ServerCodes.GetRoomStateReq);
+            codes.Add(typeof(leaveRoomStruct), ServerCodes.leaveRoomReq);
         }
 
         public Buffer SerializeResponse<T>(T requestToServer)

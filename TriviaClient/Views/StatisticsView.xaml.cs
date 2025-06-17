@@ -161,7 +161,7 @@ namespace Statistics.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Application.Current.Shutdown();
         }
         private void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
