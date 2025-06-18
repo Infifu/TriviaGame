@@ -22,6 +22,10 @@ public enum ServerCodes
     StartGameReq = 28,
     GetRoomStateReq = 29,
     leaveRoomReq = 30,
+    LeaveGameResponse = 40,
+    GetQuestionResponse = 41,
+    SubmitAnswerResponse = 42,
+    GetGameResultsResponse = 43
 }
 
 public struct CloseRoomStruct
@@ -30,9 +34,9 @@ public struct CloseRoomStruct
 public struct StartGameStruct
 {}
 public struct GetRoomStateStruct
-{ }
+{}
 public struct leaveRoomStruct
-{ }
+{}
 
 public struct LoginRequest
 {
@@ -79,6 +83,17 @@ public struct JoinRoomRequest
 {
     public byte RoomId { get; set; }
 }
+public struct LeaveGameResponse
+{}
+
+public struct SubmitAnswerResponse
+{
+    public uint status { get; set; }
+    public double answerTime { get; set; }
+}
+public struct GetGameResultsResponse
+{}
+
 
 //we need an external libary for cbor serialization for json named Peter0.Cbor
 namespace TriviaClient.Services
@@ -103,6 +118,12 @@ namespace TriviaClient.Services
             codes.Add(typeof(StartGameStruct), ServerCodes.StartGameReq);
             codes.Add(typeof(GetRoomStateStruct), ServerCodes.GetRoomStateReq);
             codes.Add(typeof(leaveRoomStruct), ServerCodes.leaveRoomReq);
+
+            codes.Add(typeof(LeaveGameResponse), ServerCodes.LeaveGameResponse);
+            codes.Add(typeof(GetQuestionResponse), ServerCodes.GetQuestionResponse);
+            codes.Add(typeof(SubmitAnswerResponse), ServerCodes.SubmitAnswerResponse);
+            codes.Add(typeof(GetGameResultsResponse), ServerCodes.GetGameResultsResponse);
+
         }
 
         public Buffer SerializeResponse<T>(T requestToServer)

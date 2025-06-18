@@ -141,7 +141,7 @@ namespace TriviaClient.Views
                     {
                         foreach (RoomData room in response.rooms)
                         {
-                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion,room.id));
+                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion, room.id));
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace TriviaClient.Views
             {
                 GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
                 List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
-                if(is_refreshing)
+                if (is_refreshing)
                 {
                     ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
@@ -181,10 +181,10 @@ namespace TriviaClient.Views
                     {
                         RoomGotClosed();
                     }
-                    else if(playerRes.status == 1)
+                    else if (playerRes.status == 1)
                     {
                         MessageBox.Show("Game Started!");
-                        BackToMenu_Click(null,null);
+                        BackToMenu_Click(null, null);
                     }
                     else if (playerRes != null && playerRes.players != null)
                     {
@@ -269,7 +269,7 @@ namespace TriviaClient.Views
             mainMenu.Show();
             this.Close();
         }
-         
+
 
         private async void BackToMenu_Click(object sender, RoutedEventArgs e)
         {
