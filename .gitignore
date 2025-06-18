@@ -457,3 +457,10 @@ vcpkg/vcpkg.exe
 vcpkg/vcpkg.pdb
 vcpkg/vcpkg*.log
 vcpkg/scripts/buildsystems/msbuild/applocal.ps1
+
+# vcpkg build output
+vcpkg_installed/
+buildtrees/
+packages/
+installed/
+*.vcpkg_lock.json

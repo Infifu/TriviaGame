@@ -1,5 +1,5 @@
 {
-  "name": "Trivia_Shmuel_Ilya_2025",
+  "name": "trivia",
   "version-string": "1.0",
   "dependencies": [
     "curl"
