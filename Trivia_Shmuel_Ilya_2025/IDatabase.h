@@ -8,6 +8,7 @@
 #include "Question.h"
 #include <vector>
 #include "sqlite3.h"
+#include <curl/curl.h>
 
 class IDatabase
 {

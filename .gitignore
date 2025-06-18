@@ -435,3 +435,25 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++
+
+### vcpkg (local) ###
+# Keep vcpkg itself
+!vcpkg/
+!vcpkg/**/
+!vcpkg/*.bat
+!vcpkg/*.sh
+!vcpkg/*.ps1
+!vcpkg/README.md
+!vcpkg/LICENSE.txt
+!vcpkg/vcpkg.json
+!vcpkg/bootstrap-vcpkg.bat
+
+# Ignore vcpkg build outputs and cache
+vcpkg/buildtrees/
+vcpkg/downloads/
+vcpkg/packages/
+vcpkg/installed/
+vcpkg/vcpkg.exe
+vcpkg/vcpkg.pdb
+vcpkg/vcpkg*.log
+vcpkg/scripts/buildsystems/msbuild/applocal.ps1

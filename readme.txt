@@ -1,0 +1,2 @@
+You see this vcpkg folder installed? i put it here to save you the hustle with the external library bro!
+just click on the setup.bat to bootstrap the vcpkg so it will download the package (library) for you and youre ready sir C:
