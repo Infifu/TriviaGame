@@ -129,7 +129,7 @@ namespace TriviaClient.Views
                 roomReq.questionCount = (Byte)Int32.Parse("20");
 
                 ServerAnswer answer = Client.Instance.communicator.SendAndReceive(Client.Instance.serializer.SerializeResponse(roomReq));
-                
+
                 if (answer.code == 0)
                 {
                     CreateRoomPanel.Visibility = Visibility.Collapsed;
