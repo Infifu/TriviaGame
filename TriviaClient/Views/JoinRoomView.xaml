@@ -142,7 +142,8 @@
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
-                <ScrollViewer Grid.Column="0" Margin="10">
+                <ScrollViewer x:Name="ServerListScrollViewer"
+                    Grid.Column="0" Margin="10" Visibility="Visible">
                     <ItemsControl ItemsSource="{Binding Rooms}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

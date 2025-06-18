@@ -1,0 +1,142 @@
+﻿<Window x:Class="TriviaClient.Views.LoginRegisterScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriviaClient.Views"
+        mc:Ignorable="d"
+        Title="LoginRegisterScreen" Height="720" Width="1000"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
+
+    <Border 
+        CornerRadius="50"
+        Background="#bad6e8"
+        BorderThickness="2.5">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#7096D1" Offset="0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="341*"/>
+                <RowDefinition Height="344*"/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="5"/>
+
+                </Grid.ColumnDefinitions>
+                <TextBlock Text=""
+                           Foreground="DarkBlue"
+                           FontSize="25"
+                           FontFamily="Montserrat"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="50,0,22,0" Height="30"/>
+                <Button x:Name="btnMinimize"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="-"
+                        Foreground="#7096D1"
+                        FontSize="25"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Click="btnMinimize_Click"
+                        Margin="841,1,56,-1" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform AngleY="-0.616"/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="0.156"/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Button x:Name="btnClose"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="X"
+                        Foreground="#7096D1"
+                        FontSize="20"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Click="btnClose_Click"
+                        Margin="888,2,0,-2" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+            <Image Margin="272,124,272,14" Grid.Row="1" Source="/Models/podium.png" Stretch="Fill"/>
+            <TextBlock Text="Your game statistics:"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="272,29,272,265" Grid.Row="2"/>
+            <TextBlock x:Name="TotalQuestionsTextBlock"
+                Text="Total questions: ?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="272,79,272,215" Grid.Row="2"/>
+            <TextBlock x:Name="CorrectAnswersTextBlock"
+                Text="Total correct answers: ?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="272,129,272,165" Grid.Row="2"/>
+            <TextBlock x:Name="AverageAnswerTimeTextBlock"
+                Text="Average answer time: ?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="272,172,272,122" Grid.Row="2"/>
+            <TextBlock x:Name="FirstPlaceTextBlock"
+                Text="?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="363,90,363,201" Grid.Row="1"/>
+            <TextBlock x:Name="SecondPlaceTextBlock"
+                Text="?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="206,151,520,140" Grid.Row="1"/>
+            <TextBlock x:Name="ThirdPlaceTextBlock"
+                Text="?"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="514,200,212,90" Grid.Row="1"/>
+
+
+        </Grid>
+
+    </Border>
+</Window>
