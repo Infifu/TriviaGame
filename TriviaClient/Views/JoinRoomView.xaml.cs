@@ -93,6 +93,8 @@ namespace TriviaClient.Views
             loadRoomsTask = LoadRoomsLoopAsync();
 
             DataContext = this;
+
+            ServerListScrollViewer.Visibility = Visibility.Visible;
         }
 
 
@@ -211,6 +213,7 @@ namespace TriviaClient.Views
             {
                 try
                 {
+                    ServerListScrollViewer.Visibility = Visibility.Collapsed;
                     JoinRoomRequest req = new JoinRoomRequest { RoomId = (byte)selectedRoom.Id };
                     List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
                     ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
