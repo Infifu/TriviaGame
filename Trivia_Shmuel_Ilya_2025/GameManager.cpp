@@ -11,22 +11,22 @@ Game& GameManager::createGame(Room room)
     {
         players.insert({ LoggedUser(player),GameData(questions[0],0,0,0) });
     }
-    m_games.push_back(Game(questions, players, room.getMetadata().id, m_database));
-    return m_games.back();
+
+    auto it = m_games.find(room.getMetadata().id);
+    if (it != m_games.end())
+    {
+        return it->second;
+    }
+
+    return m_games.insert({ room.getMetadata().id, Game(questions, players, room.getMetadata().id, m_database) }).first->second;
 }
 
 void GameManager::deleteGame(unsigned int gameId)
 {
-    for (auto it = m_games.begin(); it != m_games.end(); )
-    {
-        if (it->getgameId() == gameId)
-        {
-            it = m_games.erase(it);
-            break;
-        }
-        else
-        {
-            ++it;
-        }
-    }
+    m_games.erase(gameId); //check if this works
+}
+
+Game& GameManager::getGameById(unsigned int gameID)
+{
+    return m_games.at(gameID);
 }

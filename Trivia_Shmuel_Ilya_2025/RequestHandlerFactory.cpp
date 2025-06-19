@@ -30,7 +30,7 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
 {
 	return new RoomMemberRequestHandler(user, room, _roomManager, *this);
 }
-
+                      
 
 GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser user, Room& room)
 {

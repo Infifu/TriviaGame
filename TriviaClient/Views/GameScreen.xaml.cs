@@ -70,7 +70,7 @@ namespace TriviaClient.Views
             {
                 countdownTimer.Stop();
                 TimerText.Text = "Time's up!";
-                SubmitAnswer(-1); 
+                SubmitAnswer(2); 
             }
         }
 
@@ -107,8 +107,9 @@ namespace TriviaClient.Views
 
         private void SubmitAnswer(int selectedAnswerId)
         {
-            var req = new SubmitAnswerRequest { answerId = (uint)selectedAnswerId };
-            List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
+            SubmitAnswerRequest answerReq = new SubmitAnswerRequest();
+            answerReq.answerId = (byte)selectedAnswerId;
+            List<byte> buffer = Client.Instance.serializer.SerializeResponse(answerReq);
             ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
             var response = JsonSerializer.Deserialize<SubmitAnswerResponse>(answer.json);

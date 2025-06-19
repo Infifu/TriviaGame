@@ -86,7 +86,7 @@ public struct LeaveGameRequest
 
 public struct SubmitAnswerRequest
 {
-    public uint answerId { get; set; }
+    public byte answerId { get; set; }
 }
 public struct GetGameResultsRequest
 { }
