@@ -112,7 +112,7 @@ namespace TriviaClient.Views
             List<byte> buffer = Client.Instance.serializer.SerializeResponse(answerReq);
             ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 
-            var response = JsonSerializer.Deserialize<SubmitAnswerResponse>(answer.json);
+            SubmitAnswerResponse response = JsonSerializer.Deserialize<SubmitAnswerResponse>(answer.json);
 
             if (selectedAnswerId == response.correctAnswerID)
             {
