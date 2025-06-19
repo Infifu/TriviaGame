@@ -9,6 +9,7 @@ struct GameData
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
 	unsigned int averageAnswerTime;
+	unsigned int currentQuestionID;
 };
 
 class Game

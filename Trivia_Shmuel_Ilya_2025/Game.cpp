@@ -16,7 +16,11 @@ Question& Game::getQuestionForUser(const LoggedUser& user)
     {
         if (it->first.getUsername() == user.getUsername())
         {
-            return it->second.currentQuestion; //might crash
+            if (it->second.currentQuestionID < m_questions.size())
+            {
+                it->second.currentQuestion = m_questions[it->second.currentQuestionID];
+                return it->second.currentQuestion; //might crash
+            }
         }
     }
 }
@@ -45,6 +49,7 @@ void Game::submitAnswer(const LoggedUser& user, const unsigned answerId, const d
             it->second.averageAnswerTime += questionTime;
             it->second.averageAnswerTime /= questionsAmount + 1;
 
+            it->second.currentQuestionID++;
             break;
         }
     }
