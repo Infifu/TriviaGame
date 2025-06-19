@@ -24,7 +24,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
         GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
         Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
-        if (m_roomID == RoomStatus::INGAME)
+        if (status == RoomStatus::INGAME)
         {
             return { buffer, m_handlerFactory.createGameRequestHandler(m_user,m_room)};
         }

@@ -12,43 +12,75 @@ using TriviaClient.Services;
 using WPFTEST.Services;
 
 
+public class SubmitAnswerResponse
+{
+    public int status { get; set; }
+    public int correctAnswerID { get; set; }
+}
+
 public struct GetQuestionResponse
 {
     public uint status { get; set; }
     public string question { get; set; }
     public Dictionary<uint, string> answers { get; set; }
 }
-public struct SubmitAnswerResponse
-{
-    public uint status { get; set; }
-    public uint correctAnswerID { get; set; }
-}
-
 
 namespace TriviaClient.Views
 {
-
     public partial class GameScreen : Window
     {
-        private int questionsLeft = 20;
+        private int questionsLeft = 10;
         private int questionsRight = 0;
+        private int answerTimeoutSeconds;
+        private DispatcherTimer countdownTimer;
+        private int secondsLeft;
 
-        public GameScreen()
+        public GameScreen(int timeoutSeconds)
         {
             InitializeComponent();
 
-            QuestionsLeftText.Text = $"Left: {questionsLeft}";
-            QuestionsRightText.Text = $"Right: {questionsRight}";
+            answerTimeoutSeconds = timeoutSeconds;
+            questionsLeft = 10;
+            questionsRight = 0;
 
+            StartTimer();
             LoadNextQuestion();
+        }
+
+        private void StartTimer()
+        {
+            if (countdownTimer != null)
+                countdownTimer.Stop();
+
+            secondsLeft = answerTimeoutSeconds;
+            TimerText.Text = $"Time: {secondsLeft}s";
+
+            countdownTimer = new DispatcherTimer();
+            countdownTimer.Interval = TimeSpan.FromSeconds(1);
+            countdownTimer.Tick += CountdownTimer_Tick;
+            countdownTimer.Start();
+        }
+
+        private void CountdownTimer_Tick(object sender, EventArgs e)
+        {
+            secondsLeft--;
+            TimerText.Text = $"Time: {secondsLeft}s";
+
+            if (secondsLeft <= 0)
+            {
+                countdownTimer.Stop();
+                TimerText.Text = "Time's up!";
+                SubmitAnswer(-1); 
+            }
         }
 
         private void LoadNextQuestion()
         {
+            StartTimer();
+
             GetQuestionRequest questionReq = new GetQuestionRequest();
             List<byte> buffer = Client.Instance.serializer.SerializeResponse(questionReq);
             ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
-
             GetQuestionResponse questionRes = JsonSerializer.Deserialize<GetQuestionResponse>(serverAnswer.json);
 
             QuestionText.Text = questionRes.question;
@@ -73,69 +105,51 @@ namespace TriviaClient.Views
             AnswerD.IsEnabled = true;
         }
 
-        private async void Answer_Click(object sender, RoutedEventArgs e)
+        private void SubmitAnswer(int selectedAnswerId)
         {
-            if (sender is Button button)
+            var req = new SubmitAnswerRequest { answerId = (uint)selectedAnswerId };
+            List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
+            ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
+
+            var response = JsonSerializer.Deserialize<SubmitAnswerResponse>(answer.json);
+
+            if (selectedAnswerId == response.correctAnswerID)
             {
-                uint selectedAnswerId = (uint)button.Tag;
-
-                AnswerA.IsEnabled = false;
-                AnswerB.IsEnabled = false;
-                AnswerC.IsEnabled = false;
-                AnswerD.IsEnabled = false;
-
-                SubmitAnswerRequest request = new SubmitAnswerRequest
-                {
-                    answerId = selectedAnswerId
-                };
-
-                List<byte> submitBuffer = Client.Instance.serializer.SerializeResponse(request);
-                ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(submitBuffer);
-
-                SubmitAnswerResponse response = JsonSerializer.Deserialize<SubmitAnswerResponse>(serverAnswer.json);
-
-                MessageBox.Show(
-                    $"You selected: (ID: {selectedAnswerId})\n" +
-                    $"Server Response:\n" +
-                    $"- Status: {response.status}\n" +
-                    $"- Correct Answer ID: {response.correctAnswerID}",
-                    "Answer Submitted",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
-
-                if (selectedAnswerId == response.correctAnswerID)
-                {
-                    questionsRight++;
-                }
-                questionsLeft--;
-
+                questionsRight++;
                 QuestionsRightText.Text = $"Right: {questionsRight}";
-                QuestionsLeftText.Text = $"Left: {questionsLeft}";
+            }
 
-                if (questionsLeft == 0)
-                {
-                    EndGameScreen endScreen = new EndGameScreen();
-                    endScreen.Show();
-                    this.Close();
-                    return;
-                }
+            questionsLeft--;
+            QuestionsLeftText.Text = $"Left: {questionsLeft}";
 
-                await Task.Delay(1000);
-
+            if (questionsLeft == 0)
+            {
+                EndGameScreen end = new EndGameScreen();
+                end.Show();
+                this.Close();
+            }
+            else
+            {
                 LoadNextQuestion();
             }
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Answer_Click(object sender, RoutedEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            Button btn = sender as Button;
+            int selectedAnswerId = Convert.ToInt32(btn.Tag);
+            countdownTimer.Stop();
+            SubmitAnswer(selectedAnswerId);
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 DragMove();
             }
-
-           
         }
-
     }
+
+
 }

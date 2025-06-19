@@ -188,7 +188,7 @@ namespace TriviaClient.Views
                         is_loading = false;
                         is_refreshing = false;
 
-                        GameScreen gamescreen = new GameScreen();
+                        GameScreen gamescreen = new GameScreen(playerRes.answerTimeOut);
                         gamescreen.Show();
                         this.Close();
                     }

@@ -97,7 +97,8 @@ namespace TriviaClient.Views
                 {
                     is_refreshing = false;
 
-                    GameScreen gamescreen = new GameScreen();
+                    int timeout = Int32.Parse(txtTimeToAnswer.Text);
+                    GameScreen gamescreen = new GameScreen(timeout);
                     gamescreen.Show();
                     this.Close();
                 }

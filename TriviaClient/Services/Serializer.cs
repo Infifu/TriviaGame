@@ -131,6 +131,7 @@ namespace TriviaClient.Services
             byte[] jsonLength = BitConverter.GetBytes(jsonSerialized.Length);
 
             buffer.Add((byte)(codes[typeof(T)])); //add code to buffer
+
             buffer.AddRange(jsonLength);
             buffer.AddRange(jsonSerialized);
             return buffer;
