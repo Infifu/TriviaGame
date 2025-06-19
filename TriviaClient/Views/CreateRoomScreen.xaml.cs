@@ -95,7 +95,11 @@ namespace TriviaClient.Views
 
                 if (startGameAnswer.code == 0)
                 {
-                    MessageBox.Show("Game started successfully!");
+                    is_refreshing = false;
+
+                    GameScreen gamescreen = new GameScreen();
+                    gamescreen.Show();
+                    this.Close();
                 }
                 else
                 {

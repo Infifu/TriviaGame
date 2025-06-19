@@ -22,21 +22,23 @@ public enum ServerCodes
     StartGameReq = 28,
     GetRoomStateReq = 29,
     leaveRoomReq = 30,
-    LeaveGameResponse = 40,
-    GetQuestionResponse = 41,
-    SubmitAnswerResponse = 42,
-    GetGameResultsResponse = 43
+    LeaveGameRequest = 40,
+    GetQuestionRequest = 41,
+    SubmitAnswerRequest = 42,
+    GetGameResultsRequest = 43
 }
 
 public struct CloseRoomStruct
 {}
-
 public struct StartGameStruct
 {}
 public struct GetRoomStateStruct
 {}
 public struct leaveRoomStruct
 {}
+public struct GetQuestionRequest
+{}
+
 
 public struct LoginRequest
 {
@@ -71,28 +73,24 @@ public struct GetStatsRequest
 };
 
 public struct GetTop3Request
-{
-    
-}
+{}
 
 public struct GetRoomsRequest
-{
-
-}
+{}
 public struct JoinRoomRequest
 {
     public byte RoomId { get; set; }
 }
-public struct LeaveGameResponse
+public struct LeaveGameRequest
 {}
 
-public struct SubmitAnswerResponse
+public struct SubmitAnswerRequest
 {
     public uint status { get; set; }
     public double answerTime { get; set; }
 }
-public struct GetGameResultsResponse
-{}
+public struct GetGameResultsRequest
+{ }
 
 
 //we need an external libary for cbor serialization for json named Peter0.Cbor
@@ -119,10 +117,10 @@ namespace TriviaClient.Services
             codes.Add(typeof(GetRoomStateStruct), ServerCodes.GetRoomStateReq);
             codes.Add(typeof(leaveRoomStruct), ServerCodes.leaveRoomReq);
 
-            codes.Add(typeof(LeaveGameResponse), ServerCodes.LeaveGameResponse);
-            codes.Add(typeof(GetQuestionResponse), ServerCodes.GetQuestionResponse);
-            codes.Add(typeof(SubmitAnswerResponse), ServerCodes.SubmitAnswerResponse);
-            codes.Add(typeof(GetGameResultsResponse), ServerCodes.GetGameResultsResponse);
+            codes.Add(typeof(LeaveGameRequest), ServerCodes.LeaveGameRequest);
+            codes.Add(typeof(GetQuestionRequest), ServerCodes.GetQuestionRequest);
+            codes.Add(typeof(SubmitAnswerRequest), ServerCodes.SubmitAnswerRequest);
+            codes.Add(typeof(GetGameResultsRequest), ServerCodes.GetGameResultsRequest);
 
         }
 

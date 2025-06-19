@@ -136,7 +136,7 @@ std::vector<Question> SqliteDataBase::getQuestions(int amount)
 		possibleAnswers.push_back(row.at("answer1"));
 		possibleAnswers.push_back(row.at("answer2"));
 		possibleAnswers.push_back(row.at("answer3"));
-		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_Index"))));
+		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_id"))));
 	}
 	return questions;
 }

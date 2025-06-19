@@ -185,8 +185,12 @@ namespace TriviaClient.Views
                     }
                     else if (playerRes.status == 1)
                     {
-                        MessageBox.Show("Game Started!");
-                        BackToMenu_Click(null, null);
+                        is_loading = false;
+                        is_refreshing = false;
+
+                        GameScreen gamescreen = new GameScreen();
+                        gamescreen.Show();
+                        this.Close();
                     }
                     else if (playerRes != null && playerRes.players != null)
                     {

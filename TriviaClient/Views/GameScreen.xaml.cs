@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Threading;
 using TriviaClient.Services;
 using WPFTEST.Services;
-public struct GetQuestionRequest { }
 
 public struct GetQuestionResponse
 {
@@ -16,13 +16,10 @@ public struct GetQuestionResponse
     public Dictionary<uint, string> answers { get; set; }
 }
 
-public struct SubmitAnswerRequest
-{
-    public uint answerId { get; set; }
-}
-
-public struct LeaveGameRequest { }
-
+//public struct SubmitAnswerRequest
+//{
+//    public uint answerId { get; set; }
+//}
 
 namespace TriviaClient.Views
 {
@@ -32,6 +29,22 @@ namespace TriviaClient.Views
         public GameScreen()
         {
             InitializeComponent();
+
+            GetQuestionRequest questionReq = new GetQuestionRequest();
+            List<byte> startGameBuffer = Client.Instance.serializer.SerializeResponse(questionReq);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(startGameBuffer);
+
+            GetQuestionResponse questionRes = JsonSerializer.Deserialize<GetQuestionResponse>(serverAnswer.json);
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+
+           
         }
     }
 }

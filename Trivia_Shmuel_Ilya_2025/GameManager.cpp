@@ -1,6 +1,8 @@
 #include "GameManager.h"
 
-Game GameManager::createGame(Room room)
+GameManager::GameManager(IDatabase* database) : m_database(database){}
+
+Game& GameManager::createGame(Room room)
 {
     std::vector<Question> questions = m_database->getQuestions(room.getMetadata().numOfQuestionsInGame);
     std::vector<std::string> playersRaw = room.getAllUsers();
@@ -9,8 +11,8 @@ Game GameManager::createGame(Room room)
     {
         players.insert({ LoggedUser(player),GameData(questions[0],0,0,0) });
     }
-    Game game(questions, players, room.getMetadata().id, m_database);
-    return game;
+    m_games.push_back(Game(questions, players, room.getMetadata().id, m_database));
+    return m_games.back();
 }
 
 void GameManager::deleteGame(unsigned int gameId)
