@@ -60,11 +60,12 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 
     double seconds = secondsPassed();
 
-    m_game.submitAnswer(m_user, request.answerId, seconds);
-
     SubmitAnswerResponse response{};
     response.status = 0;
     response.correctAnswerID = m_game.getQuestionForUser(m_user).getCorrectAnswerId();
+
+    m_game.submitAnswer(m_user, request.answerId, seconds);
+
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
     return { buffer, nullptr };

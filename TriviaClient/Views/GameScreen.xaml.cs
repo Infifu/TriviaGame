@@ -94,6 +94,16 @@ namespace TriviaClient.Views
 
                 SubmitAnswerResponse response = JsonSerializer.Deserialize<SubmitAnswerResponse>(serverAnswer.json);
 
+                MessageBox.Show(
+                    $"You selected: (ID: {selectedAnswerId})\n" +
+                    $"Server Response:\n" +
+                    $"- Status: {response.status}\n" +
+                    $"- Correct Answer ID: {response.correctAnswerID}",
+                    "Answer Submitted",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+
                 if (selectedAnswerId == response.correctAnswerID)
                 {
                     questionsRight++;
