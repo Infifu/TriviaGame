@@ -349,10 +349,16 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerRespons
 
 Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& response)
 {
+    json answersJson;
+    for (const auto& [key, value] : response.answers) 
+    {
+        answersJson[std::to_string(key)] = value;
+    }
+
     json statusSerialized = {
      {"status", response.status},
      {"question", response.question},
-     {"answers",response.answers} };
+     {"answers",answersJson} };
 
     Buffer jsonDump = json::to_cbor(statusSerialized);
     Buffer numberInBinary = intToBytesVal(jsonDump.size());
