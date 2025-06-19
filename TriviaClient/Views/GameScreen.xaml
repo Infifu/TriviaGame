@@ -174,7 +174,7 @@
                         BorderThickness="2"
                         Margin="0,0,0,10">
                     <TextBlock x:Name="QuestionsLeftText"
-                               Text="Left: 3"
+                               Text="Left: 20"
                                FontSize="16"
                                FontFamily="Montserrat"
                                Foreground="#081F5C"
@@ -187,7 +187,7 @@
                         BorderBrush="#7096D1"
                         BorderThickness="2">
                     <TextBlock x:Name="QuestionsRightText"
-                               Text="Right: 8"
+                               Text="Right: 0"
                                FontSize="16"
                                FontFamily="Montserrat"
                                Foreground="#081F5C"
