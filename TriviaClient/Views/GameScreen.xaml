@@ -63,7 +63,7 @@
                         </TransformGroup>
                     </UniformGrid.RenderTransform>
 
-                    <Button x:Name="AnswerA" Content="HTML" Margin="10,-27,10,80">
+                    <Button x:Name="AnswerA" Content="HTML" Margin="10,-27,10,80" Click="Answer_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="#7096D1" CornerRadius="25">
@@ -83,7 +83,7 @@
                         <Button.FontFamily>Montserrat</Button.FontFamily>
                     </Button>
 
-                    <Button x:Name="AnswerB" Content="Python" Margin="10,-27,10,80">
+                    <Button x:Name="AnswerB" Content="Python" Margin="10,-27,10,80" Click="Answer_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="#7096D1" CornerRadius="25">
@@ -103,7 +103,7 @@
                         <Button.FontFamily>Montserrat</Button.FontFamily>
                     </Button>
 
-                    <Button x:Name="AnswerC" Content="JavaScript" Margin="10,-27,10,80">
+                    <Button x:Name="AnswerC" Content="JavaScript" Margin="10,-27,10,80" Click="Answer_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="#7096D1" CornerRadius="25">
@@ -123,7 +123,7 @@
                         <Button.FontFamily>Montserrat</Button.FontFamily>
                     </Button>
 
-                    <Button x:Name="AnswerD" Content="C++" Margin="10,-27,10,80">
+                    <Button x:Name="AnswerD" Content="C++" Margin="10,-27,10,80" Click="Answer_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="#7096D1" CornerRadius="25">

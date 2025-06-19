@@ -86,8 +86,7 @@ public struct LeaveGameRequest
 
 public struct SubmitAnswerRequest
 {
-    public uint status { get; set; }
-    public double answerTime { get; set; }
+    public uint answerId { get; set; }
 }
 public struct GetGameResultsRequest
 { }

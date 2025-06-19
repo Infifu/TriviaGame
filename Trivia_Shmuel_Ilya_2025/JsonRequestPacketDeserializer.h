@@ -51,7 +51,6 @@ struct LeaveRoomRequest {};
 struct SubmitAnswerRequest
 {
 	unsigned int answerId;
-	double answerTime;
 };
 
 

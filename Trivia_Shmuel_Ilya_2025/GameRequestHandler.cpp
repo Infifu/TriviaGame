@@ -64,6 +64,7 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 
     SubmitAnswerResponse response{};
     response.status = 0;
+    response.correctAnswerID = m_game.getQuestionForUser(m_user).getCorrectAnswerId();
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
     return { buffer, nullptr };
