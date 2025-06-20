@@ -81,6 +81,7 @@ RequestResult GameRequestHandler::getGameResults(const RequestInfo& requestInfo)
     
     for (auto const& player : players)
     {
+        m_game.submitGameStatsToDB(player.second, player.first);
         PlayerResults res{player.first.getUsername(),player.second.correctAnswerCount,player.second.wrongAnswerCount,player.second.averageAnswerTime};
         resultsVector.push_back(res);
     }

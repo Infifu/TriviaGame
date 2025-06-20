@@ -36,6 +36,7 @@ void Game::submitAnswer(const LoggedUser& user, const unsigned answerId, const d
             if (answerId == it->second.currentQuestion.getCorrectAnswerId())
             {
                 it->second.correctAnswerCount++;
+                it->second.score += 5;
             }
             else
             {
@@ -71,19 +72,36 @@ void Game::removePlayer(const LoggedUser& user)
 
 void Game::submitGameStatsToDB(GameData data, LoggedUser loggedUser)
 {
+    std::string username = loggedUser.getUsername();
+
+    int gamesCount = m_database->getNumOfPlayerGames(username);
+    int existingCorrect = m_database->getNumOfCorrectAnswers(username);
+    int existingTotal = m_database->getNumOfTotalAnswers(username);
+    float existingAvgTime = m_database->getPlayerAverageAnswerTime(username);
+    int existingScore = m_database->getPlayerScore(username);
+
+    int newCorrect = existingCorrect + data.correctAnswerCount;
+    int newTotal = existingTotal + data.correctAnswerCount + data.wrongAnswerCount;
+    float newAverageTime = 0;
+
+    if (newTotal > 0)
+    {
+		newAverageTime = ((existingAvgTime * existingTotal) + (data.averageAnswerTime * (data.correctAnswerCount + data.wrongAnswerCount))) / newTotal; //ultra mega calculation
+    }
+
+    int newScore = existingScore + data.score;
+
     std::map<std::string, std::string> values;
-    int totalAnswer = data.correctAnswerCount + data.wrongAnswerCount;
-
-    int gamesCount = m_database->getNumOfPlayerGames(loggedUser.getUsername());
-
-    values["username"] = loggedUser.getUsername();
-    values["games_played"] = gamesCount + 1;
-    values["total_answers"] = std::to_string(totalAnswer);
-    values["correct_answers"] = std::to_string(data.correctAnswerCount);
-    values["average_time"] = std::to_string(data.averageAnswerTime);
+    values["username"] = username;
+    values["games_played"] = std::to_string(gamesCount + 1);
+    values["total_answers"] = std::to_string(newTotal);
+    values["correct_answers"] = std::to_string(newCorrect);
+    values["average_time"] = std::to_string(newAverageTime);
+    values["score"] = std::to_string(newScore);
 
     m_database->submitGameStatistics(values);
 }
+
 
 unsigned int Game::getgameId()
 {
