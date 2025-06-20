@@ -169,5 +169,13 @@ namespace Statistics.View
             mainMenu.Show();
             this.Hide();
         }
+
+        private void uploadQuestionClick(object sender, RoutedEventArgs e)
+        {
+            UploadQuestion uploadQuestion = new UploadQuestion();
+            uploadQuestion.Show();
+            this.Hide();
+        }
+
     }
 }

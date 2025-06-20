@@ -128,19 +128,25 @@ GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer
 
 SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(Buffer buffer)
 {
-    try
-    {
-        json j = json::from_cbor(buffer);
+    json j = json::from_cbor(buffer);
 
-        SubmitAnswerRequest request{};
-        request.answerId = j["answerId"];
-        request.answerTime = j["answerTime"];
+    SubmitAnswerRequest request{};
+    request.answerId = j["answerId"];
+    request.answerTime = j["answerTime"];
 
-        return request;
-    }
-    catch (nlohmann::json::type_error& e)
-    {
-        std::cerr << "JSON type error: " << e.what() << std::endl;
-        return SubmitAnswerRequest{};
-    }
+    return request;
+}
+
+UploadQuestionRequest JsonRequestPacketDeserializer::deserializeUploadQuestionRequest(Buffer buffer)
+{
+    json j = json::from_cbor(buffer);
+
+    UploadQuestionRequest request{};
+    request.question = j["question"];
+    request.answerOne = j["answerOne"];
+    request.answerTwo = j["answerTwo"];
+    request.answerThree = j["answerThree"];
+    request.answerFour = j["answerFour"];
+    request.correctAnswerID = j["correctAnswerID"];
+    return request;
 }

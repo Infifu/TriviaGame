@@ -7,6 +7,7 @@ using System.Text.Json;
 using PeterO.Cbor;
 
 using Buffer = System.Collections.Generic.List<byte>;
+using System.Runtime.CompilerServices;
 public enum ServerCodes
 {
     Login = 0,
@@ -25,7 +26,19 @@ public enum ServerCodes
     LeaveGameRequest = 40,
     GetQuestionRequest = 41,
     SubmitAnswerRequest = 42,
-    GetGameResultsRequest = 43
+    GetGameResultsRequest = 43,
+    uploadQuestionRequest = 66
+}
+
+
+public struct UploadQuestionRequest
+{
+    public string question { get; set; }
+    public string answerOne { get; set; }
+    public string answerTwo { get; set; }
+    public string answerThree { get; set; }
+    public string answerFour { get; set; }
+    public byte correctAnswerID { get; set; }
 }
 
 public struct SignOut
@@ -123,6 +136,7 @@ namespace TriviaClient.Services
             codes.Add(typeof(GetQuestionRequest), ServerCodes.GetQuestionRequest);
             codes.Add(typeof(SubmitAnswerRequest), ServerCodes.SubmitAnswerRequest);
             codes.Add(typeof(GetGameResultsRequest), ServerCodes.GetGameResultsRequest);
+            codes.Add(typeof(UploadQuestionRequest), ServerCodes.uploadQuestionRequest);
 
         }
 
