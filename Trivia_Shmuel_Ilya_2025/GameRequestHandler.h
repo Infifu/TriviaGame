@@ -27,5 +27,4 @@ private:
     RequestResult submitAnswer(const RequestInfo& requestInfo);
     RequestResult getGameResults(const RequestInfo& requestInfo);
     RequestResult leaveGame(const RequestInfo& requestInfo);
-    double secondsPassed();
 };

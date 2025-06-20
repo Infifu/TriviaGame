@@ -7,6 +7,7 @@ using System.Text.Json;
 using PeterO.Cbor;
 
 using Buffer = System.Collections.Generic.List<byte>;
+using System.Runtime.CompilerServices;
 public enum ServerCodes
 {
     Login = 0,
@@ -22,21 +23,36 @@ public enum ServerCodes
     StartGameReq = 28,
     GetRoomStateReq = 29,
     leaveRoomReq = 30,
-    LeaveGameResponse = 40,
-    GetQuestionResponse = 41,
-    SubmitAnswerResponse = 42,
-    GetGameResultsResponse = 43
+    LeaveGameRequest = 40,
+    GetQuestionRequest = 41,
+    SubmitAnswerRequest = 42,
+    GetGameResultsRequest = 43,
+    uploadQuestionRequest = 66
 }
 
-public struct CloseRoomStruct
-{}
 
+public struct UploadQuestionRequest
+{
+    public string question { get; set; }
+    public string answerOne { get; set; }
+    public string answerTwo { get; set; }
+    public string answerThree { get; set; }
+    public string answerFour { get; set; }
+    public byte correctAnswerID { get; set; }
+}
+
+public struct SignOut
+{ }
+public struct CloseRoomStruct
+{ }
 public struct StartGameStruct
-{}
+{ }
 public struct GetRoomStateStruct
-{}
+{ }
 public struct leaveRoomStruct
-{}
+{ }
+public struct GetQuestionRequest
+{ }
 
 public struct LoginRequest
 {
@@ -71,28 +87,24 @@ public struct GetStatsRequest
 };
 
 public struct GetTop3Request
-{
-    
-}
+{ }
 
 public struct GetRoomsRequest
-{
-
-}
+{ }
 public struct JoinRoomRequest
 {
     public byte RoomId { get; set; }
 }
-public struct LeaveGameResponse
-{}
+public struct LeaveGameRequest
+{ }
 
-public struct SubmitAnswerResponse
+public struct SubmitAnswerRequest
 {
-    public uint status { get; set; }
-    public double answerTime { get; set; }
+    public byte answerId { get; set; }
+    public int answerTime { get; set; }
 }
-public struct GetGameResultsResponse
-{}
+public struct GetGameResultsRequest
+{ }
 
 
 //we need an external libary for cbor serialization for json named Peter0.Cbor
@@ -104,6 +116,7 @@ namespace TriviaClient.Services
         public Serializer()
         {
             codes = new Dictionary<Type, ServerCodes>();
+            codes.Add(typeof(SignOut), ServerCodes.SignOut);
             codes.Add(typeof(CreateRoomRequest), ServerCodes.CreateRoom);
             codes.Add(typeof(GetPlayersInRoomRequest), ServerCodes.GetPlayersInRooms);
             codes.Add(typeof(LoginRequest), ServerCodes.Login);
@@ -119,10 +132,11 @@ namespace TriviaClient.Services
             codes.Add(typeof(GetRoomStateStruct), ServerCodes.GetRoomStateReq);
             codes.Add(typeof(leaveRoomStruct), ServerCodes.leaveRoomReq);
 
-            codes.Add(typeof(LeaveGameResponse), ServerCodes.LeaveGameResponse);
-            codes.Add(typeof(GetQuestionResponse), ServerCodes.GetQuestionResponse);
-            codes.Add(typeof(SubmitAnswerResponse), ServerCodes.SubmitAnswerResponse);
-            codes.Add(typeof(GetGameResultsResponse), ServerCodes.GetGameResultsResponse);
+            codes.Add(typeof(LeaveGameRequest), ServerCodes.LeaveGameRequest);
+            codes.Add(typeof(GetQuestionRequest), ServerCodes.GetQuestionRequest);
+            codes.Add(typeof(SubmitAnswerRequest), ServerCodes.SubmitAnswerRequest);
+            codes.Add(typeof(GetGameResultsRequest), ServerCodes.GetGameResultsRequest);
+            codes.Add(typeof(UploadQuestionRequest), ServerCodes.uploadQuestionRequest);
 
         }
 
@@ -134,6 +148,7 @@ namespace TriviaClient.Services
             byte[] jsonLength = BitConverter.GetBytes(jsonSerialized.Length);
 
             buffer.Add((byte)(codes[typeof(T)])); //add code to buffer
+
             buffer.AddRange(jsonLength);
             buffer.AddRange(jsonSerialized);
             return buffer;

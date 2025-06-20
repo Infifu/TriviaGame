@@ -7,6 +7,16 @@
 
 using json = nlohmann::json;
 
+struct UploadQuestionRequest
+{
+	std::string question;
+	std::string answerOne;
+	std::string answerTwo;
+	std::string answerThree;
+	std::string answerFour;
+	unsigned int correctAnswerID;
+};
+
 struct LoginRequest
 {
 	std::string username;
@@ -51,7 +61,8 @@ struct LeaveRoomRequest {};
 struct SubmitAnswerRequest
 {
 	unsigned int answerId;
-	double answerTime;
+	unsigned int answerTime;
+
 };
 
 
@@ -73,6 +84,8 @@ public:
 	static LeaveRoomRequest deserializeLeaveRoomRequest(Buffer);
 
 	static SubmitAnswerRequest deserializeSubmitAnswerRequest(Buffer buffer);
+
+	static UploadQuestionRequest deserializeUploadQuestionRequest(Buffer buffer);
 
 };
 

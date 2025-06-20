@@ -6,18 +6,22 @@
 #include "IDatabase.h"
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
+#include <regex>
 
 enum LoginStatus
 {
     LoginSuccess = 0,
     LoginUserNotExist = 1,
-    LoginWrongPassword = 2
+    LoginWrongPassword = 2,
+    AlreadyLoggedIn = 3
 };
 
 enum SignUpStatus
 {
     SignSuccess = 0,
-    SignUsernameIsTaken = 1
+    SignUsernameIsTaken = 1,
+    PasswordError = 2,
+	EmailError = 3
 };
 
 

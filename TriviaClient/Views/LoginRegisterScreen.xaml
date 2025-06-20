@@ -207,7 +207,7 @@
             <StackPanel x:Name="RegisterPanel"
                 Grid.Row="1"
                 Orientation="Vertical"
-                Margin="271,35,270,0" Visibility="Collapsed">
+                Margin="271,35,270,0" Visibility="Collapsed" d:IsHidden="True">
                 <Image Source="/Models/TriviaLogo.png" Height="196" Width="499"/>
 
                 <TextBlock Text="Trivia is the art of knowing a little about everything and everything about nothing"
@@ -325,6 +325,18 @@
                         Cursor="Hand"
                         MouseLeftButtonDown="btnSwitchToLogin_Click"/>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="ErrorBoxRegister"
+               Visibility="Collapsed"
+               Text="Registration error"
+               Foreground="#081F5C"
+               FontSize="12"
+               FontWeight="Medium"
+               FontFamily="Montserrat"
+               Margin="0,5,0,0"/>
+            </StackPanel>
+
+                
                 
                 
 
@@ -334,6 +346,7 @@
 
 
         </Grid>
+        
 
     </Border>
 </Window>

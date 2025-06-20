@@ -114,26 +114,57 @@
                 TextWrapping="Wrap"
                 TextAlignment="Center" Margin="272,172,272,122" Grid.Row="2"/>
             <TextBlock x:Name="FirstPlaceTextBlock"
-                Text="?"
+                Text=""
                 Foreground="#081F5C"
                 FontSize="20"
                 FontFamily="Montserrat"
                 TextWrapping="Wrap"
                 TextAlignment="Center" Margin="363,90,363,201" Grid.Row="1"/>
             <TextBlock x:Name="SecondPlaceTextBlock"
-                Text="?"
+                Text=""
                 Foreground="#081F5C"
                 FontSize="20"
                 FontFamily="Montserrat"
                 TextWrapping="Wrap"
                 TextAlignment="Center" Margin="206,151,520,140" Grid.Row="1"/>
             <TextBlock x:Name="ThirdPlaceTextBlock"
-                Text="?"
+                Text=""
                 Foreground="#081F5C"
                 FontSize="20"
                 FontFamily="Montserrat"
                 TextWrapping="Wrap"
                 TextAlignment="Center" Margin="514,200,212,90" Grid.Row="1"/>
+            <Rectangle x:Name="BlockingStatsRectangle" Visibility="Visible"
+                HorizontalAlignment="Left" Height="628" Margin="206,10,0,0" Grid.RowSpan="2" Grid.Row="1" VerticalAlignment="Top" Width="650" Fill="#FFBAD6E8"/>
+            <TextBlock x:Name="WaitingTextBlock" Visibility="Visible"
+                Text="Waiting for Results!"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="363,280,363,10" Grid.Row="1"/>
+            <Button x:Name="BackToMenuButton"
+                Content="← Menu" Width="100" Height="36" Visibility="Collapsed"
+                FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
+                BorderThickness="1" BorderBrush="#7096D1"
+                Background="#ddeeff" Foreground="#081F5C"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackToMenu_Click" Grid.RowSpan="2" Margin="50,15,0,0">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Border>
 </Window>

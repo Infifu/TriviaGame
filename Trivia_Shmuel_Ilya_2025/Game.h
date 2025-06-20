@@ -9,6 +9,8 @@ struct GameData
 	unsigned int correctAnswerCount;
 	unsigned int wrongAnswerCount;
 	unsigned int averageAnswerTime;
+	unsigned int currentQuestionID;
+	int score = 0;
 };
 
 class Game
@@ -25,5 +27,7 @@ public:
 	void removePlayer(const LoggedUser& user);
 	void submitGameStatsToDB(GameData data, LoggedUser user);
 	unsigned int getgameId();
+	bool isGameEnded();
+	std::map<LoggedUser, GameData> getPlayers();
 };
 

@@ -113,6 +113,10 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SignOut leaveGameRequest = new SignOut();
+            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+
             Application.Current.Shutdown();
         }
 
@@ -185,8 +189,12 @@ namespace TriviaClient.Views
                     }
                     else if (playerRes.status == 1)
                     {
-                        MessageBox.Show("Game Started!");
-                        BackToMenu_Click(null, null);
+                        is_loading = false;
+                        is_refreshing = false;
+
+                        GameScreen gamescreen = new GameScreen(playerRes.answerTimeOut);
+                        gamescreen.Show();
+                        this.Close();
                     }
                     else if (playerRes != null && playerRes.players != null)
                     {

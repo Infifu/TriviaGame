@@ -1,4 +1,5 @@
 #pragma once
+#include "IDatabase.h"
 #include "IRequestHandler.h"
 #include "LoggedUser.h"
 #include "RequestHandlerFactory.h"
@@ -13,6 +14,8 @@
 
 class RequestHandlerFactory;
 
+class IDatabase;
+
 class MenuRequestHandler : public IRequestHandler
 {
 private:
@@ -21,7 +24,9 @@ private:
 	JsonResponsePacketSerializer m_serializer;
 	JsonRequestPacketDeserializer m_deserializer;
 	RoomManager& m_manager;
+	IDatabase* m_database;
 
+	RequestResult uploadQuestion(RequestInfo);
 	RequestResult signout(RequestInfo);
 	RequestResult getRooms(RequestInfo);
 	RequestResult getPlayersInRoom(RequestInfo);
@@ -30,7 +35,7 @@ private:
 	RequestResult joinRoom(RequestInfo);
 	RequestResult createRoom(RequestInfo);
 public:
-	MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager);
+	MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager,IDatabase* database);
 	bool isRequestRelevant(const RequestInfo& requestInfo) override;
 	RequestResult handleRequest(const RequestInfo& requestInfo) override;
 

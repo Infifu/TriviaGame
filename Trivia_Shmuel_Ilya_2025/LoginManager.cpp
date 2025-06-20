@@ -6,14 +6,30 @@ SignUpStatus LoginManager::signup(const std::string& username, const std::string
 {
     SignUpStatus status;
 
-    if (m_database->doesUserExist(username)) 
+    std::regex passwordRegex(R"((?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\*\&\^\%\$\#\@\!]).{8,})");
+
+    std::regex emailRegex(R"(^[a-zA-Z0-9]+@[a-zA-Z0-9]+(\.com|\.co\.il|\.cyber\.org\.il)$)");
+
+    if (!std::regex_match(password, passwordRegex))
     {
-        status = SignUsernameIsTaken; // Username already exists
+        status = PasswordError;
+        return status;
+    }
+
+    if (!std::regex_match(email, emailRegex))
+    {
+        status = EmailError;
+        return status;
+    }
+
+    if (m_database->doesUserExist(username))
+    {
+        status = SignUsernameIsTaken;
         return status;
     }
 
     m_database->addNewUser(username, password, email);
-    status = SignSuccess; // Success
+    status = SignSuccess;
     return status;
 }
 
@@ -31,6 +47,15 @@ LoginStatus LoginManager::login(const std::string& username, const std::string& 
     {
         status = LoginWrongPassword; // Incorrect password
         return status;
+    }
+
+    for (auto const& user : m_loggedUsers)
+    {
+        if (user.getUsername() == username)
+        {
+            status = AlreadyLoggedIn;
+            return status;
+        }
     }
 
     m_loggedUsers.push_back(LoggedUser(username));
