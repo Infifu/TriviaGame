@@ -6,7 +6,11 @@ MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* h
 {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
-{
+{	
+	if (requestInfo.id == 3)
+	{
+		return true;
+	}
 	if (requestInfo.id > 26 || requestInfo.id < 21)
 	{
 		return false;

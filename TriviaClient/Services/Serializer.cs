@@ -28,6 +28,8 @@ public enum ServerCodes
     GetGameResultsRequest = 43
 }
 
+public struct SignOut
+{ }
 public struct CloseRoomStruct
 { }
 public struct StartGameStruct
@@ -101,6 +103,7 @@ namespace TriviaClient.Services
         public Serializer()
         {
             codes = new Dictionary<Type, ServerCodes>();
+            codes.Add(typeof(SignOut), ServerCodes.SignOut);
             codes.Add(typeof(CreateRoomRequest), ServerCodes.CreateRoom);
             codes.Add(typeof(GetPlayersInRoomRequest), ServerCodes.GetPlayersInRooms);
             codes.Add(typeof(LoginRequest), ServerCodes.Login);
