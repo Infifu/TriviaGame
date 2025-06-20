@@ -392,7 +392,7 @@ bool SqliteDataBase::updateQuery(const std::map<std::string, std::string> values
 	sqlite3_stmt* stmt;
 	char* errMessage = nullptr;
 
-	sqlStatement = "UPDATE statistics SET games_played = ?, total_answers = ? , correct_answer = ?, average_time = ?, score = ? WHERE username = ?";
+	sqlStatement = "UPDATE statistics SET games_played = ?, total_answers = ? , correct_answers = ?, average_time = ?, score = ? WHERE username = ?";
 
 	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
 	if (res != SQLITE_OK)
