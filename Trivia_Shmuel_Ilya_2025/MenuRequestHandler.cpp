@@ -72,8 +72,6 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
 	return reqRes;
 }
 
-
-
 RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
     JoinRoomRequest joinRoomReq = m_deserializer.deserializeJoinRoomRequest(info.buffer);
@@ -97,9 +95,16 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 
 		if (!found)
 		{
-			room->addUser(m_user);
-			joinRoomRes.status = 0;
-			nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
+			if (room->getMetadata().maxPlayers >= users.size() + 1)
+			{
+				room->addUser(m_user);
+				joinRoomRes.status = 0;
+				nextHandler = m_handlerFactory.createRoomMemberRequestHandler(m_user, *room);
+			}
+			else
+			{
+				joinRoomRes.status = 1;
+			}
 		}
 		else
 		{

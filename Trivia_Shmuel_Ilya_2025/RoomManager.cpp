@@ -34,6 +34,7 @@ std::vector<RoomData> RoomManager::getRooms()
     {
         if (roomPair.second.getMetadata().status == RoomStatus::LOBBY)
         {
+            if (roomPair.second.getMetadata().maxPlayers > roomPair.second.getAllUsers().size())
             datas.push_back(roomPair.second.getMetadata());
         }
         else if (roomPair.second.getMetadata().status == RoomStatus::FINISHED)
