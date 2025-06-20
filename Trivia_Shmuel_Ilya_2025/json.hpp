@@ -342,7 +342,8 @@ NLOHMANN_JSON_NAMESPACE_END
 // SPDX-License-Identifier: MIT
 
 /* Hedley - https://nemequ.github.io/hedley
- * Created by Evan Nemerson <evan@nemerson.com>
+ * 
+ d by Evan Nemerson <evan@nemerson.com>
  */
 
 #if !defined(JSON_HEDLEY_VERSION) || (JSON_HEDLEY_VERSION < 15)

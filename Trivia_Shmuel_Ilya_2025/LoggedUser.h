@@ -11,6 +11,7 @@ public:
     //TO DO:
     //need this for log out might delete later sir
     bool operator==(const LoggedUser& other) const { return getUsername() == other.getUsername(); }
+    bool operator<(const LoggedUser& other) const { return getUsername() < other.getUsername(); }
 private:
 
     std::string m_username;

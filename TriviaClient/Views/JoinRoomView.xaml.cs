@@ -93,6 +93,8 @@ namespace TriviaClient.Views
             loadRoomsTask = LoadRoomsLoopAsync();
 
             DataContext = this;
+
+            ServerListScrollViewer.Visibility = Visibility.Visible;
         }
 
 
@@ -111,6 +113,10 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SignOut leaveGameRequest = new SignOut();
+            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+
             Application.Current.Shutdown();
         }
 
@@ -141,7 +147,7 @@ namespace TriviaClient.Views
                     {
                         foreach (RoomData room in response.rooms)
                         {
-                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion,room.id));
+                            Rooms.Add(new Room(room.name, room.maxPlayers, room.timePerQuestion, room.id));
                         }
                     }
                 }
@@ -172,7 +178,7 @@ namespace TriviaClient.Views
             {
                 GetRoomStateStruct getRoomStatereq = new GetRoomStateStruct();
                 List<byte> playerReqBuffer = Client.Instance.serializer.SerializeResponse(getRoomStatereq);
-                if(is_refreshing)
+                if (is_refreshing)
                 {
                     ServerAnswer playerAnswer = Client.Instance.communicator.SendAndReceive(playerReqBuffer);
 
@@ -181,10 +187,14 @@ namespace TriviaClient.Views
                     {
                         RoomGotClosed();
                     }
-                    else if(playerRes.status == 1)
+                    else if (playerRes.status == 1)
                     {
-                        MessageBox.Show("Game Started!");
-                        BackToMenu_Click(null,null);
+                        is_loading = false;
+                        is_refreshing = false;
+
+                        GameScreen gamescreen = new GameScreen(playerRes.answerTimeOut);
+                        gamescreen.Show();
+                        this.Close();
                     }
                     else if (playerRes != null && playerRes.players != null)
                     {
@@ -211,6 +221,7 @@ namespace TriviaClient.Views
             {
                 try
                 {
+                    ServerListScrollViewer.Visibility = Visibility.Collapsed;
                     JoinRoomRequest req = new JoinRoomRequest { RoomId = (byte)selectedRoom.Id };
                     List<byte> buffer = Client.Instance.serializer.SerializeResponse(req);
                     ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
@@ -269,7 +280,7 @@ namespace TriviaClient.Views
             mainMenu.Show();
             this.Close();
         }
-         
+
 
         private async void BackToMenu_Click(object sender, RoutedEventArgs e)
         {

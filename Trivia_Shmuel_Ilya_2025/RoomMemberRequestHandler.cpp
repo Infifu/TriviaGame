@@ -23,6 +23,11 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
         bool hasGameBegun = status == 1 ? true : false;
         GetRoomStateResponse response{ static_cast<unsigned int>(status), hasGameBegun ,m_room.getAllUsers(),0,m_room.getMetadata().timePerQuestion }; //Fixed wrong response initalization
         Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+
+        if (status == RoomStatus::INGAME)
+        {
+            return { buffer, m_handlerFactory.createGameRequestHandler(m_user,m_room)};
+        }
         return { buffer, nullptr };
     }
     else

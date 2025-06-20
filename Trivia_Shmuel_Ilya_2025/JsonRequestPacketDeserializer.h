@@ -7,6 +7,16 @@
 
 using json = nlohmann::json;
 
+struct UploadQuestionRequest
+{
+	std::string question;
+	std::string answerOne;
+	std::string answerTwo;
+	std::string answerThree;
+	std::string answerFour;
+	unsigned int correctAnswerID;
+};
+
 struct LoginRequest
 {
 	std::string username;
@@ -48,12 +58,20 @@ struct StartGameRequest {};
 struct GetRoomStateRequest {};
 struct LeaveRoomRequest {};
 
+struct SubmitAnswerRequest
+{
+	unsigned int answerId;
+	unsigned int answerTime;
+
+};
+
+
 class JsonRequestPacketDeserializer
 {
 public:
 	//I removed the length and code extraction from your deserializer please note this
 	//and dont make it in new ones
-	GetStatsRequest deserializeGetStatsRequest(Buffer buffer);
+	static GetStatsRequest deserializeGetStatsRequest(Buffer buffer);
 	static LoginRequest deserializeLoginRequest(const Buffer buffer);
 	static SignupRequest deserializeSignupRequest(const Buffer& buffer);
 	static GetPlayersInRoomRequest deserializeGetPlayersRequest(const Buffer& buffer);
@@ -64,6 +82,10 @@ public:
 	static StartGameRequest deserializeStartGameRequest(Buffer);
 	static GetRoomStateRequest deserializeGetRoomStateRequest(Buffer);
 	static LeaveRoomRequest deserializeLeaveRoomRequest(Buffer);
+
+	static SubmitAnswerRequest deserializeSubmitAnswerRequest(Buffer buffer);
+
+	static UploadQuestionRequest deserializeUploadQuestionRequest(Buffer buffer);
 
 };
 

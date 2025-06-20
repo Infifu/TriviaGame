@@ -1,0 +1,301 @@
+﻿<Window x:Class="TriviaClient.Views.UploadQuestion"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriviaClient.Views"
+        mc:Ignorable="d"
+        Title="UploadQuestion" Height="720" Width="1000"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown">
+
+    <Border 
+        CornerRadius="50"
+        Background="#bad6e8"
+        BorderThickness="2.5">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#7096D1" Offset="0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="26*"/>
+                <ColumnDefinition Width="969*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="5"/>
+
+                </Grid.ColumnDefinitions>
+                <TextBlock Text=""
+                           Foreground="DarkBlue"
+                           FontSize="25"
+                           FontFamily="Montserrat"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="50,0,22,0" Height="30"/>
+                <Button x:Name="btnMinimize"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="-"
+                        Foreground="#7096D1"
+                        FontSize="25"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Click="btnMinimize_Click"
+                        Margin="841,1,56,-1" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform AngleY="-0.616"/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="0.156"/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+
+                <Button x:Name="btnClose"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Content="X"
+                        Foreground="#7096D1"
+                        FontSize="20"
+                        FontFamily="Montserrat"
+                        Cursor="Hand"
+                        Click="btnClose_Click"
+                        Margin="888,2,0,-2" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="-1"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+            </Grid>
+            <StackPanel x:Name="RegisterPanel"
+            Grid.Row="1"
+            Orientation="Vertical"
+            Margin="245,35,270,0" Grid.Column="1">
+                <Image Source="/Models/TriviaLogo.png" Height="196" Width="446"/>
+
+                <TextBlock
+        Foreground="#081F5C"
+        FontSize="20"
+        FontFamily="Montserrat"
+        HorizontalAlignment="Center"
+        TextWrapping="Wrap"
+        TextAlignment="Center"
+        Text="Upload your own question!"/>
+
+             <TextBlock Text="Question:"
+                   Foreground="#081F5C"
+                   FontSize="20"
+                   FontFamily="Montserrat"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   Margin="0,20,0,0"/>
+             <TextBox x:Name="QuestionTextBox"
+                 FontSize="13"
+                 FontWeight="Medium"
+                 FontFamily="Montserrat"
+                 Background="Transparent"
+                 Foreground="#081F5C"
+                 CaretBrush="#081F5C"
+                 BorderThickness="0,0,0,1"
+                 Height="30"
+                 VerticalContentAlignment="Center"
+                 Margin="0,5,0,0"/>
+
+                <Grid Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                        <TextBlock Text="Answer 1:"
+                       FontSize="20"
+                       FontFamily="Montserrat"
+                       Foreground="#081F5C"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+                     <TextBox x:Name="firstAnswerTextBlock"
+                         FontSize="13"
+                         FontWeight="Medium"
+                         FontFamily="Montserrat"
+                         Background="Transparent"
+                         Foreground="#081F5C"
+                         CaretBrush="#081F5C"
+                         BorderThickness="0,0,0,1"
+                         Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                        <TextBlock Text="Answer 2:"
+                       FontSize="20"
+                       FontFamily="Montserrat"
+                       Foreground="#081F5C"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+                        <TextBox x:Name="secondAnswerTextBlock"
+                     FontSize="13"
+                     FontWeight="Medium"
+                     FontFamily="Montserrat"
+                     Background="Transparent"
+                     Foreground="#081F5C"
+                     CaretBrush="#081F5C"
+                     BorderThickness="0,0,0,1"
+                     Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                        <TextBlock Text="Answer 3:"
+                       FontSize="20"
+                       FontFamily="Montserrat"
+                       Foreground="#081F5C"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+                        <TextBox x:Name="thirdAnswerTextBlock"
+                     FontSize="13"
+                     FontWeight="Medium"
+                     FontFamily="Montserrat"
+                     Background="Transparent"
+                     Foreground="#081F5C"
+                     CaretBrush="#081F5C"
+                     BorderThickness="0,0,0,1"
+                     Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                        <TextBlock Text="Answer 4:"
+                       FontSize="20"
+                       FontFamily="Montserrat"
+                       Foreground="#081F5C"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+                     <TextBox x:Name="fourthAnswerTextBlock"
+                     FontSize="13"
+                     FontWeight="Medium"
+                     FontFamily="Montserrat"
+                     Background="Transparent"
+                     Foreground="#081F5C"
+                     CaretBrush="#081F5C"
+                     BorderThickness="0,0,0,1"
+                     Height="30"/>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Correct answer:"
+               Foreground="#081F5C"
+               FontSize="20"
+               FontFamily="Montserrat"
+               HorizontalAlignment="Center"
+               TextWrapping="Wrap"
+               TextAlignment="Center"
+               Margin="0,16,0,0"/>
+
+                <TextBox x:Name="correctAnswerTextBox"
+                 FontSize="13"
+                 FontWeight="Medium"
+                 FontFamily="Montserrat"
+                 Background="Transparent"
+                 Foreground="#081F5C"
+                 BorderThickness="0,0,0,1"
+                 Height="30"
+                 VerticalContentAlignment="Center"
+                 Margin="0,5,0,0" 
+                 Width="248"/>
+
+                <Button x:Name="butnUpload"
+                BorderThickness="0"
+                Content="UPLOAD"
+                Foreground="White"
+                FontSize="12"
+                FontFamily="Montserrat"
+                Cursor="Hand"
+                Margin="0,26,0,0"
+                Click="btunUpload_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="#462AD8"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#28AEED"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Width="150" Height="40"
+                        CornerRadius="20"
+                        Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <TextBlock x:Name="errorBox"
+                    Text=""
+               Foreground="#081F5C"
+               FontSize="10"
+               FontFamily="Montserrat"
+               HorizontalAlignment="Center"
+               TextWrapping="Wrap"
+               TextAlignment="Center"
+               Margin="0,5,0,0"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Button Content="← Menu" Width="100" Height="36"
+                FontFamily="Montserrat" FontSize="14" FontWeight="Bold"
+                BorderThickness="1" BorderBrush="#7096D1"
+                Background="#ddeeff" Foreground="#081F5C"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="25,0,0,0" Click="BackToMenu_Click" Grid.Row="1" Grid.ColumnSpan="2">
+
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+
+        </Grid>
+
+    </Border>
+</Window>

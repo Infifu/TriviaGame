@@ -7,6 +7,44 @@
 
 using json = nlohmann::json; //so the class could be accessed just by json::foo keyword
 
+struct uploadQuestionResponse
+{
+	unsigned int status;
+};
+
+struct LeaveGameResponse
+{
+	unsigned int status;
+};
+
+struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::map<unsigned int, std::string> answers;
+};
+
+struct SubmitAnswerResponse
+{
+	unsigned int status;
+	unsigned int correctAnswerID;
+};
+
+struct PlayerResults
+{
+	std::string username;
+	unsigned int correctAnswerCount;
+	unsigned int wrongAnswerCount;
+	unsigned int averageAnswerTime;
+};
+
+struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+};
+
+
 struct LogoutResponse
 {
 	unsigned int status;
@@ -73,7 +111,7 @@ public:
 	static Buffer serializeResponse(const LoginResponse& loginResponse);
 	static Buffer serializeResponse(const SignupResponse& signupResponse);
 
-	//game
+	//menu
 	static Buffer serializeResponse(const LogoutResponse& response);
 	static Buffer serializeResponse(const GetRoomsResponse& response);
 	static Buffer serializeResponse(const GetPlayersInRoomResponse& response);
@@ -88,10 +126,14 @@ public:
 	static Buffer serializeResponse(const LeaveRoomResponse& response);
 	static Buffer serializeResponse(const GetRoomStateResponse& response);
 
+	//in game
+	static Buffer serializeResponse(const GetGameResultsResponse& response);
+	static Buffer serializeResponse(const SubmitAnswerResponse& response);
+	static Buffer serializeResponse(const GetQuestionResponse& response);
+	static Buffer serializeResponse(const LeaveGameResponse& response);
+
+	static Buffer serializeResponse(const uploadQuestionResponse& response);
 private:
 	static Buffer intToBytesVal(int number);
-
-
-
 };
 
