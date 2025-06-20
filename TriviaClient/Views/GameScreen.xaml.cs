@@ -126,8 +126,7 @@ namespace TriviaClient.Views
 
             if (questionsLeft == 0)
             {
-                //братанчик сделай ебучую хуйню которая считает авредж время и сунь сюда спс
-                EndGameScreen end = new EndGameScreen(totalQuestions,questionsRight,0);
+                EndGameScreen end = new EndGameScreen(totalQuestions,questionsRight);
                 end.Show();
                 this.Close();
             }

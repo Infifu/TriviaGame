@@ -106,7 +106,7 @@ public:
 	static Buffer serializeResponse(const LoginResponse& loginResponse);
 	static Buffer serializeResponse(const SignupResponse& signupResponse);
 
-	//game
+	//menu
 	static Buffer serializeResponse(const LogoutResponse& response);
 	static Buffer serializeResponse(const GetRoomsResponse& response);
 	static Buffer serializeResponse(const GetPlayersInRoomResponse& response);

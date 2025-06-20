@@ -209,6 +209,25 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 	return highScores;
 }
 
+bool SqliteDataBase::submitGameStatistics(std::map<std::string, std::string> values)
+{
+	updateQuery(values);
+}
+
+int SqliteDataBase::getPlayersGamesCount(std::string username)
+{
+	std::string gamesCount;
+	std::string sqlstmt = "SELECT games_played FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+
+	for (const auto& row : selected)
+	{
+		gamesCount = row.at("games_played");
+	}
+
+	return std::stoi(gamesCount);
+}
+
 
 DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::string argument)
 {
@@ -311,6 +330,40 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 	}
 
 	return true;
+}
+
+bool SqliteDataBase::updateQuery(const std::map<std::string, std::string> values)
+{
+	std::string sqlStatement;
+	sqlite3_stmt* stmt;
+	char* errMessage = nullptr;
+
+	sqlStatement = "UPDATE statistics SET games_played = ?, total_answers = ? , correct_answer = ?, average_time = ?, score = ? WHERE username = ?";
+
+	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
+	if (res != SQLITE_OK)
+	{
+		std::cerr << "prepare error: " << sqlite3_errmsg(m_database) << std::endl;
+		return false;
+	}
+
+	sqlite3_bind_int(stmt, 1, std::stoi(values.at("games_played")));
+	sqlite3_bind_int(stmt, 2, std::stoi(values.at("total_answers")));
+	sqlite3_bind_int(stmt, 3, std::stoi(values.at("correct_answers")));
+	sqlite3_bind_double(stmt, 4, std::stod(values.at("average_time")));
+	sqlite3_bind_int(stmt, 5, std::stoi(values.at("score")));
+	sqlite3_bind_text(stmt, 6, values.at("username").c_str(), -1, SQLITE_STATIC);
+
+	res = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (res != SQLITE_DONE) {
+		std::cerr << "SQL error: " << sqlite3_errmsg(m_database) << std::endl;
+		return false;
+	}
+
+	return true;
+
 }
 
 

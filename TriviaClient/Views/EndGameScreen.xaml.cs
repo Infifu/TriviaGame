@@ -43,21 +43,28 @@ namespace TriviaClient.Views
         private int questionsRight;
         private int averageAnswerTime;
 
-        public EndGameScreen(int totalQus,int RightQus,int averageAnswerTime)
+        public EndGameScreen(int totalQus,int RightQus)
         {
             this.totalQuestions = totalQus;
             this.questionsRight = RightQus;
-            this.averageAnswerTime = averageAnswerTime;
             InitializeComponent();                                                                  
 
             this.TotalQuestionsTextBlock.Text = "Total questions: " + this.totalQuestions.ToString();
             this.CorrectAnswersTextBlock.Text = "Total correct answers: " + this.questionsRight.ToString();
-            this.AverageAnswerTimeTextBlock.Text = "Average answer time: " + this.averageAnswerTime.ToString();
 
             GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
             List<Byte> buffer = Client.Instance.serializer.SerializeResponse(getGameResultsRequest);
             ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
             GetGameResultsAnswer resultRes = JsonSerializer.Deserialize<GetGameResultsAnswer>(serverAnswer.json);
+
+            foreach (var player in resultRes.results)
+            {
+                if (player.username == Client.Instance.nameofuser)
+                {
+                    this.averageAnswerTime = player.averageAnswerTime;
+                    this.AverageAnswerTimeTextBlock.Text = "Average answer time: " + player.averageAnswerTime.ToString();
+                }
+            }
 
             List<PlayerResults> SortedList = resultRes.results
                 .OrderByDescending(o => o.correctAnswerCount)
