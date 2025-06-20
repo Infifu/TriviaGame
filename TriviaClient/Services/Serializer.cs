@@ -29,15 +29,15 @@ public enum ServerCodes
 }
 
 public struct CloseRoomStruct
-{}
+{ }
 public struct StartGameStruct
-{}
+{ }
 public struct GetRoomStateStruct
-{}
+{ }
 public struct leaveRoomStruct
-{}
+{ }
 public struct GetQuestionRequest
-{}
+{ }
 
 public struct LoginRequest
 {
@@ -72,16 +72,16 @@ public struct GetStatsRequest
 };
 
 public struct GetTop3Request
-{}
+{ }
 
 public struct GetRoomsRequest
-{}
+{ }
 public struct JoinRoomRequest
 {
     public byte RoomId { get; set; }
 }
 public struct LeaveGameRequest
-{}
+{ }
 
 public struct SubmitAnswerRequest
 {

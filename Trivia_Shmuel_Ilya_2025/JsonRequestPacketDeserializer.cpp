@@ -128,11 +128,19 @@ GetStatsRequest JsonRequestPacketDeserializer::deserializeGetStatsRequest(Buffer
 
 SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(Buffer buffer)
 {
-    json j = json::from_cbor(buffer);
+    try
+    {
+        json j = json::from_cbor(buffer);
 
-    SubmitAnswerRequest request{};
-    request.answerId = j["answerId"];
-	request.answerTime = j["answerTime"];
+        SubmitAnswerRequest request{};
+        request.answerId = j["answerId"];
+        request.answerTime = j["answerTime"];
 
-    return request;
+        return request;
+    }
+    catch (nlohmann::json::type_error& e)
+    {
+        std::cerr << "JSON type error: " << e.what() << std::endl;
+        return SubmitAnswerRequest{};
+    }
 }

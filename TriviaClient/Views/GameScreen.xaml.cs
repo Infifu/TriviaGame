@@ -29,8 +29,7 @@ namespace TriviaClient.Views
 {
     public partial class GameScreen : Window
     {
-        private int totalQuestions = 10;
-        private int questionsLeft = 10;
+        private int questionsLeft = 20;
         private int questionsRight = 0;
         private int answerTimeoutSeconds;
         private DispatcherTimer countdownTimer;
@@ -42,7 +41,7 @@ namespace TriviaClient.Views
             InitializeComponent();
 
             answerTimeoutSeconds = timeoutSeconds;
-            questionsLeft = 10;
+            questionsLeft = 20;
             questionsRight = 0;
 
             StartTimer();
@@ -72,7 +71,7 @@ namespace TriviaClient.Views
             {
                 countdownTimer.Stop();
                 TimerText.Text = "Time's up!";
-                SubmitAnswer(-1); 
+                SubmitAnswer(-1);
             }
         }
 
@@ -141,7 +140,7 @@ namespace TriviaClient.Views
 
             if (questionsLeft == 0)
             {
-                EndGameScreen end = new EndGameScreen(totalQuestions,questionsRight);
+                EndGameScreen end = new EndGameScreen();
                 end.Show();
                 this.Close();
             }

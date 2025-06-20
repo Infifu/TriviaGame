@@ -134,6 +134,15 @@
                 FontFamily="Montserrat"
                 TextWrapping="Wrap"
                 TextAlignment="Center" Margin="514,200,212,90" Grid.Row="1"/>
+            <Rectangle x:Name="BlockingStatsRectangle" Visibility="Visible"
+                HorizontalAlignment="Left" Height="628" Margin="206,10,0,0" Grid.RowSpan="2" Grid.Row="1" VerticalAlignment="Top" Width="650" Fill="#FFBAD6E8"/>
+            <TextBlock x:Name="WaitingTextBlock" Visibility="Visible"
+                Text="Waiting for Results!"
+                Foreground="#081F5C"
+                FontSize="20"
+                FontFamily="Montserrat"
+                TextWrapping="Wrap"
+                TextAlignment="Center" Margin="363,280,363,10" Grid.Row="1"/>
         </Grid>
     </Border>
 </Window>

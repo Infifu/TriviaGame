@@ -74,7 +74,7 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 RequestResult GameRequestHandler::getGameResults(const RequestInfo& requestInfo)
 {
     GetGameResultsResponse response{};
-    response.status = 0;
+    response.status = m_game.isGameEnded() == true ? 0 : 1;
 
     std::vector<PlayerResults> resultsVector;
     std::map<LoggedUser, GameData> players = m_game.getPlayers();
