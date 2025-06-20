@@ -28,5 +28,8 @@ public:
 	virtual int getNumOfPlayerGames(std::string) = 0;
 	virtual int getPlayerScore(std::string) = 0;
 	virtual std::vector<std::string> getHighScores() = 0;
+
+	virtual bool submitGameStatistics(std::map<std::string, std::string> values) = 0 ;
+	virtual int getPlayersGamesCount(std::string username) = 0;
 };
 

@@ -29,6 +29,7 @@ namespace TriviaClient.Views
 {
     public partial class GameScreen : Window
     {
+        private int totalQuestions = 10;
         private int questionsLeft = 10;
         private int questionsRight = 0;
         private int answerTimeoutSeconds;
@@ -140,7 +141,7 @@ namespace TriviaClient.Views
 
             if (questionsLeft == 0)
             {
-                EndGameScreen end = new EndGameScreen();
+                EndGameScreen end = new EndGameScreen(totalQuestions,questionsRight);
                 end.Show();
                 this.Close();
             }

@@ -39,7 +39,6 @@ public struct leaveRoomStruct
 public struct GetQuestionRequest
 {}
 
-
 public struct LoginRequest
 {
     public string username { get; set; }
