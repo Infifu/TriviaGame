@@ -48,7 +48,7 @@ public struct CloseRoomStruct
 public struct StartGameStruct
 { }
 public struct GetRoomStateStruct
-{ }
+{}
 public struct leaveRoomStruct
 { }
 public struct GetQuestionRequest
