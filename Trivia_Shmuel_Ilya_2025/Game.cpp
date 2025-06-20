@@ -92,15 +92,14 @@ unsigned int Game::getgameId()
 
 bool Game::isGameEnded()
 {
-    bool end = true;
-    for (auto const& player : m_players)
+    for (const auto& player : m_players)
     {
-        if (player.second.currentQuestion.getQuestion() != "")
+        if (player.second.currentQuestionID < m_questions.size())
         {
-            end = false;
+            return false;
         }
     }
-    return end;
+    return true;
 }
 
 std::map<LoggedUser, GameData> Game::getPlayers()

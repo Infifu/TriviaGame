@@ -32,8 +32,6 @@ namespace TriviaClient.Views
     }
 
 
-
-
     /// <summary>
     /// Interaction logic for EndGameScreen.xaml
     /// </summary>
@@ -42,31 +40,34 @@ namespace TriviaClient.Views
         private int totalQuestions;
         private int questionsRight;
         private int averageAnswerTime;
+        List<PlayerResults> resultList;
 
-        public EndGameScreen(int totalQus,int RightQus)
+        public EndGameScreen()
         {
-            this.totalQuestions = totalQus;
-            this.questionsRight = RightQus;
-            InitializeComponent();                                                                  
+            this.totalQuestions = 0;
+            this.questionsRight = 0;
+            this.averageAnswerTime = 0;
+            InitializeComponent();
+            this.BlockingStatsRectangle.Visibility = Visibility.Visible;
+            this.WaitingTextBlock.Visibility = Visibility.Visible;
+
+            Loaded += EndGameScreen_Loaded;
+
+        }
+
+        private async void EndGameScreen_Loaded(object sender, RoutedEventArgs e)
+        {
+            await EndGameCheck();
+
+            this.BlockingStatsRectangle.Visibility = Visibility.Collapsed;
+            this.WaitingTextBlock.Visibility = Visibility.Collapsed;
 
             this.TotalQuestionsTextBlock.Text = "Total questions: " + this.totalQuestions.ToString();
             this.CorrectAnswersTextBlock.Text = "Total correct answers: " + this.questionsRight.ToString();
+            this.AverageAnswerTimeTextBlock.Text = "Average answer time: " + this.averageAnswerTime.ToString();
 
-            GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
-            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(getGameResultsRequest);
-            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
-            GetGameResultsAnswer resultRes = JsonSerializer.Deserialize<GetGameResultsAnswer>(serverAnswer.json);
 
-            foreach (var player in resultRes.results)
-            {
-                if (player.username == Client.Instance.nameofuser)
-                {
-                    this.averageAnswerTime = player.averageAnswerTime;
-                    this.AverageAnswerTimeTextBlock.Text = "Average answer time: " + player.averageAnswerTime.ToString();
-                }
-            }
-
-            List<PlayerResults> SortedList = resultRes.results
+            List<PlayerResults> SortedList = resultList
                 .OrderByDescending(o => o.correctAnswerCount)
                 .ToList();
 
@@ -78,7 +79,6 @@ namespace TriviaClient.Views
 
             if (SortedList.Count > 2)
                 this.ThirdPlaceTextBlock.Text = SortedList[2].username;
-
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -99,6 +99,31 @@ namespace TriviaClient.Views
             Application.Current.Shutdown();
         }
 
+        private async Task EndGameCheck()
+        {
+            while (true)
+            {
+                GetGameResultsRequest getGameResultsRequest = new GetGameResultsRequest();
+                List<Byte> buffer = Client.Instance.serializer.SerializeResponse(getGameResultsRequest);
+                ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+                GetGameResultsAnswer resultRes = JsonSerializer.Deserialize<GetGameResultsAnswer>(serverAnswer.json);
 
+                if (resultRes.status == 0)
+                {
+                    foreach (var player in resultRes.results)
+                    {
+                        if (player.username == Client.Instance.nameofuser)
+                        {
+                            this.averageAnswerTime = player.averageAnswerTime;
+                            this.totalQuestions = player.correctAnswerCount + player.wrongAnswerCount;
+                            this.questionsRight = player.correctAnswerCount;
+                            this.resultList = resultRes.results;
+                        }
+                    }
+                    break;
+                }
+                await Task.Delay(3000);
+            }
+        }
     }
 }
