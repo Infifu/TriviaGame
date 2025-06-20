@@ -117,8 +117,8 @@ namespace TriviaClient.Views
                 }
                 else
                 {
-                    ErrorBox.Visibility = Visibility.Visible;
-                    ErrorBox.Text = "Register error";
+                    ErrorBoxRegister.Visibility = Visibility.Visible;
+                    ErrorBoxRegister.Text = "Error during registration";
                 }
             }
         }
