@@ -58,7 +58,7 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 {
     SubmitAnswerRequest request = JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(requestInfo.buffer);
 
-    double seconds = secondsPassed();
+    double seconds = request.answerTime;
 
     SubmitAnswerResponse response{};
     response.status = 0;
@@ -86,15 +86,4 @@ RequestResult GameRequestHandler::leaveGame(const RequestInfo& requestInfo)
     LeaveGameResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, m_handlerFactory.createMenuRequestHandler(m_user) };
-}
-
-double GameRequestHandler::secondsPassed()
-{
-    static std::clock_t lastTime = std::clock();
-    std::clock_t currentTime = std::clock();
-
-    double elapsed = static_cast<double>(currentTime - lastTime) / CLOCKS_PER_SEC;
-    lastTime = currentTime;
-
-    return elapsed;
 }

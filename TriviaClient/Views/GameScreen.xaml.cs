@@ -34,6 +34,7 @@ namespace TriviaClient.Views
         private int answerTimeoutSeconds;
         private DispatcherTimer countdownTimer;
         private int secondsLeft;
+        private DateTime questionStartTime;
 
         public GameScreen(int timeoutSeconds)
         {
@@ -70,13 +71,14 @@ namespace TriviaClient.Views
             {
                 countdownTimer.Stop();
                 TimerText.Text = "Time's up!";
-                SubmitAnswer(2); 
+                SubmitAnswer(-1); 
             }
         }
 
         private void LoadNextQuestion()
         {
             StartTimer();
+            questionStartTime = DateTime.Now;
 
             GetQuestionRequest questionReq = new GetQuestionRequest();
             List<byte> buffer = Client.Instance.serializer.SerializeResponse(questionReq);
@@ -107,8 +109,21 @@ namespace TriviaClient.Views
 
         private void SubmitAnswer(int selectedAnswerId)
         {
+            int timeTaken;
+
+            if (selectedAnswerId == -1)
+            {
+                timeTaken = answerTimeoutSeconds;
+            }
+            else
+            {
+                timeTaken = (int)(DateTime.Now - questionStartTime).TotalSeconds;
+            }
+
             SubmitAnswerRequest answerReq = new SubmitAnswerRequest();
-            answerReq.answerId = (byte)selectedAnswerId;
+            answerReq.answerId = (byte)(selectedAnswerId);
+            answerReq.answerTime = timeTaken;
+
             List<byte> buffer = Client.Instance.serializer.SerializeResponse(answerReq);
             ServerAnswer answer = Client.Instance.communicator.SendAndReceive(buffer);
 

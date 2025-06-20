@@ -12,14 +12,68 @@ SqliteDataBase::~SqliteDataBase()
 
 bool SqliteDataBase::open()
 {
-	//TO DO
-	//check if the file exists, create the database
 	int res = sqlite3_open("TriviaDB.db", &m_database);
-
 	if (res != SQLITE_OK)
 	{
 		std::cerr << "Failed to open database: " << sqlite3_errmsg(m_database) << std::endl;
 		sqlite3_close(m_database);
+		return false;
+	}
+	return createTables();
+}
+
+bool SqliteDataBase::createTables()
+{
+	const char* createUsers = R"(
+        CREATE TABLE IF NOT EXISTS users (
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            PRIMARY KEY(password)
+        );
+    )";
+
+	const char* createStats = R"(
+        CREATE TABLE IF NOT EXISTS statistics (
+            username TEXT NOT NULL UNIQUE,
+            games_played INTEGER,
+            total_answers INTEGER,
+            correct_answers INTEGER,
+            average_time REAL,
+            score INTEGER,
+            FOREIGN KEY(username) REFERENCES users(username)
+        );
+    )";
+
+	const char* createQuestions = R"(
+        CREATE TABLE IF NOT EXISTS questions (
+            question TEXT NOT NULL,
+            answer0 TEXT NOT NULL,
+            answer1 TEXT NOT NULL,
+            answer2 TEXT NOT NULL,
+            answer3 TEXT NOT NULL,
+            correct_answer_id INTEGER NOT NULL,
+            id INTEGER PRIMARY KEY AUTOINCREMENT
+        );
+    )";
+
+	char* errMsg = nullptr;
+	if (sqlite3_exec(m_database, createUsers, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create users table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		return false;
+	}
+	if (sqlite3_exec(m_database, createStats, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create statistics table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		return false;
+	}
+	if (sqlite3_exec(m_database, createQuestions, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create questions table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
 		return false;
 	}
 	return true;

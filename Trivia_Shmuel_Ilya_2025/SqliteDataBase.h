@@ -16,6 +16,7 @@ public:
 	SqliteDataBase();
 	~SqliteDataBase();
 	bool open() override;
+	bool createTables();
 	bool close() override;
 
 	bool doesUserExist(const std::string username) override ;

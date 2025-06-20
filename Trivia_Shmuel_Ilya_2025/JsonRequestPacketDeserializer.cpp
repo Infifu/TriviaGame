@@ -132,6 +132,7 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 
     SubmitAnswerRequest request{};
     request.answerId = j["answerId"];
+	request.answerTime = j["answerTime"];
 
     return request;
 }
