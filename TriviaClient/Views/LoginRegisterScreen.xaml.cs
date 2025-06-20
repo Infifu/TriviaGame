@@ -20,7 +20,6 @@ namespace TriviaClient.Views
     /// </summary>
     public partial class LoginRegisterScreen : Window
     {
-
         public LoginRegisterScreen()
         {
             InitializeComponent();

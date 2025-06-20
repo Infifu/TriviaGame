@@ -48,6 +48,8 @@ namespace TriviaClient.Views
             this.questionsRight = 0;
             this.averageAnswerTime = 0;
             InitializeComponent();
+            this.btnClose.Visibility = Visibility.Collapsed;
+            this.btnMinimize.Visibility = Visibility.Collapsed;
             this.BackToMenuButton.Visibility = Visibility.Collapsed;
             this.BlockingStatsRectangle.Visibility = Visibility.Visible;
             this.WaitingTextBlock.Visibility = Visibility.Visible;
@@ -63,6 +65,8 @@ namespace TriviaClient.Views
             this.BlockingStatsRectangle.Visibility = Visibility.Collapsed;
             this.WaitingTextBlock.Visibility = Visibility.Collapsed;
             this.BackToMenuButton.Visibility = Visibility.Visible;
+            this.btnClose.Visibility = Visibility.Visible;
+            this.btnMinimize.Visibility = Visibility.Visible;
 
 
             this.TotalQuestionsTextBlock.Text = "Total questions: " + this.totalQuestions.ToString();
@@ -99,6 +103,10 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SignOut leaveGameRequest = new SignOut();
+            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+
             Application.Current.Shutdown();
         }
 
