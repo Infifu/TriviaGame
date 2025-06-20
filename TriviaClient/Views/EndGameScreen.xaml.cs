@@ -48,6 +48,7 @@ namespace TriviaClient.Views
             this.questionsRight = 0;
             this.averageAnswerTime = 0;
             InitializeComponent();
+            this.BackToMenuButton.Visibility = Visibility.Collapsed;
             this.BlockingStatsRectangle.Visibility = Visibility.Visible;
             this.WaitingTextBlock.Visibility = Visibility.Visible;
 
@@ -61,6 +62,8 @@ namespace TriviaClient.Views
 
             this.BlockingStatsRectangle.Visibility = Visibility.Collapsed;
             this.WaitingTextBlock.Visibility = Visibility.Collapsed;
+            this.BackToMenuButton.Visibility = Visibility.Visible;
+
 
             this.TotalQuestionsTextBlock.Text = "Total questions: " + this.totalQuestions.ToString();
             this.CorrectAnswersTextBlock.Text = "Total correct answers: " + this.questionsRight.ToString();
@@ -98,6 +101,14 @@ namespace TriviaClient.Views
         {
             Application.Current.Shutdown();
         }
+
+        private void BackToMenu_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Show();
+            this.Close();
+        }
+
 
         private async Task EndGameCheck()
         {

@@ -88,6 +88,11 @@ RequestResult GameRequestHandler::getGameResults(const RequestInfo& requestInfo)
     response.results = resultsVector;
 
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+    
+    if (m_game.isGameEnded())
+    {
+        return { buffer, m_handlerFactory.createMenuRequestHandler(m_user)};
+    }
     return { buffer, nullptr };
 }
 

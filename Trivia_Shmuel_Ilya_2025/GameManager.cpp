@@ -18,6 +18,7 @@ Game& GameManager::createGame(Room room)
         return it->second;
     }
 
+    room.setStatus(RoomStatus::FINISHED);
     return m_games.insert({ room.getMetadata().id, Game(questions, players, room.getMetadata().id, m_database) }).first->second;
 }
 
