@@ -49,6 +49,15 @@ LoginStatus LoginManager::login(const std::string& username, const std::string& 
         return status;
     }
 
+    for (auto const& user : m_loggedUsers)
+    {
+        if (user.getUsername() == username)
+        {
+            status = AlreadyLoggedIn;
+            return status;
+        }
+    }
+
     m_loggedUsers.push_back(LoggedUser(username));
     status = LoginSuccess; // Success
     return status;

@@ -12,7 +12,8 @@ enum LoginStatus
 {
     LoginSuccess = 0,
     LoginUserNotExist = 1,
-    LoginWrongPassword = 2
+    LoginWrongPassword = 2,
+    AlreadyLoggedIn = 3
 };
 
 enum SignUpStatus

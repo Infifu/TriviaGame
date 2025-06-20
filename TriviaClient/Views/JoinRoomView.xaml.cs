@@ -113,6 +113,10 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SignOut leaveGameRequest = new SignOut();
+            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+
             Application.Current.Shutdown();
         }
 
