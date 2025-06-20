@@ -52,7 +52,7 @@ void Game::submitAnswer(const LoggedUser& user, const unsigned answerId, const d
             it->second.currentQuestionID++;
             break;
         }
-    }
+    }                                    
 }
 
 
@@ -66,10 +66,39 @@ void Game::removePlayer(const LoggedUser& user)
 
 void Game::submitGameStatsToDB(GameData data, LoggedUser loggedUser)
 {
-    //m_database->submitGameStatistics(data, loggedUser);
+    std::map<std::string, std::string> values;
+    int totalAnswer = data.correctAnswerCount + data.wrongAnswerCount;
+
+    int gamesCount = m_database->getNumOfPlayerGames(loggedUser.getUsername());
+
+    values["username"] = loggedUser.getUsername();
+    values["games_played"] = gamesCount + 1;
+    values["total_answers"] = std::to_string(totalAnswer);
+    values["correct_answers"] = std::to_string(data.correctAnswerCount);
+    values["average_time"] = std::to_string(data.averageAnswerTime);
+
+    m_database->submitGameStatistics(values);
 }
 
 unsigned int Game::getgameId()
 {
     return m_gameId;
+}
+
+bool Game::isGameEnded()
+{
+    bool end = true;
+    for (auto const& player : m_players)
+    {
+        if (player.second.currentQuestion.getQuestion() != "")
+        {
+            end = false;
+        }
+    }
+    return end;
+}
+
+std::map<LoggedUser, GameData> Game::getPlayers()
+{
+    return m_players;
 }
