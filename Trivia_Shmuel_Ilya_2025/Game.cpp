@@ -27,14 +27,11 @@ Question& Game::getQuestionForUser(const LoggedUser& user)
 
 void Game::submitAnswer(const LoggedUser& user, const unsigned answerId, const double questionTime)
 {
-    int questionsAmount = 0;
-
     for (auto it = this->m_players.begin(); it != this->m_players.end(); ++it)
     {
         if (it->first.getUsername() == user.getUsername())
         {
-            questionsAmount += it->second.wrongAnswerCount;
-            questionsAmount += it->second.correctAnswerCount;
+            int questionsAmount = it->second.correctAnswerCount + it->second.wrongAnswerCount;
 
             if (answerId == it->second.currentQuestion.getCorrectAnswerId())
             {
@@ -45,15 +42,23 @@ void Game::submitAnswer(const LoggedUser& user, const unsigned answerId, const d
                 it->second.wrongAnswerCount++;
             }
 
-            it->second.averageAnswerTime *= questionsAmount;
-            it->second.averageAnswerTime += questionTime;
-            it->second.averageAnswerTime /= questionsAmount + 1;
+            if (questionsAmount == 0)
+            {
+                it->second.averageAnswerTime = questionTime;
+            }
+            else
+            {
+                double totalTime = it->second.averageAnswerTime * questionsAmount;
+                totalTime += questionTime;
+                it->second.averageAnswerTime = totalTime / (questionsAmount + 1);
+            }
 
             it->second.currentQuestionID++;
             break;
         }
-    }                                    
+    }
 }
+
 
 
 
