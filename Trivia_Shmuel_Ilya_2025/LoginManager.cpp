@@ -12,13 +12,13 @@ SignUpStatus LoginManager::signup(const std::string& username, const std::string
 
     if (!std::regex_match(password, passwordRegex))
     {
-        status = Signfail;
+        status = PasswordError;
         return status;
     }
 
     if (!std::regex_match(email, emailRegex))
     {
-        status = Signfail;
+        status = EmailError;
         return status;
     }
 
