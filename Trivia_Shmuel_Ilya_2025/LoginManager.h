@@ -6,6 +6,7 @@
 #include "IDatabase.h"
 #include "SqliteDataBase.h"
 #include "LoggedUser.h"
+#include <regex>
 
 enum LoginStatus
 {
@@ -17,7 +18,8 @@ enum LoginStatus
 enum SignUpStatus
 {
     SignSuccess = 0,
-    SignUsernameIsTaken = 1
+    SignUsernameIsTaken = 1,
+    Signfail = 2
 };
 
 
