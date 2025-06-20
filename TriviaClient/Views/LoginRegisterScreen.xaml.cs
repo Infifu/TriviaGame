@@ -20,7 +20,6 @@ namespace TriviaClient.Views
     /// </summary>
     public partial class LoginRegisterScreen : Window
     {
-
         public LoginRegisterScreen()
         {
             InitializeComponent();
@@ -97,8 +96,8 @@ namespace TriviaClient.Views
         {
             if (txtUsernameInReg.Text == "" || txtPAsswordInReg.Password == "" || txtEmailInReg.Text == "")
             {
-                ErrorBox.Visibility = Visibility.Visible;
-                ErrorBox.Text = "Please fill all the fields";
+                ErrorBoxRegister.Visibility = Visibility.Visible;
+                ErrorBoxRegister.Text = "Please fill all the fields";
             }
             else
             {
@@ -115,10 +114,26 @@ namespace TriviaClient.Views
                     LoginPanel.Visibility = Visibility.Visible;
                     RegisterPanel.Visibility = Visibility.Collapsed;
                 }
+                else if (answer.code == 1)
+                {
+                    ErrorBoxRegister.Visibility = Visibility.Visible;
+                    ErrorBoxRegister.Text = "This username is already taken.";
+                }
+                else if (answer.code == 2)
+                {
+                    ErrorBoxRegister.Visibility = Visibility.Visible;
+                    ErrorBoxRegister.Text = "Password doesn't match the requirements.";
+                }
+                else if (answer.code == 3)
+                {
+                    ErrorBoxRegister.Visibility = Visibility.Visible;
+                    ErrorBoxRegister.Text =
+                        "Email must be a valid format (e.g., name@domain.com or name@cyber.org.il)";
+                }
                 else
                 {
-                    ErrorBox.Visibility = Visibility.Visible;
-                    ErrorBox.Text = "Register error";
+                    ErrorBoxRegister.Visibility = Visibility.Visible;
+                    ErrorBoxRegister.Text = "Error during registration";
                 }
             }
         }

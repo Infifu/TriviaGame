@@ -69,15 +69,27 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			Buffer msgLength(4);
 
 			int recieved = recv(clientSocket, reinterpret_cast<char*>(&code), 1, 0); //recieve the code
+			if (recieved == 0)
+			{
+				std::cout << "Client disconnected" << std::endl;
+				break;
+			}
 			if (recieved < 1)
 			{
-				throw std::exception("Recieve failed");
+				std::cerr << "Receive failed " << WSAGetLastError() << std::endl;
+				break;
 			}
 
 			recieved = recv(clientSocket, reinterpret_cast<char*>(&msgLength[0]), 4, 0); //recieve the length
+			if (recieved == 0)
+			{
+				std::cout << "Client disconnected" << std::endl;
+				break;
+			}
 			if (recieved < 4)
 			{
-				throw std::exception("Recieve failed");
+				std::cerr << "Receive failed " << WSAGetLastError() << std::endl;
+				break;
 			}
 
 			int length = 0;
@@ -87,9 +99,15 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			if (length > 0)
 			{
 				recieved = recv(clientSocket, reinterpret_cast<char*>(&buffer[0]), length, 0);
+				if (recieved == 0)
+				{
+					std::cout << "Client disconnected" << std::endl;
+					break;
+				}
 				if (recieved < length)
 				{
-					throw std::exception("Failed to receive full message body");
+					std::cout << "Receive failed" << std::endl;
+					break;
 				}
 			}
 
@@ -113,7 +131,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			}
 
 			send(clientSocket, reinterpret_cast<const char*>(requestResult.response.data()), requestResult.response.size(), 0);
-
 		}
 	}
 	catch (const std::exception&)
@@ -123,6 +140,14 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 		Buffer msg = JsonResponsePacketSerializer::serializeResponse(error);
 		send(clientSocket, reinterpret_cast<const char*>(msg.data()), msg.size(), 0);
 		std::cout << "Error has occured" << std::endl;
+	}
+
+	closesocket(clientSocket);
+	auto it = m_clients.find(clientSocket);
+	if (it != m_clients.end())
+	{
+		delete it->second;
+		m_clients.erase(it);
 	}
 }
 

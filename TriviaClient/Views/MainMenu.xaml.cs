@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TriviaClient.Services;
+using WPFTEST.Services;
 
 namespace TriviaClient.Views
 {
@@ -40,6 +43,10 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SignOut leaveGameRequest = new SignOut();
+            List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+            ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+
             Application.Current.Shutdown();
         }
 

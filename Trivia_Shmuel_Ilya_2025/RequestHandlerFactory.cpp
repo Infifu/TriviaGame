@@ -1,10 +1,8 @@
 #include "RequestHandlerFactory.h"
 
 
-RequestHandlerFactory::RequestHandlerFactory(IDatabase* database): _database(database), _roomManager(), _statisticsManager(database), _loginManager(database)
-{
-
-}
+RequestHandlerFactory::RequestHandlerFactory(IDatabase* database): _database(database), _roomManager(), _statisticsManager(database), _loginManager(database),_gameManager(database)
+{}
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
@@ -14,7 +12,7 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser user)
 {
-	MenuRequestHandler* menuRequestHandler = new MenuRequestHandler(user, this, &_roomManager);
+	MenuRequestHandler* menuRequestHandler = new MenuRequestHandler(user, this, &_roomManager,_database);
 	return menuRequestHandler;
 }
 
@@ -32,11 +30,11 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
 {
 	return new RoomMemberRequestHandler(user, room, _roomManager, *this);
 }
-
+                      
 
 GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser user, Room& room)
 {
-	Game game = _gameManager.createGame(room);
+	Game& game = _gameManager.createGame(room);
 	return new GameRequestHandler(user, game, _gameManager, *this);
 }
 

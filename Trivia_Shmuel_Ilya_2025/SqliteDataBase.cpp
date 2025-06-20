@@ -12,14 +12,68 @@ SqliteDataBase::~SqliteDataBase()
 
 bool SqliteDataBase::open()
 {
-	//TO DO
-	//check if the file exists, create the database
 	int res = sqlite3_open("TriviaDB.db", &m_database);
-
 	if (res != SQLITE_OK)
 	{
 		std::cerr << "Failed to open database: " << sqlite3_errmsg(m_database) << std::endl;
 		sqlite3_close(m_database);
+		return false;
+	}
+	return createTables();
+}
+
+bool SqliteDataBase::createTables()
+{
+	const char* createUsers = R"(
+        CREATE TABLE IF NOT EXISTS users (
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            PRIMARY KEY(password)
+        );
+    )";
+
+	const char* createStats = R"(
+        CREATE TABLE IF NOT EXISTS statistics (
+            username TEXT NOT NULL UNIQUE,
+            games_played INTEGER,
+            total_answers INTEGER,
+            correct_answers INTEGER,
+            average_time REAL,
+            score INTEGER,
+            FOREIGN KEY(username) REFERENCES users(username)
+        );
+    )";
+
+	const char* createQuestions = R"(
+        CREATE TABLE IF NOT EXISTS questions (
+            question TEXT NOT NULL,
+            answer0 TEXT NOT NULL,
+            answer1 TEXT NOT NULL,
+            answer2 TEXT NOT NULL,
+            answer3 TEXT NOT NULL,
+            correct_answer_id INTEGER NOT NULL,
+            id INTEGER PRIMARY KEY AUTOINCREMENT
+        );
+    )";
+
+	char* errMsg = nullptr;
+	if (sqlite3_exec(m_database, createUsers, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create users table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		return false;
+	}
+	if (sqlite3_exec(m_database, createStats, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create statistics table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		return false;
+	}
+	if (sqlite3_exec(m_database, createQuestions, nullptr, nullptr, &errMsg) != SQLITE_OK)
+	{
+		std::cerr << "Failed to create questions table: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
 		return false;
 	}
 	return true;
@@ -136,7 +190,7 @@ std::vector<Question> SqliteDataBase::getQuestions(int amount)
 		possibleAnswers.push_back(row.at("answer1"));
 		possibleAnswers.push_back(row.at("answer2"));
 		possibleAnswers.push_back(row.at("answer3"));
-		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_Index"))));
+		questions.push_back(Question(row.at("question"),possibleAnswers,std::stoi(row.at("correct_answer_id"))));
 	}
 	return questions;
 }
@@ -147,7 +201,6 @@ float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
 	DBvector selected = selectQuery(sqlstmt, username);
 	for (auto const& row : selected)
 	{
-		std::cout << row.at("average_time") << std::endl;
 		return std::stof(row.at("average_time"));
 	}
 }
@@ -202,11 +255,34 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 	{
 		std::string name = row.at("username");
 		std::string score = row.at("score");
-		std::cout << name << " " << score << std::endl;
 		highScores.push_back(name + ": " + score);
 	}
 
 	return highScores;
+}
+
+bool SqliteDataBase::submitGameStatistics(std::map<std::string, std::string> values)
+{
+	return updateQuery(values);
+}
+
+int SqliteDataBase::getPlayersGamesCount(std::string username)
+{
+	std::string gamesCount;
+	std::string sqlstmt = "SELECT games_played FROM statistics WHERE username = ?";
+	DBvector selected = selectQuery(sqlstmt, username);
+
+	for (const auto& row : selected)
+	{
+		gamesCount = row.at("games_played");
+	}
+
+	return std::stoi(gamesCount);
+}
+
+bool SqliteDataBase::uploadQuestion(std::map<std::string, std::string> values)
+{ 
+	return insertQuery("questions", values);
 }
 
 
@@ -272,6 +348,8 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 		sqlStatement = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
 	else if (table == "statistics")
 		sqlStatement = "INSERT INTO statistics (username, games_played, total_answers, correct_answers, average_time, score) VALUES (?,?,?,?,?,?)";
+	else if (table == "questions")
+		sqlStatement = "INSERT INTO questions(question, answer0, answer1, answer2, answer3, correct_answer_id) VALUES (? , ? , ? , ? , ? , ? )";
 	else
 	{
 		std::cerr << "error: Invalid table name" << std::endl;
@@ -300,6 +378,15 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 		sqlite3_bind_text(stmt, 2, values.at("password").c_str(), -1, SQLITE_STATIC);
 		sqlite3_bind_text(stmt, 3, values.at("email").c_str(), -1, SQLITE_STATIC);
 	}
+	else if (table == "questions")
+	{
+		sqlite3_bind_text(stmt, 1, values.at("question").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 2, values.at("answerOne").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 3, values.at("answerTwo").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 4, values.at("answerThree").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 5, values.at("answerFour").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_int(stmt, 6, std::stoi(values.at("correctAnswerID")));
+	}
 
 	res = sqlite3_step(stmt);
 	sqlite3_finalize(stmt);
@@ -311,6 +398,40 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 	}
 
 	return true;
+}
+
+bool SqliteDataBase::updateQuery(const std::map<std::string, std::string> values)
+{
+	std::string sqlStatement;
+	sqlite3_stmt* stmt;
+	char* errMessage = nullptr;
+
+	sqlStatement = "UPDATE statistics SET games_played = ?, total_answers = ? , correct_answers = ?, average_time = ?, score = ? WHERE username = ?";
+
+	int res = sqlite3_prepare_v2(m_database, sqlStatement.c_str(), -1, &stmt, nullptr);
+	if (res != SQLITE_OK)
+	{
+		std::cerr << "prepare error: " << sqlite3_errmsg(m_database) << std::endl;
+		return false;
+	}
+
+	sqlite3_bind_int(stmt, 1, std::stoi(values.at("games_played")));
+	sqlite3_bind_int(stmt, 2, std::stoi(values.at("total_answers")));
+	sqlite3_bind_int(stmt, 3, std::stoi(values.at("correct_answers")));
+	sqlite3_bind_double(stmt, 4, std::stod(values.at("average_time")));
+	sqlite3_bind_int(stmt, 5, std::stoi(values.at("score")));
+	sqlite3_bind_text(stmt, 6, values.at("username").c_str(), -1, SQLITE_STATIC);
+
+	res = sqlite3_step(stmt);
+	sqlite3_finalize(stmt);
+
+	if (res != SQLITE_DONE) {
+		std::cerr << "SQL error: " << sqlite3_errmsg(m_database) << std::endl;
+		return false;
+	}
+
+	return true;
+
 }
 
 

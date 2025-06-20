@@ -82,6 +82,16 @@ namespace TriviaClient.Views
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            if(RoomPlayerInfoPanell.Visibility == Visibility.Visible)
+            {
+                SignOut leaveGameRequest = new SignOut();
+                List<Byte> buffer = Client.Instance.serializer.SerializeResponse(leaveGameRequest);
+                ServerAnswer serverAnswer = Client.Instance.communicator.SendAndReceive(buffer);
+            }
+            else
+            {
+                closeRoom();
+            }
             Application.Current.Shutdown();
         }
 
@@ -95,7 +105,12 @@ namespace TriviaClient.Views
 
                 if (startGameAnswer.code == 0)
                 {
-                    MessageBox.Show("Game started successfully!");
+                    is_refreshing = false;
+
+                    int timeout = Int32.Parse(txtTimeToAnswer.Text);
+                    GameScreen gamescreen = new GameScreen(timeout);
+                    gamescreen.Show();
+                    this.Close();
                 }
                 else
                 {
@@ -145,10 +160,6 @@ namespace TriviaClient.Views
                     is_refreshing = true;
                     refreshMembers = RefreshMembersListLoopAsync();
 
-                }
-                else
-                {
-                    //add here an error message
                 }
             }
         }

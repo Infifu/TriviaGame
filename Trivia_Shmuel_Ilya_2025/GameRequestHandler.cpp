@@ -58,12 +58,14 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 {
     SubmitAnswerRequest request = JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(requestInfo.buffer);
 
-    double seconds = secondsPassed();
-
-    m_game.submitAnswer(m_user, request.answerId, seconds);
+    double seconds = request.answerTime;
 
     SubmitAnswerResponse response{};
     response.status = 0;
+    response.correctAnswerID = m_game.getQuestionForUser(m_user).getCorrectAnswerId();
+
+    m_game.submitAnswer(m_user, request.answerId, seconds);
+
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
 
     return { buffer, nullptr };
@@ -72,9 +74,26 @@ RequestResult GameRequestHandler::submitAnswer(const RequestInfo& requestInfo)
 RequestResult GameRequestHandler::getGameResults(const RequestInfo& requestInfo)
 {
     GetGameResultsResponse response{};
-    response.status = 0;
+    response.status = m_game.isGameEnded() == true ? 0 : 1;
+
+    std::vector<PlayerResults> resultsVector;
+    std::map<LoggedUser, GameData> players = m_game.getPlayers();
+    
+    for (auto const& player : players)
+    {
+        m_game.submitGameStatsToDB(player.second, player.first);
+        PlayerResults res{player.first.getUsername(),player.second.correctAnswerCount,player.second.wrongAnswerCount,player.second.averageAnswerTime};
+        resultsVector.push_back(res);
+    }
+     
+    response.results = resultsVector;
 
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
+    
+    if (m_game.isGameEnded())
+    {
+        return { buffer, m_handlerFactory.createMenuRequestHandler(m_user)};
+    }
     return { buffer, nullptr };
 }
 
@@ -84,15 +103,4 @@ RequestResult GameRequestHandler::leaveGame(const RequestInfo& requestInfo)
     LeaveGameResponse response{ 0 };
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, m_handlerFactory.createMenuRequestHandler(m_user) };
-}
-
-double GameRequestHandler::secondsPassed()
-{
-    static std::clock_t lastTime = std::clock();
-    std::clock_t currentTime = std::clock();
-
-    double elapsed = static_cast<double>(currentTime - lastTime) / CLOCKS_PER_SEC;
-    lastTime = currentTime;
-
-    return elapsed;
 }

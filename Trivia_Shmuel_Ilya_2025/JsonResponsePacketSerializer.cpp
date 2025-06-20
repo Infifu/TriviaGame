@@ -88,7 +88,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& sig
 
     int status = signupResponse.status; 
     json statusSerialized = { {"status", status} };
-    signUpCode = status == 0 ? SUCCESS : FAIL;
+    signUpCode = status;
 
     jsonDump = json::to_cbor(statusSerialized); 
     numberInBinary = intToBytesVal(jsonDump.size());
@@ -349,10 +349,16 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SubmitAnswerRespons
 
 Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse& response)
 {
+    json answersJson;
+    for (const auto& [key, value] : response.answers) 
+    {
+        answersJson[std::to_string(key)] = value;
+    }
+
     json statusSerialized = {
      {"status", response.status},
      {"question", response.question},
-     {"answers",response.answers} };
+     {"answers",answersJson} };
 
     Buffer jsonDump = json::to_cbor(statusSerialized);
     Buffer numberInBinary = intToBytesVal(jsonDump.size());
@@ -367,6 +373,20 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const GetQuestionResponse
 Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& response)
 {
     json statusSerialized = {{"status", response.status}};
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
+Buffer JsonResponsePacketSerializer::serializeResponse(const uploadQuestionResponse& response)
+{
+    json statusSerialized = { {"status", response.status} };
 
     Buffer jsonDump = json::to_cbor(statusSerialized);
     Buffer numberInBinary = intToBytesVal(jsonDump.size());

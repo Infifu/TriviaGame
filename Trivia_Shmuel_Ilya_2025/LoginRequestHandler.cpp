@@ -61,7 +61,7 @@ RequestResult LoginRequestHandler::login(const RequestInfo requestInfo)
 
     RequestResult reqRes{ JsonResponsePacketSerializer::serializeResponse(logRes)};
 
-    if (loginStatus == 1 || loginStatus == 2)
+    if (loginStatus == 1 || loginStatus == 2 || loginStatus == 3)
     {
         reqRes.newHandler = this;
     }

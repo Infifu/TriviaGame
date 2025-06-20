@@ -136,3 +136,17 @@ SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerReques
 
     return request;
 }
+
+UploadQuestionRequest JsonRequestPacketDeserializer::deserializeUploadQuestionRequest(Buffer buffer)
+{
+    json j = json::from_cbor(buffer);
+
+    UploadQuestionRequest request{};
+    request.question = j["question"];
+    request.answerOne = j["answerOne"];
+    request.answerTwo = j["answerTwo"];
+    request.answerThree = j["answerThree"];
+    request.answerFour = j["answerFour"];
+    request.correctAnswerID = j["correctAnswerID"];
+    return request;
+}
