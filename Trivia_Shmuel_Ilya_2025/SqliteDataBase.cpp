@@ -282,6 +282,11 @@ int SqliteDataBase::getPlayersGamesCount(std::string username)
 	return std::stoi(gamesCount);
 }
 
+bool SqliteDataBase::uploadQuestion(std::map<std::string, std::string> values)
+{ 
+	return insertQuery("questions", values);
+}
+
 
 DBvector SqliteDataBase::selectQuery(const std::string sqlStatement, const std::string argument)
 {
@@ -345,6 +350,8 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 		sqlStatement = "INSERT INTO users (username, password, email) VALUES (?,?,?)";
 	else if (table == "statistics")
 		sqlStatement = "INSERT INTO statistics (username, games_played, total_answers, correct_answers, average_time, score) VALUES (?,?,?,?,?,?)";
+	else if (table == "questions")
+		sqlStatement = "INSERT INTO questions(question, answer0, answer1, answer2, answer3, correct_answer_id) VALUES (? , ? , ? , ? , ? , ? )";
 	else
 	{
 		std::cerr << "error: Invalid table name" << std::endl;
@@ -372,6 +379,15 @@ bool SqliteDataBase::insertQuery(const std::string table, const std::map<std::st
 		sqlite3_bind_text(stmt, 1, values.at("username").c_str(), -1, SQLITE_STATIC);
 		sqlite3_bind_text(stmt, 2, values.at("password").c_str(), -1, SQLITE_STATIC);
 		sqlite3_bind_text(stmt, 3, values.at("email").c_str(), -1, SQLITE_STATIC);
+	}
+	else if (table == "questions")
+	{
+		sqlite3_bind_text(stmt, 1, values.at("question").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 2, values.at("answerOne").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 3, values.at("answerTwo").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 4, values.at("answerThree").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 5, values.at("answerFour").c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_int(stmt, 6, std::stoi(values.at("correctAnswerID")));
 	}
 
 	res = sqlite3_step(stmt);

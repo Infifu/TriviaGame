@@ -1,13 +1,13 @@
 #include "MenuRequestHandler.h"
 
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger) : m_user(user), m_handlerFactory(*handlerFactory)
-, m_serializer(), m_deserializer(), m_manager(*roomManger)
+MenuRequestHandler::MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManger,IDatabase* database) : m_user(user), m_handlerFactory(*handlerFactory)
+, m_serializer(), m_deserializer(), m_manager(*roomManger) , m_database(database)
 {}
 
 bool MenuRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 {	
-	if (requestInfo.id == 3)
+	if (requestInfo.id == 3 || requestInfo.id == 66)
 	{
 		return true;
 	}
@@ -16,6 +16,30 @@ bool MenuRequestHandler::isRequestRelevant(const RequestInfo& requestInfo)
 		return false;
 	}
 	return true;
+}
+
+RequestResult MenuRequestHandler::uploadQuestion(RequestInfo info)
+{
+	uploadQuestionResponse upRes;
+	UploadQuestionRequest req = m_deserializer.deserializeUploadQuestionRequest(info.buffer);
+	std::map<std::string, std::string> values;
+	values["question"] = req.question;
+	values["answerOne"] = req.answerOne;
+	values["answerTwo"] = req.answerTwo;
+	values["answerThree"] = req.answerThree;
+	values["answerFour"] = req.answerFour;
+	values["correctAnswerID"] = std::to_string(static_cast<int>(req.correctAnswerID));
+
+	if (m_database->uploadQuestion(values))
+	{
+		upRes.status = 0;
+	}
+	else
+	{
+		upRes.status = 1;
+	}
+	RequestResult reqRes{ m_serializer.serializeResponse(upRes) };
+	return reqRes;
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo info)
@@ -183,6 +207,9 @@ RequestResult MenuRequestHandler::handleRequest(const RequestInfo& requestInfo)
 			break;
 		case 26:
 			reqRes = getHighScore(requestInfo);
+			break;
+		case 66:
+			reqRes = uploadQuestion(requestInfo);
 			break;
 		default:
 			throw TriviaException("Error occured in menu handler");

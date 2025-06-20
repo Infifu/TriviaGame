@@ -31,5 +31,7 @@ public:
 
 	virtual bool submitGameStatistics(std::map<std::string, std::string> values) = 0 ;
 	virtual int getPlayersGamesCount(std::string username) = 0;
+
+	virtual bool uploadQuestion(std::map<std::string, std::string> values) = 0;
 };
 

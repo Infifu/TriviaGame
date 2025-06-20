@@ -12,7 +12,7 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser user)
 {
-	MenuRequestHandler* menuRequestHandler = new MenuRequestHandler(user, this, &_roomManager);
+	MenuRequestHandler* menuRequestHandler = new MenuRequestHandler(user, this, &_roomManager,_database);
 	return menuRequestHandler;
 }
 

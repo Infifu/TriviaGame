@@ -36,6 +36,8 @@ public:
 	bool submitGameStatistics(std::map<std::string, std::string> values) override;
 	int getPlayersGamesCount(std::string username) override;
 
+	bool uploadQuestion(std::map<std::string, std::string> values);
+
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
 	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);

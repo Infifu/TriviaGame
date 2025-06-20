@@ -384,6 +384,20 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const LeaveGameResponse& 
     return buffer;
 }
 
+Buffer JsonResponsePacketSerializer::serializeResponse(const uploadQuestionResponse& response)
+{
+    json statusSerialized = { {"status", response.status} };
+
+    Buffer jsonDump = json::to_cbor(statusSerialized);
+    Buffer numberInBinary = intToBytesVal(jsonDump.size());
+
+    Buffer buffer;
+    buffer.push_back(response.status);
+    buffer.insert(buffer.end(), numberInBinary.begin(), numberInBinary.end());
+    buffer.insert(buffer.end(), jsonDump.begin(), jsonDump.end());
+    return buffer;
+}
+
 Buffer JsonResponsePacketSerializer::intToBytesVal(int number)
 {
     //little endian encoding cuz god want me to suffer or whatever
