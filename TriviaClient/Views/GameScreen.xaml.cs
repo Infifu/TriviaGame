@@ -29,6 +29,7 @@ namespace TriviaClient.Views
 {
     public partial class GameScreen : Window
     {
+        private int totalQuestions = 10;
         private int questionsLeft = 10;
         private int questionsRight = 0;
         private int answerTimeoutSeconds;
@@ -125,7 +126,8 @@ namespace TriviaClient.Views
 
             if (questionsLeft == 0)
             {
-                EndGameScreen end = new EndGameScreen();
+                //братанчик сделай ебучую хуйню которая считает авредж время и сунь сюда спс
+                EndGameScreen end = new EndGameScreen(totalQuestions,questionsRight,0);
                 end.Show();
                 this.Close();
             }

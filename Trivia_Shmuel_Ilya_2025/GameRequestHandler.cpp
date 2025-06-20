@@ -76,6 +76,17 @@ RequestResult GameRequestHandler::getGameResults(const RequestInfo& requestInfo)
     GetGameResultsResponse response{};
     response.status = 0;
 
+    std::vector<PlayerResults> resultsVector;
+    std::map<LoggedUser, GameData> players = m_game.getPlayers();
+    
+    for (auto const& player : players)
+    {
+        PlayerResults res{player.first.getUsername(),player.second.correctAnswerCount,player.second.wrongAnswerCount,player.second.averageAnswerTime};
+        resultsVector.push_back(res);
+    }
+     
+    response.results = resultsVector;
+
     Buffer buffer = JsonResponsePacketSerializer::serializeResponse(response);
     return { buffer, nullptr };
 }

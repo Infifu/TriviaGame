@@ -26,5 +26,6 @@ public:
 	void removePlayer(const LoggedUser& user);
 	void submitGameStatsToDB(GameData data, LoggedUser user);
 	unsigned int getgameId();
+	std::map<LoggedUser, GameData> getPlayers();
 };
 
