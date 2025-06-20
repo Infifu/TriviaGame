@@ -88,7 +88,7 @@ Buffer JsonResponsePacketSerializer::serializeResponse(const SignupResponse& sig
 
     int status = signupResponse.status; 
     json statusSerialized = { {"status", status} };
-    signUpCode = status == 0 ? SUCCESS : FAIL;
+    signUpCode = status;
 
     jsonDump = json::to_cbor(statusSerialized); 
     numberInBinary = intToBytesVal(jsonDump.size());

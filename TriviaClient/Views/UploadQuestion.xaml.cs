@@ -89,6 +89,14 @@ namespace TriviaClient.Views
                         this.errorBox.Text = "Success";
                     }
                 }
+                else
+                {
+                    this.errorBox.Text = "The correct answer does not match any other answers";
+                }
+            }
+            else
+            {
+                this.errorBox.Text = "Please fill the fields";
             }
         }
 

@@ -19,7 +19,8 @@ enum SignUpStatus
 {
     SignSuccess = 0,
     SignUsernameIsTaken = 1,
-    Signfail = 2
+    PasswordError = 2,
+	EmailError = 3
 };
 
 

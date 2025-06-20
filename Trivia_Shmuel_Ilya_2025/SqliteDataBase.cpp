@@ -201,7 +201,6 @@ float SqliteDataBase::getPlayerAverageAnswerTime(std::string username)
 	DBvector selected = selectQuery(sqlstmt, username);
 	for (auto const& row : selected)
 	{
-		std::cout << row.at("average_time") << std::endl;
 		return std::stof(row.at("average_time"));
 	}
 }
@@ -256,7 +255,6 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 	{
 		std::string name = row.at("username");
 		std::string score = row.at("score");
-		std::cout << name << " " << score << std::endl;
 		highScores.push_back(name + ": " + score);
 	}
 
