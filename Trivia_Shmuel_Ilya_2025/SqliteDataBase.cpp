@@ -265,8 +265,7 @@ std::vector<std::string> SqliteDataBase::getHighScores()
 
 bool SqliteDataBase::submitGameStatistics(std::map<std::string, std::string> values)
 {
-	updateQuery(values);
-	return true;
+	return updateQuery(values);
 }
 
 int SqliteDataBase::getPlayersGamesCount(std::string username)
