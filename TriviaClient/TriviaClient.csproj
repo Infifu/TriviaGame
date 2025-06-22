@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\podium.png" />
+    <None Remove="Models\TriviaLogo.png" />
+    <None Remove="Models\TriviaWithoutClountLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PeterO.Cbor" Version="4.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Models\podium.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Models\TriviaLogo.png" />
+    <Resource Include="Models\TriviaWithoutClountLogo.png" />
+  </ItemGroup>
+
+</Project>
