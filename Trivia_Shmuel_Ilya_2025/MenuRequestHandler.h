@@ -1,0 +1,42 @@
+#pragma once
+#include "IDatabase.h"
+#include "IRequestHandler.h"
+#include "LoggedUser.h"
+#include "RequestHandlerFactory.h"
+#include "RoomManager.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
+#include "UsingBuffer.h"
+#include "StatisticsManager.h"
+#include "TriviaException.h"
+#include "RoomAdminRequestHandler.h"
+#include "RoomMemberRequestHandler.h"
+
+class RequestHandlerFactory;
+
+class IDatabase;
+
+class MenuRequestHandler : public IRequestHandler
+{
+private:
+	LoggedUser m_user;
+	RequestHandlerFactory& m_handlerFactory;
+	JsonResponsePacketSerializer m_serializer;
+	JsonRequestPacketDeserializer m_deserializer;
+	RoomManager& m_manager;
+	IDatabase* m_database;
+
+	RequestResult uploadQuestion(RequestInfo);
+	RequestResult signout(RequestInfo);
+	RequestResult getRooms(RequestInfo);
+	RequestResult getPlayersInRoom(RequestInfo);
+	RequestResult getPeronsalStats(RequestInfo);
+	RequestResult getHighScore(RequestInfo);
+	RequestResult joinRoom(RequestInfo);
+	RequestResult createRoom(RequestInfo);
+public:
+	MenuRequestHandler(LoggedUser user, RequestHandlerFactory* handlerFactory, RoomManager* roomManager,IDatabase* database);
+	bool isRequestRelevant(const RequestInfo& requestInfo) override;
+	RequestResult handleRequest(const RequestInfo& requestInfo) override;
+
+};
