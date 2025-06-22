@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="StatisticsView" Height="720" Width="1000"
         Background="Transparent" AllowsTransparency="True"
+        MouseDown="Window_MouseDown"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
 
@@ -281,6 +282,35 @@
                     </WrapPanel>
                 </StackPanel>
             </Grid>
+            <Button x:Name="uploadQuestion"                          
+                BorderThickness="0"
+                Content="Upload question"
+                Foreground="White"
+                FontSize="12"
+                FontFamily="Montserrat"
+                Cursor="Hand"
+                Click="uploadQuestionClick" Margin="-532,226,242,0">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#7096D1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#28AEED"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Width="150" Height="50"
+                            CornerRadius="20"
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Border>
 </Window>

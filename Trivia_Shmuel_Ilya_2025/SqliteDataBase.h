@@ -5,6 +5,7 @@
 #include "Question.h"
 #include "json.hpp"
 #include <Vector>
+#include "LoggedUser.h"
 
 using DBvector = std::vector<std::map<std::string, std::string>>;
 using RowMap = std::map<std::string, std::string>;
@@ -16,6 +17,7 @@ public:
 	SqliteDataBase();
 	~SqliteDataBase();
 	bool open() override;
+	bool createTables();
 	bool close() override;
 
 	bool doesUserExist(const std::string username) override ;
@@ -31,10 +33,15 @@ public:
 	int getPlayerScore(std::string) override;
 	std::vector<std::string> getHighScores() override;
 
+	bool submitGameStatistics(std::map<std::string, std::string> values) override;
+	int getPlayersGamesCount(std::string username) override;
+
+	bool uploadQuestion(std::map<std::string, std::string> values);
+
 private:
 	DBvector selectQuery(const std::string sqlStatement,const std::string argument);
 	bool insertQuery(const std::string table,const std::map<std::string, std::string> values);
-
+	bool updateQuery(const std::map<std::string, std::string> values);
 private:
 	sqlite3* m_database;
 };
